@@ -8,6 +8,7 @@ class ResourceReference {
     this.resource_ = resource;
     this.id = hints && hints.id != null ? String(hints.id) : generateUuid();
     this.serial = hints && typeof hints.serial === 'number' ? hints.serial : 1;
+    this.hints = hints;
   }
 
   get resource() {

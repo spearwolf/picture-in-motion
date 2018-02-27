@@ -5,11 +5,13 @@ describe('ResourceReference', () => {
   it('create instance', () => {
     const data = {};
     const dataType = 666;
-    const ref = new ResourceReference(dataType, data);
+    const hints = { foo: 'bar' };
+    const ref = new ResourceReference(dataType, data, hints);
     expect(ref.resource).toBe(data);
     expect(ref.resourceType).toBe(dataType);
     expect(ref.serial).toBe(1);
     expect(typeof ref.id).toBe('string');
+    expect(ref.hints).toEqual(hints);
   });
 
   it('create instance with :serial hint', () => {

@@ -8,11 +8,13 @@
     "rules": {
       "max-len": 0,
       "no-plusplus": 0,
+      "no-bitwise": 0,
       "no-underscore-dangle": ["error", {
         "allowAfterThis": true,
         "allowAfterSuper": true
       }],
       "consistent-return": 0,
+      "valid-typeof": 0,
       "import/no-extraneous-dependencies": 0,
       "import/prefer-default-export": 0,
       "react/forbid-prop-types": 0,
