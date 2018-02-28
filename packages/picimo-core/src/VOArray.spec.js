@@ -5,8 +5,7 @@ describe('VOArray', () => {
   it('create instance', () => {
     const voa = new VOArray(4, 16, ['float32', 'int16', 'uint8']);
 
-    expect(voa.buffer.byteLength).toEqual(64);
-    expect(voa.buffer).toBe(voa.arrayBuffer);
+    expect(voa.bufferByteLength).toEqual(64);
     expect(voa.buffer).toBe(voa.float32Array.buffer);
     expect(voa.buffer).toBe(voa.int16Array.buffer);
     expect(voa.buffer).toBe(voa.uint8Array.buffer);
@@ -32,9 +31,8 @@ describe('VOArray', () => {
 
     const voa = new VOArray(2, 16 * Uint32Array.BYTES_PER_ELEMENT, ['uint32'], values);
 
-    expect(voa.buffer.byteLength).toEqual(128);
-    expect(voa.buffer).not.toBe(voa.arrayBuffer);
-    expect(voa.arrayBuffer).toBe(values.buffer);
+    expect(voa.bufferByteLength).toEqual(128);
+    expect(voa.buffer).toBe(values.buffer);
     expect(Array.from(voa.uint32Array)).toEqual(Array.from(values));
   });
 
@@ -49,8 +47,8 @@ describe('VOArray', () => {
     const b = a.subarray(1, 1);
 
     expect(values.buffer.byteLength).toEqual(3 * 16 * Uint32Array.BYTES_PER_ELEMENT);
-    expect(b.buffer.byteLength).toEqual(16 * Uint32Array.BYTES_PER_ELEMENT);
-    expect(b.arrayBuffer).toBe(a.arrayBuffer);
+    expect(b.bufferByteLength).toEqual(16 * Uint32Array.BYTES_PER_ELEMENT);
+    expect(b.buffer).toBe(a.buffer);
 
     a.uint32Array[17] = 666;
 
