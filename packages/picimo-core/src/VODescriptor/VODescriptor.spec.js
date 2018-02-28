@@ -2,7 +2,7 @@
 import assert from 'assert';
 import assertVOAttrDescriptor from './assertVOAttrDescriptor';
 
-import VODescriptor from './VODescriptor';
+import VODescriptor from '.';
 import VOArray from '../VOArray';
 
 /** @private */

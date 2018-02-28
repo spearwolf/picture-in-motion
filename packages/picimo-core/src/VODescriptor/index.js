@@ -1,1 +1,1 @@
-export { default as VODescriptor } from './VODescriptor';
+export { default } from './VODescriptor';
