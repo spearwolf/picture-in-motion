@@ -10,39 +10,49 @@ const TYPED_ARRAY = {
   uint8: Uint8Array,
 };
 
-const createTypedArray = (data, capacity, bytesPerVO, TypedArray) => {
+const createBufferView = (capacity, bytesPerVO, data) => {
+  const byteLength = capacity * bytesPerVO;
+
   if (data instanceof ArrayBuffer) {
-    return new TypedArray(data);
-  } else if (data instanceof DataView) {
-    return new TypedArray(data.buffer, data.byteOffset, data.byteLength / TypedArray.BYTES_PER_ELEMENT);
-  } else if (data != null) {
-    return TypedArray.from(data);
+    if (byteLength > data.byteLength) {
+      throw new TypeError(`VOArray: [data] buffer is too small! needs ${byteLength} bytes (capacity=${capacity} bytesPerVO=${bytesPerVO}) but has ${data.byteLength} bytes!`);
+    }
+    return new DataView(data, 0, byteLength);
   }
 
-  return new TypedArray(new ArrayBuffer(capacity * bytesPerVO));
+  if (ArrayBuffer.isView(data)) {
+    const { byteOffset, byteLength: dataByteLength } = data;
+    if (byteLength > dataByteLength) {
+      throw new TypeError(`VOArray: [data] buffer is too small! needs ${byteLength} bytes (capacity=${capacity} bytesPerVO=${bytesPerVO}) but has ${dataByteLength} (byteOffset=${byteOffset}) bytes!`);
+    }
+    return new DataView(data.buffer, byteOffset, byteLength);
+  }
+
+  throw new TypeError('VOArray: [data] must be instanceof ArrayBuffer, DataView or TypedArray!');
 };
 
 const typedArrayProp = type => `${type}Array`;
 
-const createLinkedTypedArrays = (voArray, attrTypes) => {
-  const {
-    buffer,
-    byteOffset: bufferByteOffset,
-    byteLength: bufferByteLength,
-  } = voArray.typedArray;
+const createLinkedTypedArrays = (buffer, arrayTypes) => {
+  const { byteLength: bufferByteLength } = buffer;
+  const typedArrays = {};
 
-  const arrays = {};
+  let bufferByteOffset = 0;
+  let arrayBuffer = buffer;
 
-  attrTypes.forEach((type) => {
+  if (ArrayBuffer.isView(buffer)) {
+    bufferByteOffset = buffer.byteOffset;
+    arrayBuffer = buffer.buffer;
+  }
+
+  arrayTypes.forEach((type) => {
     const TypedArray = TYPED_ARRAY[type];
-    const arr = new TypedArray(buffer, bufferByteOffset, bufferByteLength / TypedArray.BYTES_PER_ELEMENT);
-    arrays[typedArrayProp(type)] = arr;
+    const arr = new TypedArray(arrayBuffer, bufferByteOffset, bufferByteLength / TypedArray.BYTES_PER_ELEMENT);
+    typedArrays[typedArrayProp(type)] = arr;
   });
 
-  return arrays;
+  return typedArrays;
 };
-
-const typedArrayType = voArray => voArray.attrTypes[0];
 
 // --- }}}
 
@@ -50,37 +60,50 @@ export default class VOArray {
   /**
    * @param {number} capacity - Number of `vertex objects`
    * @param {number} bytesPerVO - Size of a single `vertex object` in *bytes*
-   * @param {Array<string>} attrTypes - List of allowed *typed array element types*. Should have at least one type included.
+   * @param {Array<string>} arrayTypes - List of allowed *typed array types*. Should have at least one type included.
+   * @param {ArrayBuffer|DataView|TypedArray} [data] - Create a view into data buffer instead of creating a new internal ArrayBuffer
    */
-  constructor(capacity, bytesPerVO, attrTypes, data) {
+  constructor(capacity, bytesPerVO, arrayTypes, data) {
     this.capacity = capacity;
     this.bytesPerVO = bytesPerVO;
-    this.attrTypes = attrTypes;
+    this.arrayTypes = arrayTypes.slice(0);
 
-    this.typedArray = createTypedArray(data, capacity, bytesPerVO, TYPED_ARRAY[typedArrayType(this)]);
+    if (data) {
+      this.buffer = createBufferView(capacity, bytesPerVO, data);
+      this.bufferByteOffset = this.buffer.byteOffset;
+      this.arrayBuffer = this.buffer.buffer;
+    } else {
+      this.arrayBuffer = new ArrayBuffer(capacity * bytesPerVO);
+      this.buffer = this.arrayBuffer;
+      this.bufferByteOffset = 0;
+    }
 
-    Object.assign(this, createLinkedTypedArrays(this, attrTypes));
+    Object.assign(this, createLinkedTypedArrays(this.buffer, arrayTypes));
   }
 
   /**
    * Copy all `vertex object` data from another *array* to this *array*.
    *
    * @desc
-   * Both *arrays* should have the same characteristics (`bytesPerVO` and least one of the same `attrType`).
+   * Both *arrays* should have the same `bytesPerVO`.
    *
    * @param {VOArray} fromVOArray - The source vertex array.
    * @param {number} [toOffset=0] - `vertex object` target offset
    */
   copy(fromVOArray, toOffset = 0) {
-    const typedArray = this[typedArrayProp(typedArrayType(fromVOArray))];
+    const bytesPerElement = Uint16Array.BYTES_PER_ELEMENT;
+    const elementsPerVO = this.bytesPerVO / bytesPerElement;
+
+    const source = new Uint16Array(fromVOArray.arrayBuffer, fromVOArray.bufferByteOffset, fromVOArray.capacity * elementsPerVO);
+    const target = new Uint16Array(this.arrayBuffer, this.bufferByteOffset, this.capacity * elementsPerVO);
 
     let offset = 0;
 
     if (toOffset > 0) {
-      offset = toOffset * (this.bytesPerVO / typedArray.BYTES_PER_ELEMENT);
+      offset = toOffset * elementsPerVO;
     }
 
-    typedArray.set(fromVOArray.typedArray, offset);
+    target.set(source, offset);
   }
 
   /**
@@ -96,14 +119,10 @@ export default class VOArray {
    * @return {VOArray}
    */
   subarray(begin, size = 1) {
-    const { bytesPerVO } = this;
-    const byteOffset = this.typedArray.byteOffset + (begin * bytesPerVO);
-    const byteCount = size * bytesPerVO;
+    const { bytesPerVO, bufferByteOffset } = this;
+    const byteBegin = bufferByteOffset + (begin * bytesPerVO);
+    const byteEnd = size * bytesPerVO;
 
-    return new VOArray(size, bytesPerVO, this.attrTypes, new DataView(
-      this.typedArray.buffer,
-      byteOffset,
-      byteCount,
-    ));
+    return new VOArray(size, bytesPerVO, this.arrayTypes, new DataView(this.arrayBuffer, byteBegin, byteEnd));
   }
 }

@@ -5,42 +5,52 @@ describe('VOArray', () => {
   it('create instance', () => {
     const voa = new VOArray(4, 16, ['float32', 'int16', 'uint8']);
 
-    expect(voa.typedArray.byteLength).toEqual(64);
-    expect(voa.typedArray.buffer).toBe(voa.float32Array.buffer);
-    expect(voa.typedArray.buffer).toBe(voa.int16Array.buffer);
-    expect(voa.typedArray.buffer).toBe(voa.uint8Array.buffer);
+    expect(voa.buffer.byteLength).toEqual(64);
+    expect(voa.buffer).toBe(voa.arrayBuffer);
+    expect(voa.buffer).toBe(voa.float32Array.buffer);
+    expect(voa.buffer).toBe(voa.int16Array.buffer);
+    expect(voa.buffer).toBe(voa.uint8Array.buffer);
     expect(voa.int32Array).toBeUndefined();
     expect(voa.int8Array).toBeUndefined();
     expect(voa.uint32Array).toBeUndefined();
     expect(voa.uint16Array).toBeUndefined();
   });
 
-  it('create instance from TypedArray should copy all values', () => {
-    const floats = Uint32Array.from([
+  it('create instance should clone arrayTypes (no copy)', () => {
+    const arrayTypes = ['float32', 'int16', 'uint8'];
+    const voa = new VOArray(4, 16, arrayTypes);
+
+    expect(voa.arrayTypes).not.toBe(arrayTypes);
+    expect(voa.arrayTypes).toEqual(arrayTypes);
+  });
+
+  it('create from existing buffer should create a view into existing buffer', () => {
+    const values = Uint32Array.from([
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
       17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
     ]);
 
-    const voa = new VOArray(2, 16 * Uint32Array.BYTES_PER_ELEMENT, ['uint32'], floats);
+    const voa = new VOArray(2, 16 * Uint32Array.BYTES_PER_ELEMENT, ['uint32'], values);
 
-    expect(voa.typedArray.byteLength).toEqual(128);
-    expect(voa.uint32Array).not.toBe(floats);
-    expect(voa.uint32Array.buffer).not.toBe(floats.buffer);
-    expect(Array.from(voa.uint32Array)).toEqual(Array.from(floats));
+    expect(voa.buffer.byteLength).toEqual(128);
+    expect(voa.buffer).not.toBe(voa.arrayBuffer);
+    expect(voa.arrayBuffer).toBe(values.buffer);
+    expect(Array.from(voa.uint32Array)).toEqual(Array.from(values));
   });
 
   it('subarray() should create a new VOArray using the same internal buffer', () => {
-    const floats = Uint32Array.from([
+    const values = Uint32Array.from([
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
       17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
       33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
     ]);
 
-    const a = new VOArray(3, 16 * Uint32Array.BYTES_PER_ELEMENT, ['uint32'], floats);
+    const a = new VOArray(3, 16 * Uint32Array.BYTES_PER_ELEMENT, ['uint32'], values);
     const b = a.subarray(1, 1);
 
-    expect(b.typedArray.byteLength).toEqual(16 * Uint32Array.BYTES_PER_ELEMENT);
-    expect(b.typedArray.buffer).toBe(a.typedArray.buffer);
+    expect(values.buffer.byteLength).toEqual(3 * 16 * Uint32Array.BYTES_PER_ELEMENT);
+    expect(b.buffer.byteLength).toEqual(16 * Uint32Array.BYTES_PER_ELEMENT);
+    expect(b.arrayBuffer).toBe(a.arrayBuffer);
 
     a.uint32Array[17] = 666;
 
@@ -50,18 +60,19 @@ describe('VOArray', () => {
   });
 
   it('copy() without offset', () => {
-    const floats = Uint32Array.from([
+    const data = new Float32Array(3 * 16);
+    data.set([
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
       17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
       33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
     ]);
 
-    const a = new VOArray(3, 16 * Uint32Array.BYTES_PER_ELEMENT, ['uint32'], floats);
-    const b = new VOArray(4, 16 * Uint32Array.BYTES_PER_ELEMENT, ['uint32']);
+    const a = new VOArray(3, 16 * Float32Array.BYTES_PER_ELEMENT, ['float32'], data.buffer);
+    const b = new VOArray(4, 16 * Float32Array.BYTES_PER_ELEMENT, ['float32']);
 
     b.copy(a, 0);
 
-    expect(Array.from(b.uint32Array)).toEqual([
+    expect(Array.from(b.float32Array)).toEqual([
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
       17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
       33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
