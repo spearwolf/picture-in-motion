@@ -77,11 +77,8 @@ export default class VOArray {
       throw new TypeError(`new VOArray: bytesPerVO must be divisible by 4 (but is not!) bytesPerVO=${bytesPerVO}`);
     }
 
-    /** @type {number} */
     this.capacity = capacity;
-    /** @type {number} */
     this.bytesPerVO = bytesPerVO;
-    /** @type {number} */
     this.arrayTypes = arrayTypes.slice(0);
 
     if (data) {
@@ -89,16 +86,12 @@ export default class VOArray {
 
       /** @type {ArrayBuffer} */
       this.buffer = buffer.buffer;
-      /** @type {number} */
       this.bufferByteOffset = buffer.byteOffset;
-      /** @type {number} */
       this.bufferByteLength = buffer.byteLength;
     } else {
       /** @type {ArrayBuffer} */
       this.buffer = new ArrayBuffer(capacity * bytesPerVO);
-      /** @type {number} */
       this.bufferByteOffset = 0;
-      /** @type {number} */
       this.bufferByteLength = this.buffer.byteLength;
     }
 
