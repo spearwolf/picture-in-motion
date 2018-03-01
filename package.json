@@ -2,7 +2,8 @@
   "name": "picimo-next",
   "private": true,
   "workspaces": [
-    "packages/picimo-core"
+    "packages/picimo-core",
+    "packages/picimo-renderer"
   ],
   "main": "src/index.js",
   "author": {
