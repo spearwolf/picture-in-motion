@@ -9,6 +9,6 @@ describe('WebGlRenderer', () => {
     const r = new WebGlRenderer(canvas, { foo: 'plah!' });
     assert.strictEqual(r.domElement, canvas, 'WebGlRenderer.domElement');
     assert.strictEqual(r.canvas, canvas, 'WebGlRenderer.canvas');
-    assert.strictEqual(r.gl, 'bar', 'WebGlRenderer.gl');
+    assert.strictEqual(r.gl, 'foo!', 'WebGlRenderer.gl');
   });
 });
