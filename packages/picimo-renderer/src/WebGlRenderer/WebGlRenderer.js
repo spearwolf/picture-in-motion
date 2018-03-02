@@ -108,6 +108,30 @@ export default class WebGlRenderer {
   }
 
   /**
+   * Returns the current content of our *webgl canvas* as ImageData object.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/ImageData
+   * @param {boolean} [flipY=false] - flip image vertically
+   * @returns {ImageData}
+   */
+  readPixels(flipY = false) {
+    const { gl } = this;
+    const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
+    const data = new Uint8Array(width * height * 4);
+
+    gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, data);
+
+    if (flipY) {
+      // https://stackoverflow.com/a/41971402
+      Array
+        .from({ length: height }, (val, i) => data.slice(i * width * 4, (i + 1) * width * 4))
+        .forEach((val, i) => data.set(val, (height - i - 1) * width * 4));
+    }
+
+    return new ImageData(Uint8ClampedArray.from(data), width, height);
+  }
+
+  /**
    * @desc
    * Render a single frame.
    * Every call to `render()` will increase the `frameNo` counter.
