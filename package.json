@@ -3,7 +3,8 @@
   "private": true,
   "workspaces": [
     "packages/picimo-core",
-    "packages/picimo-renderer"
+    "packages/picimo-renderer",
+    "react-playground"
   ],
   "main": "src/index.js",
   "author": {
