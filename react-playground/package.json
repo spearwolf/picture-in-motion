@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@picimo/core": "^0.0.1",
+    "@picimo/renderer": "^0.0.1",
+    "lodash": "^4.17.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "1.1.1",
-    "@picimo/core": "^0.0.1",
-    "@picimo/renderer": "^0.0.1"
+    "react-scripts": "1.1.1"
   },
   "devDependencies": {
     "eslint": "^4.18.1",
