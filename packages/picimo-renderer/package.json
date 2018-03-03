@@ -3,17 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "module": "src/index.js",
-  "author": {
-    "name": "Wolfger Schramm",
-    "email": "wolfger@spearwolf.de",
-    "url": "https://www.spearwolf.de"
-  },
+  "author": "Wolfger Schramm <wolfger@spearwolf.de> (https:/www.spearwolf.de)",
   "license": "Apache-2.0",
   "scripts": {
     "test": "../../node_modules/.bin/webpack-dev-server",
     "docs": "../../node_modules/.bin/esdoc"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@picimo/core": "^0.0.1"
   },
   "devDependencies": {
