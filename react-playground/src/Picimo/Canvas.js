@@ -11,7 +11,7 @@ const initRenderer = (component, canvas) => {
   if (!canvas) return;
   if (component.renderer) return;
   if (component.canvas && canvas !== component.canvas) {
-    throw new Error('initRenderer: canvas element changed!');
+    throw new Error('<Picimo.Canvas/>::initRenderer: canvas element changed!');
   }
 
   component.canvas = canvas;
@@ -28,20 +28,30 @@ const initRenderer = (component, canvas) => {
 
   component.renderer = new WebGlRenderer(canvas, options);
 
-  console.log('initRenderer:', component, component.canvas, component.renderer); // eslint-disable-line
+  component.childContext = {
+    renderer: component.renderer,
+  };
+
+  console.log('<Picimo.Canvas/>::initRenderer:', component.renderer); // eslint-disable-line
 };
 
 class Canvas extends Component {
   constructor(props) {
     super(props);
     this.rafId = 0;
+    this.childContext = { renderer: null };
+  }
+
+  getChildContext() {
+    return this.childContext;
   }
 
   componentDidMount() {
+    // TODO move into an own component, for example: <Picimo.Animator/>
     const animate = () => {
       this.rafId = window.requestAnimationFrame((now) => {
         animate();
-        this.onFrame(now);
+        this.renderFrame(now);
       });
     };
     animate();
@@ -51,9 +61,12 @@ class Canvas extends Component {
     window.cancelAnimationFrame(this.rafId);
   }
 
-  onFrame(now) {
-    this.renderer.render(now);
-    this.forceUpdate();
+  renderFrame(now) {
+    const { renderer } = this;
+    if (renderer) {
+      renderer.render(now);
+      this.forceUpdate();
+    }
   }
 
   render() {
@@ -71,6 +84,10 @@ class Canvas extends Component {
     );
   }
 }
+
+Canvas.childContextTypes = {
+  renderer: PropTypes.object,
+};
 
 Canvas.propTypes = {
   children: PropTypes.node,
