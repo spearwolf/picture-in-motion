@@ -1,7 +1,7 @@
 /* eslint-env browser */
 /* eslint no-param-reassign: 0 */
 /* eslint react/no-unused-prop-types: 0 */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import pick from 'lodash';
 
@@ -29,29 +29,69 @@ const initRenderer = (component, canvas) => {
   component.renderer = new WebGlRenderer(canvas, options);
 
   component.childContext = {
-    renderer: component.renderer,
+    renderCtl: {
+      renderer: component.renderer,
+
+      onNextFrame: (renderFrame, name) => {
+        console.log('onNextFrame:', name); // eslint-disable-line
+      },
+      onNextFrameEnd: (renderFrameEnd, name) => {
+        console.log('onNextFrameEnd:', name); // eslint-disable-line
+      },
+    },
   };
 
-  console.log('<Picimo.Canvas/>::initRenderer:', component.renderer); // eslint-disable-line
+  // console.log('<Picimo.Canvas/>::initRenderer:', component.renderer); // eslint-disable-line
+
+  component.forceUpdate();
 };
+
+/*
+const renderFrameChildren = (renderer, component) => {
+  if (component.state) {
+    const { renderFrame } = component.state;
+    if (renderFrame) {
+      renderFrame(renderer);
+    }
+  }
+
+  React.Children.forEach(component.props.children, function (c) {
+    console.log(`renderFrameChildren(${renderer.frameNo})`, this, c);
+//     renderFrameChildren.bind(null, renderer)
+  });
+//   if (component.afterRenderFrame) {
+//     component.afterRenderFrame(renderer);
+//   }
+};
+
+const renderFrame = (now, component) => {
+  const { renderer } = component;
+  if (renderer) {
+    renderer.render(now);
+    if (renderer.frameNo !== 100) return;
+    renderFrameChildren(renderer, component);
+  }
+};
+*/
 
 class Canvas extends Component {
   constructor(props) {
     super(props);
     this.rafId = 0;
-    this.childContext = { renderer: null };
+    this.childContext = { renderCtl: null };
   }
 
   getChildContext() {
     return this.childContext;
   }
 
+  /*
   componentDidMount() {
-    // TODO move into an own component, for example: <Picimo.Animator/>
+    // TODO extract this into an extra component: <Picimo.Animator/>
     const animate = () => {
       this.rafId = window.requestAnimationFrame((now) => {
         animate();
-        this.renderFrame(now);
+        // renderFrame(now, this);
       });
     };
     animate();
@@ -60,37 +100,27 @@ class Canvas extends Component {
   componentWillUnmount() {
     window.cancelAnimationFrame(this.rafId);
   }
-
-  renderFrame(now) {
-    const { renderer } = this;
-    if (renderer) {
-      renderer.render(now);
-      this.forceUpdate();
-    }
-  }
+  */
 
   render() {
     return (
-      <div style={{
-          width: '320px',
-          height: '200px',
-          display: 'inline-block',
-          margin: '0 auto',
-        }}
-      >
-        <canvas ref={canvas => initRenderer(this, canvas)} />
+      <Fragment>
+        <div className={this.props.className}>
+          <canvas ref={canvas => initRenderer(this, canvas)} />
+        </div>
         { this.props.children }
-      </div>
+      </Fragment>
     );
   }
 }
 
 Canvas.childContextTypes = {
-  renderer: PropTypes.object,
+  renderCtl: PropTypes.object,
 };
 
 Canvas.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.any,
   alpha: PropTypes.bool,
   depth: PropTypes.bool,
   stencil: PropTypes.bool,
@@ -102,6 +132,7 @@ Canvas.propTypes = {
 
 Canvas.defaultProps = {
   children: undefined,
+  className: undefined,
   alpha: false,
   depth: true,
   stencil: true,

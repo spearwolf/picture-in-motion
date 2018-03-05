@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-const FrameNo = ({ label }, { renderer }) => renderer && (
+const FrameNo = ({ label }, { renderer }) => (renderer || null) && (
   <Fragment>{ `${label}${renderer.frameNo} {${Math.round(renderer.now)} sec}` }</Fragment>
 );
 

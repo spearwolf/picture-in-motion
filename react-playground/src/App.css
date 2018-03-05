@@ -22,6 +22,14 @@
   font-size: large;
 }
 
+.Picimo-Canvas-Container {
+  display: inline-block;
+  width: 534px;
+  height: 300px;
+  margin: 0 auto;
+  padding: 0;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

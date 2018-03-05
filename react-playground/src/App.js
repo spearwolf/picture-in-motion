@@ -8,12 +8,10 @@ import './App.css';
 const App = () => (
   <div className="App">
 
-    <Picimo.Canvas alpha>
-      <div style={{
-          fontFamily: 'monospace',
-          color: '#333',
-        }}
-      >
+    <Picimo.Canvas alpha className="Picimo-Canvas-Container">
+      <Picimo.Clear color="#8ac" />
+
+      <div style={{ fontFamily: 'monospace', color: '#333' }}>
         <FrameNo />
       </div>
     </Picimo.Canvas>
