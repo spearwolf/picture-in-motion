@@ -7,6 +7,8 @@ import pick from 'lodash';
 
 import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 
+import RenderCtl, { RENDERCTL } from './RenderCtl';
+
 const initRenderer = (component, canvas) => {
   if (!canvas) return;
   if (component.renderer) return;
@@ -29,69 +31,62 @@ const initRenderer = (component, canvas) => {
   component.renderer = new WebGlRenderer(canvas, options);
 
   component.childContext = {
-    renderCtl: {
+    [RENDERCTL]: {
       renderer: component.renderer,
-
-      onNextFrame: (renderFrame, name) => {
-        console.log('onNextFrame:', name); // eslint-disable-line
-      },
-      onNextFrameEnd: (renderFrameEnd, name) => {
-        console.log('onNextFrameEnd:', name); // eslint-disable-line
-      },
+      children: new Set(),
     },
   };
 
-  // console.log('<Picimo.Canvas/>::initRenderer:', component.renderer); // eslint-disable-line
+  console.log('<Picimo.Canvas/>::initRenderer:', component.renderer); // eslint-disable-line
 
   component.forceUpdate();
 };
 
-/*
-const renderFrameChildren = (renderer, component) => {
-  if (component.state) {
-    const { renderFrame } = component.state;
-    if (renderFrame) {
-      renderFrame(renderer);
-    }
+const renderFrameTree = (renderer, context) => {
+  const renderCtl = context && context[RENDERCTL];
+  if (!renderCtl) return;
+
+  let childrenDidRender = false;
+
+  const renderChildren = () => {
+    childrenDidRender = true;
+    renderCtl.children.forEach(child => renderFrameTree(renderer, child.childContext));
+  };
+
+  RenderCtl.renderFrame(renderCtl, renderer, renderChildren);
+
+  if (!childrenDidRender) {
+    renderChildren();
   }
 
-  React.Children.forEach(component.props.children, function (c) {
-    console.log(`renderFrameChildren(${renderer.frameNo})`, this, c);
-//     renderFrameChildren.bind(null, renderer)
-  });
-//   if (component.afterRenderFrame) {
-//     component.afterRenderFrame(renderer);
-//   }
+  RenderCtl.renderFrameAfter(renderCtl, renderer);
 };
 
 const renderFrame = (now, component) => {
   const { renderer } = component;
   if (renderer) {
     renderer.render(now);
-    if (renderer.frameNo !== 100) return;
-    renderFrameChildren(renderer, component);
+    renderFrameTree(renderer, component.childContext);
   }
 };
-*/
 
 class Canvas extends Component {
   constructor(props) {
     super(props);
     this.rafId = 0;
-    this.childContext = { renderCtl: null };
+    this.childContext = { [RENDERCTL]: null };
   }
 
   getChildContext() {
     return this.childContext;
   }
 
-  /*
   componentDidMount() {
     // TODO extract this into an extra component: <Picimo.Animator/>
     const animate = () => {
       this.rafId = window.requestAnimationFrame((now) => {
         animate();
-        // renderFrame(now, this);
+        renderFrame(now, this);
       });
     };
     animate();
@@ -100,7 +95,6 @@ class Canvas extends Component {
   componentWillUnmount() {
     window.cancelAnimationFrame(this.rafId);
   }
-  */
 
   render() {
     return (
@@ -115,7 +109,10 @@ class Canvas extends Component {
 }
 
 Canvas.childContextTypes = {
-  renderCtl: PropTypes.object,
+  [RENDERCTL]: PropTypes.shape({
+    renderer: PropTypes.object,
+    children: PropTypes.object,
+  }),
 };
 
 Canvas.propTypes = {

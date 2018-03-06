@@ -9,7 +9,12 @@ const App = () => (
   <div className="App">
 
     <Picimo.Canvas alpha className="Picimo-Canvas-Container">
-      <Picimo.Clear color="#8ac" />
+      <Picimo.Scene name="foo">
+        <Picimo.Scene name="bar">
+          <Picimo.Clear color="#8ac" />
+        </Picimo.Scene>
+        <Picimo.Scene name="plah" />
+      </Picimo.Scene>
 
       <div style={{ fontFamily: 'monospace', color: '#333' }}>
         <FrameNo />
