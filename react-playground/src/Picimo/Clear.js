@@ -18,7 +18,7 @@ const getColorState = ({ color }) => {
   };
 };
 
-class Clear extends React.Component {
+class Clear extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
 
@@ -31,7 +31,8 @@ class Clear extends React.Component {
     }
   }
 
-  renderFrame({ gl }) {
+  renderFrame(renderer) {
+    const { gl } = renderer.glx;
     const {
       red,
       green,

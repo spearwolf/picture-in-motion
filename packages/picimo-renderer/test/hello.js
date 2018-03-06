@@ -10,7 +10,7 @@ describe('WebGlRenderer', () => {
       const r = new WebGlRenderer(canvas, { foo: 'bar' });
       assert.strictEqual(r.domElement, canvas, 'domElement');
       assert.strictEqual(r.canvas, canvas, 'canvas');
-      assert.exists(r.gl, 'gl (webgl context)');
+      assert.exists(r.glx, 'glx (webgl context)');
       assert.strictEqual(r.now, 0, 'now');
       assert.strictEqual(r.frameNo, 0, 'frameNo');
       assert.strictEqual(r.timeFrameOffset, 0, 'timeFrameOffset');

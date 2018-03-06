@@ -2,7 +2,7 @@
 import { readOption } from '@picimo/core'; // eslint-disable-line
 
 import createCanvas from './createCanvas';
-import createGl from './createGl';
+import { createWebGlContext } from '../WebGlContext';
 
 /**
  * The WebGL renderer.
@@ -27,12 +27,7 @@ export default class WebGlRenderer {
     /**
      * WebGL context
      */
-    this.gl = createGl(this.canvas, options);
-
-    /**
-     * WebGL context attributes
-     */
-    this.glContextAttributes = this.gl.getContextAttributes();
+    this.glx = createWebGlContext(this.canvas, options);
 
     /**
      * Time in *seconds*
@@ -151,5 +146,7 @@ export default class WebGlRenderer {
       this.timeFrameOffset = this.now - this.lastFrameTime;
     }
     this.lastFrameTime = this.now;
+
+    this.glx.gl.viewport(0, 0, this.width, this.height);
   }
 }

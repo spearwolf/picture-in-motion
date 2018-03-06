@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import makeRenderable from './makeRenderable';
 
-class GetRenderer extends React.Component {
+class GetRenderer extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
 
@@ -11,17 +11,21 @@ class GetRenderer extends React.Component {
   }
 
   renderFrame(renderer) {
-    this.setState({
-      renderer,
-      frameNo: renderer.frameNo,
-    });
+    if (this.props.updateOnEachFrame) {
+      this.setState({
+        renderer,
+        frameNo: renderer.frameNo, // eslint-disable-line
+      });
+    } else {
+      this.setState({ renderer });
+    }
   }
 
   render() {
     const { children } = this.props;
-    const { renderer, frameNo } = this.state;
+    const { renderer } = this.state;
     if (renderer && typeof children === 'function') {
-      return children(renderer, frameNo);
+      return children(renderer, renderer.frameNo);
     }
     return null;
   }
@@ -29,10 +33,12 @@ class GetRenderer extends React.Component {
 
 GetRenderer.propTypes = {
   children: PropTypes.func,
+  updateOnEachFrame: PropTypes.bool,
 };
 
 GetRenderer.defaultProps = {
   children: undefined,
+  updateOnEachFrame: false,
 };
 
 export default makeRenderable(GetRenderer);
