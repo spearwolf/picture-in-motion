@@ -65,6 +65,7 @@ const renderFrameTree = (renderer, context) => {
 const renderFrame = (now, component) => {
   const { renderer } = component;
   if (renderer) {
+    renderer.resize();
     renderer.render(now);
     renderFrameTree(renderer, component.childContext);
   }

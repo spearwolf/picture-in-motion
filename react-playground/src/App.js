@@ -10,6 +10,7 @@ import './App.css';
 const PicimoCanvas = styled(Canvas)`
   display: inline-block;
   width: 534px;
+  max-width: 100vw;
   height: 300px;
   margin: 0 auto;
   padding: 0;
