@@ -24,10 +24,14 @@ const readContextAttributes = options => ({
 export default (canvas, options) => {
   const ctxAttrs = readContextAttributes(options);
 
-  let gl = canvas.getContext('webgl2', ctxAttrs);
+  let gl;
 
-  if (gl) {
-    return new WebGl2Context(gl);
+  if (!options.disableWebGL2) {
+    gl = canvas.getContext('webgl2', ctxAttrs);
+
+    if (gl) {
+      return new WebGl2Context(gl);
+    }
   }
 
   gl = canvas.getContext('webgl', ctxAttrs) || canvas.getContext('experimental-webgl', ctxAttrs);

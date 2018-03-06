@@ -26,6 +26,7 @@ const initRenderer = (component, canvas) => {
     'premultipliedAlpha',
     'preserveDrawingBuffer',
     'pixelRatio',
+    'disableWebGL2',
   ]);
 
   component.renderer = new WebGlRenderer(canvas, options);
@@ -126,6 +127,7 @@ Canvas.propTypes = {
   premultipliedAlpha: PropTypes.bool,
   preserveDrawingBuffer: PropTypes.bool,
   pixelRatio: PropTypes.number,
+  disableWebGL2: PropTypes.bool,
 };
 
 Canvas.defaultProps = {
@@ -138,6 +140,7 @@ Canvas.defaultProps = {
   premultipliedAlpha: true,
   preserveDrawingBuffer: false,
   pixelRatio: undefined,
+  disableWebGL2: false,
 };
 
 export default Canvas;

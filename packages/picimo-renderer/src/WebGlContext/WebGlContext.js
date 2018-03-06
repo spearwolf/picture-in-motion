@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: 0 */
-import TextureManager from './TextureManager';
+
+// https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-WebGL.html
 
 const readGlState = (glx) => {
   const { gl } = glx;
@@ -28,8 +29,6 @@ class WebGlContext {
     for (let i = 0; i < this.boundTextures.length; i++) {
       this.boundTextures[i] = { TEXTURE_2D: null };
     }
-
-    this.textureManager = new TextureManager(this);
 
     this.activeTexture(0); // enable first texture unit by default
   }

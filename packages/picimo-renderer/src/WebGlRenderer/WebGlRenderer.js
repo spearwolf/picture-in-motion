@@ -12,6 +12,7 @@ export default class WebGlRenderer {
    * @param {HTMLElement} domElement - The `<canvas>` element or the *container* element.
    * @param {Object} [options]
    * @param {number} [options.pixelRatio] - Set `pixelRatio` to a fixed value instead of reading from `window.devicePixelRatio` (default)
+   * @param {number} [options.disableWebGL2] - Set to `true` if you want to force a WebGL1 context instead of an WebGL2 (default if possible)
    */
   constructor(domElement, options) {
     /**
