@@ -1,25 +1,33 @@
 import React from 'react';
+import styled from 'styled-components';
 
-import Picimo from './Picimo';
+import { Canvas, Scene } from './Picimo';
 import FrameNo from './FrameNo';
+import ClearBackground from './ClearBackground';
 
 import './App.css';
+
+const PicimoCanvas = styled(Canvas)`
+  display: inline-block;
+  width: 534px;
+  height: 300px;
+  margin: 0 auto;
+  padding: 0;
+`;
 
 const App = () => (
   <div className="App">
 
-    <Picimo.Canvas alpha className="Picimo-Canvas-Container">
-      <Picimo.Scene name="foo">
-        <Picimo.Scene name="bar">
-          <Picimo.Clear color="#8ac" />
-        </Picimo.Scene>
-        <Picimo.Scene name="plah" />
-      </Picimo.Scene>
+    <PicimoCanvas alpha>
+      <FrameNo />
 
-      <div style={{ fontFamily: 'monospace', color: '#333' }}>
-        <FrameNo />
-      </div>
-    </Picimo.Canvas>
+      <Scene name="foo">
+        <Scene name="bar">
+          <ClearBackground color="#8ac" />
+        </Scene>
+        <Scene name="plah" />
+      </Scene>
+    </PicimoCanvas>
 
     <p className="App-intro">
       To get started, edit <code>src/App.js</code> and save to reload!

@@ -1,9 +1,4 @@
-import Canvas from './Canvas';
-import Clear from './Clear';
-import Scene from './Scene';
-
-export default {
-  Canvas,
-  Clear,
-  Scene,
-};
+export { default as Canvas } from './Canvas';
+export { default as Clear } from './Clear';
+export { default as Scene } from './Scene';
+export { default as GetRenderer } from './GetRenderer';

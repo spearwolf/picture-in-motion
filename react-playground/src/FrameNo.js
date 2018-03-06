@@ -1,16 +1,20 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-const FrameNo = ({ label }, { renderer }) => (renderer || null) && (
-  <Fragment>{ `${label}${renderer.frameNo} {${Math.round(renderer.now)} sec}` }</Fragment>
+import { GetRenderer } from './Picimo';
+
+const FrameNo = ({ label }) => (
+  <GetRenderer>
+    { (renderer, frameNo) => (
+      <div style={{ fontFamily: 'monospace', color: '#333' }}>
+        { `${label}${frameNo} {${Math.round(renderer.now)} sec}` }
+      </div>
+    )}
+  </GetRenderer>
 );
 
-FrameNo.contextTypes = {
-  renderer: PropTypes.object,
-};
-
 FrameNo.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
 };
 
 FrameNo.defaultProps = {

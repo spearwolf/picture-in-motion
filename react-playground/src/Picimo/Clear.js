@@ -26,8 +26,6 @@ class Clear extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('<Clear>::componentWillReceiveProps:', nextProps);  // eslint-disable-line
-
     if (nextProps.color && nextProps.color !== this.props.color) {
       this.setState(getColorState(nextProps));
     }

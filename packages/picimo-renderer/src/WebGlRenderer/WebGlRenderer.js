@@ -30,6 +30,11 @@ export default class WebGlRenderer {
     this.gl = createGl(this.canvas, options);
 
     /**
+     * WebGL context attributes
+     */
+    this.glContextAttributes = this.gl.getContextAttributes();
+
+    /**
      * Time in *seconds*
      */
     this.now = 0;

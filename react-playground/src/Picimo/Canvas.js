@@ -3,7 +3,7 @@
 /* eslint react/no-unused-prop-types: 0 */
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import pick from 'lodash';
+import pick from 'lodash/pick';
 
 import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 
@@ -13,7 +13,7 @@ const initRenderer = (component, canvas) => {
   if (!canvas) return;
   if (component.renderer) return;
   if (component.canvas && canvas !== component.canvas) {
-    throw new Error('<Picimo.Canvas/>::initRenderer: canvas element changed!');
+    throw new Error('<Picimo.Canvas>::initRenderer: canvas element changed!');
   }
 
   component.canvas = canvas;
@@ -37,7 +37,7 @@ const initRenderer = (component, canvas) => {
     },
   };
 
-  console.log('<Picimo.Canvas/>::initRenderer:', component.renderer); // eslint-disable-line
+  console.log('<Picimo.Canvas>::initRenderer:', component.renderer); // eslint-disable-line
 
   component.forceUpdate();
 };
