@@ -1,4 +1,4 @@
-/* eslint-env jest */
+/* eslint-env mocha */
 import assert from 'assert';
 import assertVOAttrDescriptor from './assertVOAttrDescriptor';
 
@@ -17,7 +17,7 @@ const assertPropertyTypes = (vo, props) => {
 describe('VODescriptor', () => {
   let descriptor;
 
-  beforeAll(() => {
+  before(() => {
     descriptor = new VODescriptor({
       proto: {
         foo() {

@@ -42,7 +42,7 @@ export default class PowerOf2Image {
     } else {
       imgEl = from;
     }
-    if (imgEl.complete === false || (imgEl.width === 0 && imgEl.height === 0)) {
+    if (imgEl.onComplete === false || (imgEl.width === 0 && imgEl.height === 0)) {
       /**
        * @type {HTMLImageElement|HTMLCanvasElement}
        */
@@ -50,7 +50,7 @@ export default class PowerOf2Image {
       /**
        * @type {Promise<PowerOf2Image>}
        */
-      this.complete = new Promise((resolve) => {
+      this.onComplete = new Promise((resolve) => {
         const origOnLoad = imgEl.onload;
         imgEl.onload = () => {
           if (origOnLoad) origOnLoad.call(imgEl);
@@ -63,7 +63,7 @@ export default class PowerOf2Image {
       /**
        * @type {Promise<PowerOf2Image>}
        */
-      this.complete = Promise.resolve(this);
+      this.onComplete = Promise.resolve(this);
     }
   }
 
