@@ -26,7 +26,7 @@ export default (canvas, options) => {
 
   let gl;
 
-  if (!options.disableWebGL2) {
+  if (!readOption(options, 'disableWebGL2', false)) {
     gl = canvas.getContext('webgl2', ctxAttrs);
 
     if (gl) {
