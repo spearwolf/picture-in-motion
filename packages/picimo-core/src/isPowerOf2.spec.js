@@ -1,18 +1,20 @@
 /* eslint-env jest */
+import assert from 'assert';
+
 import { isPowerOf2 } from '.';
 
 describe('isPowerOf2', () => {
   it('power of 2 value', () => {
-    expect(isPowerOf2(1)).toBe(true);
-    expect(isPowerOf2(2)).toBe(true);
-    expect(isPowerOf2(4)).toBe(true);
-    expect(isPowerOf2(512)).toBe(true);
-    expect(isPowerOf2(4096)).toBe(true);
+    assert.strictEqual(isPowerOf2(1), true);
+    assert.strictEqual(isPowerOf2(2), true);
+    assert.strictEqual(isPowerOf2(4), true);
+    assert.strictEqual(isPowerOf2(512), true);
+    assert.strictEqual(isPowerOf2(4096), true);
   });
   it('not power of 2 value', () => {
-    expect(isPowerOf2(0)).toBe(false);
-    expect(isPowerOf2(63)).toBe(false);
-    expect(isPowerOf2(11)).toBe(false);
-    expect(isPowerOf2(2047)).toBe(false);
+    assert.strictEqual(isPowerOf2(0), false);
+    assert.strictEqual(isPowerOf2(63), false);
+    assert.strictEqual(isPowerOf2(11), false);
+    assert.strictEqual(isPowerOf2(2047), false);
   });
 });
