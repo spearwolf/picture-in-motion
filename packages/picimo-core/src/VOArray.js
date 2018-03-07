@@ -1,3 +1,5 @@
+import DataRef from './DataRef';
+
 // === private === {{{
 
 /** @private */
@@ -71,11 +73,14 @@ export default class VOArray {
    * @param {number} bytesPerVO - Size of a single `vertex object` in *bytes*. **Must be divisible by 4**.
    * @param {Array<string>} arrayTypes - List of allowed *typed array types*. Should have at least one type included.
    * @param {ArrayBuffer|DataView|TypedArray} [data] - Create a *view* into the buffer from `data`
+   * @param {Object} [hints] - Optional *hints* for the *reference*
    */
-  constructor(capacity, bytesPerVO, arrayTypes, data) {
+  constructor(capacity, bytesPerVO, arrayTypes, data, hints) {
     if (bytesPerVO % 4 !== 0) {
       throw new TypeError(`new VOArray: bytesPerVO must be divisible by 4 (but is not!) bytesPerVO=${bytesPerVO}`);
     }
+
+    this.ref = new DataRef('VOArray', this, hints);
 
     this.capacity = capacity;
     this.bytesPerVO = bytesPerVO;

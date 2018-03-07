@@ -36,6 +36,7 @@
     "webpack-dev-server": "^3"
   },
   "dependencies": {
-    "gl-matrix": "^2.4.0"
+    "gl-matrix": "^2.4.0",
+    "uuid": "^3.2.1"
   }
 }

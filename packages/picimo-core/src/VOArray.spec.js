@@ -7,6 +7,7 @@ describe('VOArray', () => {
   it('create instance', () => {
     const voa = new VOArray(4, 16, ['float32', 'int16', 'uint8']);
 
+    assert.ok(voa.ref);
     assert.strictEqual(voa.bufferByteLength, 64);
     assert.strictEqual(voa.buffer, voa.float32Array.buffer);
     assert.strictEqual(voa.buffer, voa.int16Array.buffer);
@@ -15,6 +16,12 @@ describe('VOArray', () => {
     assert.equal(voa.int8Array, undefined);
     assert.equal(voa.uint32Array, undefined);
     assert.equal(voa.uint16Array, undefined);
+  });
+
+  it('should have a reference', () => {
+    const voa = new VOArray(4, 16, ['float32'], null, { usage: 'static' });
+
+    assert.strictEqual(voa.ref.hints.usage, 'static');
   });
 
   it('create instance should clone arrayTypes (no copy)', () => {

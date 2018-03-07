@@ -76,10 +76,14 @@ export default class VODescriptor {
 
   /**
    * @param {number} [size=1]
+   * @param {Object} [hints] - Optional *hints* for the `VOArray`
    * @returns {VOArray}
    */
-  createVOArray(size = 1) {
-    return new VOArray(size, this.bytesPerVO, this.typeList);
+  createVOArray(size = 1, hints = undefined) {
+    return new VOArray(size, this.bytesPerVO, this.typeList, null, Object.assign({
+      descriptor: this,
+      usage: 'dynamic',
+    }, hints));
   }
 
   /**

@@ -1,5 +1,7 @@
 /* eslint no-param-reassign: 0 */
+import generateUuid from '../generateUuid';
 import readOption from '../readOption';
+
 import createVOs from './createVOs';
 
 export default class VOPool {
@@ -10,16 +12,19 @@ export default class VOPool {
    * @param {VOArray} [options.voArray] - Vertex object array
    * @param {VertexObject} [options.voZero] - *vertex object* prototype
    * @param {VertexObject} [options.voNew] - *vertex object* prototype
-   * @param {VertexObject} [options.maxAllocVOSize] - never allocate more than `maxAllocVOSize` *vertex objects* at once
+   * @param {number} [options.maxAllocVOSize] - never allocate more than `maxAllocVOSize` *vertex objects* at once
+   * @param {string} [options.usage='dynamic'] - buffer usage hint, choose between `dynamic` or `static`
    */
 
   constructor(descriptor, options) {
+    this.id = generateUuid();
     this.descriptor = descriptor;
     this.capacity = readOption(options, 'capacity', this.descriptor.maxIndexedVOPoolSize);
     this.maxAllocVOSize = readOption(options, 'maxAllocVOSize', 0);
-    this.voArray = readOption(options, 'voArray', () => descriptor.createVOArray(this.capacity));
     this.voZero = readOption(options, 'voZero', () => descriptor.createVO());
     this.voNew = readOption(options, 'voNew', () => descriptor.createVO());
+    this.usage = readOption(options, 'usage', 'dynamic');
+    this.voArray = readOption(options, 'voArray', () => descriptor.createVOArray(this.capacity, { usage: this.usage }));
 
     this.availableVOs = [];
     this.usedVOs = [];

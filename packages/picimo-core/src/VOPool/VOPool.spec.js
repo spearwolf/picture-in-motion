@@ -51,6 +51,19 @@ describe('VOPool', () => {
     const floats = new Float32Array(pool.voArray.buffer);
     const vo = [];
 
+    it('should have an .id property', () => {
+      assert.strictEqual(typeof pool.id, 'string', 'id should be a string');
+      assert.ok(pool.id.length > 0, 'id should not be blank');
+    });
+
+    it('default usage should be :dynamic', () => {
+      assert.strictEqual(pool.voArray.ref.hints.usage, 'dynamic');
+    });
+
+    it('pool.voArray hints should include descriptor', () => {
+      assert.strictEqual(pool.voArray.ref.hints.descriptor, descriptor);
+    });
+
     it('1. alloc()', () => {
       vo.push(pool.alloc());
       vo[0].setPosition(1, 2, 3, 10, 20, 30, 100, 200, 300);
