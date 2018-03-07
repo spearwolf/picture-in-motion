@@ -14,12 +14,12 @@ export default class ShaderTexture2dVariable extends ShaderVariable {
   }
 
   /**
-   * Sync texture to gpu and update `.value` to the gl texture unit.
+   * Sync texture to gpu and update `.data` to the gl texture unit.
    *
    * @param {WebGlRenderer} renderer
    */
   syncTextureAndValue(renderer) {
-    // TODO move to @picimo/renderer?
+    // TODO move to @picimo/renderer -> WebGlRenderer
     if (this.texture != null) {
       const glTex = renderer.syncTexture(this.texture);
       this.data = glTex.bind();
