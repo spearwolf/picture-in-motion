@@ -1,5 +1,11 @@
 export { default as AABB2 } from './AABB2';
-export { default as ResourceReference } from './ResourceReference';
+export { default as PowerOf2Image } from './PowerOf2Image';
+export { default as ResourceRef } from './ResourceRef';
+export { default as Serial } from './Serial';
+export { default as StackedContext } from './StackedContext';
 export { default as VOArray } from './VOArray';
 export { default as Viewport } from './Viewport';
+export { default as findNextPowerOf2 } from './findNextPowerOf2';
+export { default as isPowerOf2 } from './isPowerOf2';
+export { default as maxOf } from './maxOf';
 export { default as readOption } from './readOption';

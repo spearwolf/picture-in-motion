@@ -1,0 +1,14 @@
+/* eslint-env jest */
+import { findNextPowerOf2 } from '.';
+
+describe('findNextPowerOf2', () => {
+  it('should work', () => {
+    expect(findNextPowerOf2(0)).toBe(1);
+    expect(findNextPowerOf2(1)).toBe(1);
+    expect(findNextPowerOf2(2)).toBe(2);
+    expect(findNextPowerOf2(3)).toBe(4);
+    expect(findNextPowerOf2(9)).toBe(16);
+    expect(findNextPowerOf2(666)).toBe(1024);
+    expect(findNextPowerOf2(4096)).toBe(4096);
+  });
+});
