@@ -37,7 +37,7 @@ export default class PowerOf2Image {
   constructor(from) {
     let imgEl;
     if (typeof from === 'string') {
-      imgEl = new global.Image();
+      imgEl = new window.Image();
       imgEl.src = from;
     } else {
       imgEl = from;
