@@ -19,7 +19,7 @@ describe('TextureAtlasJsonDef', () => {
     });
 
     it('jsonDef', () => {
-      assert.ok(jsonDef.jsonDef);
+      assert.ok(jsonDef.meta);
     });
 
     it('frameNames', () => assert.deepEqual(jsonDef.frameNames, [
