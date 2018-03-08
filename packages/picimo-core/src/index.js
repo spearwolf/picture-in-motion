@@ -16,6 +16,7 @@ export { default as ShaderVariableBufferGroup } from './ShaderVariableBufferGrou
 export { default as ShaderVariableGroup } from './ShaderVariableGroup';
 export { default as StackedContext } from './StackedContext';
 export { default as Texture } from './Texture';
+export { default as TextureAtlas } from './TextureAtlas';
 export { default as VOArray } from './VOArray';
 export { default as VODescriptor } from './VODescriptor';
 export { default as VOPool } from './VOPool';
@@ -24,3 +25,4 @@ export { default as findNextPowerOf2 } from './findNextPowerOf2';
 export { default as isPowerOf2 } from './isPowerOf2';
 export { default as maxOf } from './maxOf';
 export { default as readOption } from './readOption';
+export { default as sample } from './sample';

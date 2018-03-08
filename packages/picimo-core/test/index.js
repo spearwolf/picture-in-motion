@@ -15,6 +15,7 @@ require('../src/ShaderContext.spec.js');
 require('../src/ShaderVariable.spec.js');
 require('../src/StackedContext.spec.js');
 require('../src/Texture.spec.js');
+require('../src/TextureAtlas.spec.js');
 require('../src/VOArray.spec.js');
 require('../src/VODescriptor/VODescriptor.spec.js');
 require('../src/VOPool/VOPool.spec.js');
