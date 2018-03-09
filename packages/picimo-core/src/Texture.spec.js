@@ -67,7 +67,7 @@ describe('Texture', () => {
 
     describe('after complete', () => {
       before((done) => {
-        p2img.onComplete.then(() => {
+        p2img.onLoaded.then(() => {
           tex = new Texture(p2img);
           done();
         });

@@ -102,17 +102,17 @@ export default class SpriteGroup {
 
   createSprite(texture, width, height) {
     const vo = this.voPool.alloc(1);
-    if (texture != null) {
-      const w = width || texture.width;
-      const h = height || texture.height;
-      vo.setSize(w, h);
-      vo.setTexCoordsByTexture(texture);
-    }
+    if (!texture) return vo;
+
+    const w = width || texture.width;
+    const h = height || texture.height;
+    vo.setSize(w, h);
+    vo.setTexCoordsByTexture(texture);
     return vo;
   }
 
   renderFrame(renderer) {
-    if (this.shaderTextureGroup == null) {
+    if (!this.shaderTextureGroup) {
       this.shaderTextureGroup = new ShaderTextureGroup(this.textureLibrary, this.textures);
     }
 

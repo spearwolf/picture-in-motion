@@ -2,6 +2,7 @@
 /* eslint no-param-reassign: 0 */
 import { isPowerOf2, findNextPowerOf2 } from '.';
 
+/** @private */
 function convertToPowerOf2(image) {
   const w = findNextPowerOf2(image.width);
   const h = findNextPowerOf2(image.height);
@@ -14,6 +15,7 @@ function convertToPowerOf2(image) {
   return canvas;
 }
 
+/** @private */
 function setPowerOf2ImgEl(p2img, imgEl) {
   p2img.imgEl = isPowerOf2(imgEl.width) && isPowerOf2(imgEl.height) ? imgEl : convertToPowerOf2(imgEl);
   p2img.origWidth = imgEl.width;
@@ -42,7 +44,7 @@ export default class PowerOf2Image {
     } else {
       imgEl = from;
     }
-    if (imgEl.onComplete === false || (imgEl.width === 0 && imgEl.height === 0)) {
+    if (imgEl.onLoaded === false || (imgEl.width === 0 && imgEl.height === 0)) {
       /**
        * @type {HTMLImageElement|HTMLCanvasElement}
        */
@@ -50,7 +52,7 @@ export default class PowerOf2Image {
       /**
        * @type {Promise<PowerOf2Image>}
        */
-      this.onComplete = new Promise((resolve) => {
+      this.onLoaded = new Promise((resolve) => {
         const origOnLoad = imgEl.onload;
         imgEl.onload = () => {
           if (origOnLoad) origOnLoad.call(imgEl);
@@ -63,7 +65,7 @@ export default class PowerOf2Image {
       /**
        * @type {Promise<PowerOf2Image>}
        */
-      this.onComplete = Promise.resolve(this);
+      this.onLoaded = Promise.resolve(this);
     }
   }
 

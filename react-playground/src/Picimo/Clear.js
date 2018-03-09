@@ -4,7 +4,7 @@ import tinycolor from 'tinycolor2';
 
 import makeRenderable from './makeRenderable';
 
-const getColorState = ({ color }) => {
+const createColorState = ({ color }) => {
   const c = tinycolor(color).toRgb();
   const red = c.r / 255;
   const green = c.g / 255;
@@ -22,12 +22,12 @@ class Clear extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
 
-    this.state = getColorState(props);
+    this.state = createColorState(props);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.color && nextProps.color !== this.props.color) {
-      this.setState(getColorState(nextProps));
+      this.setState(createColorState(nextProps));
     }
   }
 

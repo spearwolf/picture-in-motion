@@ -6,8 +6,8 @@ import PowerOf2Image from './PowerOf2Image';
 import readOption from './readOption';
 
 /**
- * Represents texture coordinates and holds a reference to a `<img>` or `<canvas>` element.
- * Textures can form hierachical structures.
+ * Represents texture coordinates and holds a reference to an `<img>` or `<canvas>` element.
+ * Textures can form hierachical structures:
  * The *root* texture contains always the image reference, all other *sub* textures contain
  * references to their parent (and the root).
  *
@@ -211,7 +211,7 @@ export default class Texture {
     */
   static async load(url, textureHints) {
     const absoluteUrl = new URL(url, window.location.href).href;
-    const p2img = await new PowerOf2Image(absoluteUrl).onComplete;
+    const p2img = await new PowerOf2Image(absoluteUrl).onLoaded;
     return new Texture(p2img, undefined, undefined, 0, 0, textureHints);
   }
 }

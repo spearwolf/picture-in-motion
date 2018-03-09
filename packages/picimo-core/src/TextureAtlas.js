@@ -101,7 +101,7 @@ export default class TextureAtlas {
   static async load(url, options) {
     const atlasUrl = new URL(url, window.location.href).href;
     const jsonDef = await TextureAtlasJsonDef.load(atlasUrl, readOption(options, 'fetchOptions'));
-    const image = await new PowerOf2Image(readOption(options, 'image', () => new URL(jsonDef.imageUrl, atlasUrl).href, jsonDef)).onComplete;
+    const image = await new PowerOf2Image(readOption(options, 'image', () => new URL(jsonDef.imageUrl, atlasUrl).href, jsonDef)).onLoaded;
 
     const rootTexture = new Texture(image, undefined, undefined, 0, 0, readOption(options, 'textureHints'));
     const atlas = new TextureAtlas(rootTexture, jsonDef);
