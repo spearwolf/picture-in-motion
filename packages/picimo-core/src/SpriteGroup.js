@@ -46,7 +46,9 @@ export default class SpriteGroup {
       voZero = descriptor.createVO(null, voZero);
     }
 
-    this.voPool = new VOPool(descriptor, Object.assign(pickVOPoolOpts(options), {
+    this.voPool = new VOPool(descriptor, Object.assign({
+      maxAllocVOSize: 1000,
+    }, pickVOPoolOpts(options), {
       voNew,
       voZero,
     }));
@@ -137,4 +139,3 @@ export default class SpriteGroup {
     this.voPool.voArray.ref.touch();
   }
 }
-

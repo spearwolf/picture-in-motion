@@ -18,12 +18,23 @@ describe('SpriteGroup', () => {
       size: 2,
       attrNames: ['x', 'y'],
     }, {
+      name: 'size',
+      type: 'int32',
+      size: 2,
+      attrNames: ['w', 'h'],
+    }, {
       name: 'texCoords',
       type: 'int32',
       size: 2,
       attrNames: ['s', 't'],
       uniform: true,
     }],
+    proto: {
+      setTexCoordsByTexture(t) {
+        this.w = t.width;
+        this.h = t.height;
+      },
+    },
   });
 
   it('should be instancable without options', () => {
@@ -38,6 +49,7 @@ describe('SpriteGroup', () => {
   describe('voNew and voZero initialize', () => {
     it('init with an object', () => {
       const sg = new SpriteGroup(voDescriptor, textureLibrary, {
+        capacity: 10,
         voNew: {
           x0: 16,
           y1: 32,
@@ -54,6 +66,7 @@ describe('SpriteGroup', () => {
 
     it('init with a function', () => {
       const sg = new SpriteGroup(voDescriptor, textureLibrary, {
+        capacity: 10,
         voNew: (vo) => {
           vo.x1 = 17;
           vo.y3 = 66;
@@ -63,6 +76,17 @@ describe('SpriteGroup', () => {
       assert.ok(sprite);
       assert.strictEqual(sprite.x1, 17);
       assert.strictEqual(sprite.y3, 66);
+    });
+  });
+
+  describe('loadTextureAtlas', () => {
+    it('createSprite() should set size and texCoords', async () => {
+      const sg = new SpriteGroup(voDescriptor, textureLibrary, { capacity: 10 });
+      const atlas = await sg.loadTextureAtlas('tex', '/assets/nobinger.json');
+      const sprite = sg.createSprite(atlas.frame('nobinger-rot.png'));
+      assert.ok(sprite);
+      assert.strictEqual(sprite.w, 55);
+      assert.strictEqual(sprite.h, 61);
     });
   });
 });

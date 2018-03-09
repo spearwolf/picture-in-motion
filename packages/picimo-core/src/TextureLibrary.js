@@ -15,7 +15,7 @@ export default class TextureLibrary {
     return th.onReady;
   }
 
-  loadTextureAtlas(id, url = id, textureAtlasOptions) {
+  loadTextureAtlas(id, url = id, textureAtlasOptions = undefined) {
     const th = new TextureHandle(TextureAtlas.load(url, textureAtlasOptions));
     this.handles.set(id, th);
     return th.onReady;
