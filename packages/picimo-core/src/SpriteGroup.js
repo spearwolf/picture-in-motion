@@ -46,11 +46,10 @@ export default class SpriteGroup {
       voZero = descriptor.createVO(null, voZero);
     }
 
-    this.voPool = new VOPool(descriptor, {
-      ...pickVOPoolOpts(options),
+    this.voPool = new VOPool(descriptor, Object.assign(pickVOPoolOpts(options), {
       voNew,
       voZero,
-    });
+    }));
 
     this.voPoolShaderAttribs = new ShaderVariableBufferGroup(this.voPool);
 
