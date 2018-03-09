@@ -1,15 +1,16 @@
 /* eslint-env mocha */
 import assert from 'assert';
 
+import ShaderVariable from './ShaderVariable';
+import ShaderVariableAlias from './ShaderVariableAlias';
+import ShaderVariableGroup from './ShaderVariableGroup';
+import ShaderVariableBufferGroup from './ShaderVariableBufferGroup';
+import ShaderUniformVariable from './ShaderUniformVariable';
+import ShaderAttribVariable from './ShaderAttribVariable';
+import ShaderTexture2dVariable from './ShaderTexture2dVariable';
+
 import {
   ShaderContext,
-  ShaderVariable,
-  ShaderVariableAlias,
-  ShaderVariableGroup,
-  ShaderVariableBufferGroup,
-  ShaderUniformVariable,
-  ShaderAttribVariable,
-  ShaderTexture2dVariable,
   VODescriptor,
   VOPool,
 } from '.';

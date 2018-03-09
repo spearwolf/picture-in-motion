@@ -2,6 +2,7 @@ import ShaderVariable from './ShaderVariable';
 
 /**
  * Shader texture 2d variable.
+ * @private
  */
 export default class ShaderTexture2dVariable extends ShaderVariable {
   /**

@@ -1,6 +1,9 @@
 import ShaderVariable from './ShaderVariable';
 import ShaderVariableGroup from './ShaderVariableGroup';
 
+/**
+ * @private
+ */
 function shaderVarMap(shaderContext, type) {
   switch (type) {
     case ShaderVariable.UNIFORM:
@@ -14,6 +17,9 @@ function shaderVarMap(shaderContext, type) {
   }
 }
 
+/**
+ * @private
+ */
 function shaderVarLane(shaderContext, type, name) {
   const map = shaderVarMap(shaderContext, type);
   let lane = map.get(name);

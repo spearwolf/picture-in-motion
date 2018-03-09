@@ -1,5 +1,8 @@
 import VOArray from './VOArray';
 
+/**
+ * @private
+ */
 export default class ShaderAttribValue {
   constructor(name, descriptor, bufferSource) {
     this.name = name;

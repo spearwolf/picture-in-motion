@@ -1,12 +1,10 @@
 /* eslint-env mocha */
 import assert from 'assert';
 
-import {
-  ShaderVariable,
-  ShaderUniformVariable,
-  ShaderAttribVariable,
-  ShaderTexture2dVariable,
-} from '.';
+import ShaderVariable from './ShaderVariable';
+import ShaderUniformVariable from './ShaderUniformVariable';
+import ShaderAttribVariable from './ShaderAttribVariable';
+import ShaderTexture2dVariable from './ShaderTexture2dVariable';
 
 describe('ShaderVariable', () => {
   it('new ShaderVariable() without value', () => {

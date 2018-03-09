@@ -5,6 +5,7 @@ import ShaderVariableGroup from './ShaderVariableGroup';
 
 /**
  * Group of shader variables which are referencing one single buffer.
+ * @private
  */
 export default class ShaderVariableBufferGroup extends ShaderVariableGroup {
   /**

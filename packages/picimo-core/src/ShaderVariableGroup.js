@@ -1,5 +1,6 @@
 /**
  * Group of shader variables.
+ * @private
  */
 export default class ShaderVariableGroup {
   /**

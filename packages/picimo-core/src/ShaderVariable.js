@@ -4,6 +4,8 @@ import DataRef from './DataRef';
  * @desc
  * Generic container for *shader variables*.
  *
+ * @private
+ *
  * A shader variable can be an *uniform*, *vertex attributes* or *textures* ..
  * A shader variable is a `DataRef` but has an additional `name`.
  */

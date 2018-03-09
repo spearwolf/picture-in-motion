@@ -1,5 +1,6 @@
 /**
  * Shader attribute variable *alias*.
+ * @private
  */
 export default class ShaderVariableAlias {
   /**
