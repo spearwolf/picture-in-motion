@@ -13,6 +13,7 @@ require('../src/ElementIndexArray.spec.js');
 require('../src/PowerOf2Image.spec.js');
 require('../src/ShaderContext.spec.js');
 require('../src/ShaderVariable.spec.js');
+require('../src/SpriteGroup.spec.js');
 require('../src/StackedContext.spec.js');
 require('../src/Texture.spec.js');
 require('../src/TextureAtlas.spec.js');

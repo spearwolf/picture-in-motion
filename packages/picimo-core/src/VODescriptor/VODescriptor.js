@@ -90,10 +90,32 @@ export default class VODescriptor {
    * Create a *vertex object*.
    *
    * @param {VOArray} [voArray]
+   * @param {function|object} [voInit] - Initialize our *vertex object*
    * @returns {Object} the *vertex object*
    */
-  createVO(voArray) {
-    return createVO(Object.create(this.voPrototype), this, voArray);
+  createVO(voArray, voInit) {
+    const vo = createVO(Object.create(this.voPrototype), this, voArray);
+
+    switch (typeof voInit) { // eslint-disable-line
+      case 'function':
+        voInit(vo);
+        break;
+
+      case 'object': {
+        Object.keys(voInit).forEach((key) => {
+          const attrDesc = this.attr[key];
+          if (attrDesc) {
+            attrDesc.setValue(vo, voInit[key]);
+          } else if (typeof vo[key] === 'function') {
+            vo[key](voInit[key]);
+          } else {
+            vo[key] = voInit[key];
+          }
+        });
+      }
+    }
+
+    return vo;
   }
 
   /**

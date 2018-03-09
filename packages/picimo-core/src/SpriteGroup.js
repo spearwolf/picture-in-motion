@@ -6,16 +6,6 @@ import VOPool from './VOPool';
 import pick from './pick';
 
 /** @private */
-const getVO = (descriptor, opt) => {
-  if (typeof opt === 'function') {
-    const vo = descriptor.createVO();
-    opt(vo);
-    return vo;
-  }
-  return opt;
-};
-
-/** @private */
 const pickVOPoolOpts = pick([
   'capacity',
   'usage',
@@ -24,9 +14,9 @@ const pickVOPoolOpts = pick([
 ]);
 
 /**
- * @param {ResourceLibrary} resourceLibrary - The *resource library* which the VODescriptor contains
+ * @param {VODescriptor} descriptor - The `VODescriptor` (*vertex object description*)
  * @param {TextureLibrary} textureLibrary - The *texture library* which the textures contains
- * @param {Object} [options] - Options
+ * @param {Object} options - Options
  * @param {number} [options.capacity] - Maximum number of *sprites*
  * @param {VOArray} [options.voArray] - The internal *vertex object array*
  * @param {Object|function} [options.voZero] - *vertex object* prototype
@@ -35,20 +25,32 @@ const pickVOPoolOpts = pick([
  * @param {string} [options.usage='dynamic'] - Buffer usage hint, choose between `dynamic` or `static`
  * @param {string} [options.indices] - The `ElementIndexArray` which holds the *vertex index* buffer
  * @param {string} [options.primitive] - The primtive type hint for the renderer
- * @param {string} [options.vertexShader] - The name of the *vertex shader*
- * @param {string} [options.fragmentShader] - The name of the *fragment shader*
+ * @param {ShaderProgram} [options.shader] - The `ShaderProgram`. As alternative you can use the `vertexShader` option together with `fragmentShader`
+ * @param {string|ShaderSource} [options.vertexShader] - The *vertex shader*
+ * @param {string|ShaderSource} [options.fragmentShader] - The *fragment shader*
  * @param {Object} [options.textures] - The *shader variable name* to *texture* mapping
  */
 export default class SpriteGroup {
-  constructor(resourceLibrary, textureLibrary, options) {
-    this.resourceLibrary = resourceLibrary;
+  constructor(descriptor, textureLibrary, options = {}) {
+    this.descriptor = descriptor;
     this.textureLibrary = textureLibrary;
-    this.descriptor = resourceLibrary.findDescriptor(options.descriptor);
 
-    this.voPool = new VOPool(this.descriptor, Object.assign(pickVOPoolOpts(options), {
-      voNew: getVO(this.descriptor, options.voNew),
-      voZero: getVO(this.descriptor, options.voZero),
-    }));
+    let {
+      voNew,
+      voZero,
+    } = options;
+    if (voNew) {
+      voNew = descriptor.createVO(null, voNew);
+    }
+    if (voZero) {
+      voZero = descriptor.createVO(null, voZero);
+    }
+
+    this.voPool = new VOPool(descriptor, {
+      ...pickVOPoolOpts(options),
+      voNew,
+      voZero,
+    });
 
     this.voPoolShaderAttribs = new ShaderVariableBufferGroup(this.voPool);
 
@@ -58,10 +60,11 @@ export default class SpriteGroup {
       // TODO create ElementIndexArray factories! capacity=N, type=quads, ...
     );
 
-    this.shaderProgram = new ShaderProgram(
-      resourceLibrary.findVertexShader(options.vertexShader),
-      resourceLibrary.findFragmentShader(options.fragmentShader),
-    );
+    this.shaderProgram = options.shaderProgram;
+
+    if (!this.shaderProgram && options.vertexShader && options.fragmentShader) {
+      this.shaderProgram = new ShaderProgram(options.vertexShader, options.fragmentShader);
+    }
 
     this.primitive = options.primitive;
 
