@@ -34,7 +34,7 @@ export default class ResourceLibrary {
 
   /**
    * @param {string} id
-   * @param {ShaderSource} vertexShader - *vertex shader*
+   * @param {ShaderSource} fragmentShader - *vertex shader*
    * @returns {ShaderSource} - the *fragment shader*
    */
   addFragmentShader(id, fragmentShader) {
@@ -46,7 +46,6 @@ export default class ResourceLibrary {
   }
 
   /**
-   * @param {string} id
    * @param {string|function|string[]} source - See `ShaderSource` constructor for more details
    * @returns {ShaderSource} - the *vertex shader*
    */
@@ -57,7 +56,6 @@ export default class ResourceLibrary {
   }
 
   /**
-   * @param {string} id
    * @param {string|function|string[]} source - See `ShaderSource` constructor for more details
    * @returns {ShaderSource} - the *fragment shader*
    */

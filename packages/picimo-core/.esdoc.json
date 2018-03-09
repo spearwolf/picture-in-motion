@@ -11,5 +11,10 @@
         "includes": ["(spec|Spec|test|Test)\\.js$"]
       }
     }
+  }, {
+    "name": "esdoc-ecmascript-proposal-plugin",
+    "option": {
+      "all": true
+    }
   }]
 }
