@@ -40,7 +40,7 @@ export default class TextureManager {
       }
 
       if (texUnit < 0) {
-        // no free texture found
+        // no free unit found
         // so we choose the lru texture unit
 
         texUnit = this.lastBoundTexUnit;

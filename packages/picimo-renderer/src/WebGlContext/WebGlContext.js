@@ -2,6 +2,9 @@
 
 // https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-WebGL.html
 
+/**
+ * @private
+ */
 const readGlState = (glx) => {
   const { gl } = glx;
   // https://developer.mozilla.org/de/docs/Web/API/WebGLRenderingContext/getParameter
