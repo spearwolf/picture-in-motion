@@ -2,6 +2,7 @@ export { default as AABB2 } from './AABB2';
 export { default as DataRef } from './DataRef';
 export { default as ElementIndexArray } from './ElementIndexArray';
 export { default as PowerOf2Image } from './PowerOf2Image';
+export { default as Projection } from './Projection';
 export { default as ResourceLibrary } from './ResourceLibrary';
 // export { default as ShaderAttribValue } from './ShaderAttribValue';
 export { default as ShaderAttribVariable } from './ShaderAttribVariable';
