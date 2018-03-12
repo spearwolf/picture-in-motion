@@ -1,0 +1,29 @@
+{
+  "name": "@picimo/react",
+  "version": "0.0.1",
+  "private": true,
+  "module": "src/index.js",
+  "author": {
+    "name": "Wolfger Schramm",
+    "email": "wolfger@spearwolf.de",
+    "url": "https://www.spearwolf.de"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0"
+  },
+  "peerDependencies": {
+    "@picimo/core": "^0.0.1",
+    "@picimo/renderer": "^0.0.1",
+    "lodash": "^4.17.5",
+    "prop-types": "^15.6.1",
+    "react": "^16.2.0"
+  },
+  "dependencies": {
+    "tinycolor2": "^1.4.1"
+  }
+}

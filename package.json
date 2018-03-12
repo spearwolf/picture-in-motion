@@ -4,18 +4,18 @@
   "workspaces": [
     "packages/picimo-core",
     "packages/picimo-renderer",
+    "packages/picimo-react",
     "react-playground"
   ],
-  "scripts": {
-    "clean": "shx rm -fr node_modules packages/picimo-core/node_modules packages/picimo-renderer/node_modules react-playground/node_modules"
-  },
-  "main": "src/index.js",
   "author": {
     "name": "Wolfger Schramm",
     "email": "wolfger@spearwolf.de",
     "url": "https://www.spearwolf.de"
   },
   "license": "Apache-2.0",
+  "scripts": {
+    "clean": "shx rm -fr node_modules packages/picimo-core/node_modules packages/picimo-renderer/node_modules react-playground/node_modules"
+  },
   "devDependencies": {
     "shx": "^0.2.2"
   }
