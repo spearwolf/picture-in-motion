@@ -1,24 +1,7 @@
 {
   "plugins": [
     "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-proposal-object-rest-spread",
+    ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": true }],
     ["@babel/plugin-proposal-class-properties", { "loose": true }]
-  ],
-  "presets": [
-    ["@babel/preset-env", {
-      "debug": true,
-      "useBuiltIns": "entry",
-      "targets": {
-        "browsers": [
-          "and_chr 64",
-          "chrome 64",
-          "ios_saf 11",
-          "firefox 57",
-          "samsung 6.2",
-          "edge 16",
-          "ie >= 11",
-        ]
-      }
-    }]
   ]
 }

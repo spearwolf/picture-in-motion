@@ -10,4 +10,34 @@ module.exports = {
     host: '0.0.0.0',
     port: 8080,
   },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                debug: true,
+                useBuiltIns: 'entry',
+                targets: {
+                  browsers: [
+                    'and_chr 64',
+                    'chrome 64',
+                    'ios_saf 11',
+                    'firefox 57',
+                    'samsung 6.2',
+                    'edge 16',
+                    'ie 11',
+                  ],
+                },
+              }],
+            ],
+          },
+        },
+      },
+    ],
+  },
 };
