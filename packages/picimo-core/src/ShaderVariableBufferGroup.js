@@ -4,7 +4,7 @@ import ShaderVariableAlias from './ShaderVariableAlias';
 import ShaderVariableGroup from './ShaderVariableGroup';
 
 /**
- * Group of shader variables which are referencing one single buffer.
+ * A group of shader variables all referencing the same array buffer.
  * @private
  */
 export default class ShaderVariableBufferGroup extends ShaderVariableGroup {

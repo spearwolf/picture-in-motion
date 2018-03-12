@@ -11,65 +11,65 @@ export default class ResourceLibrary {
   /**
    * @param {string} id
    * @param {Object|VODescriptor} descriptor - See `VODescriptor` constructor for more details
-   * @returns {VODescriptor}
+   * @returns {string} id
    */
   createDescriptor(id, descriptor) {
     const voDescriptor = descriptor instanceof VODescriptor ? descriptor : new VODescriptor(descriptor);
     this.descriptors.set(id, voDescriptor);
-    return voDescriptor;
+    return id;
   }
 
   /**
    * @param {string} id
    * @param {ShaderSource} vertexShader - the *vertex shader*
-   * @returns {ShaderSource} - the *vertex shader*
+   * @returns {string} id
    */
   addVertexShader(id, vertexShader) {
     if (vertexShader.type !== ShaderSource.VERTEX_SHADER) {
       throw new Error(`addVertexShader: shaderSource has wrong type=${vertexShader.type} (expected type=${ShaderSource.VERTEX_SHADER})`);
     }
     this.vertexShaders.set(id, vertexShader);
-    return vertexShader;
+    return id;
   }
 
   /**
    * @param {string} id
    * @param {ShaderSource} fragmentShader - *vertex shader*
-   * @returns {ShaderSource} - the *fragment shader*
+   * @returns {string} id
    */
   addFragmentShader(id, fragmentShader) {
     if (fragmentShader.type !== ShaderSource.FRAGMENT_SHADER) {
       throw new Error(`addFragmentShader: shaderSource has wrong type=${fragmentShader.type} (expected type=${ShaderSource.FRAGMENT_SHADER})`);
     }
     this.fragmentShaders.set(id, fragmentShader);
-    return fragmentShader;
+    return id;
   }
 
   /**
    * @param {string|function|string[]} source - See `ShaderSource` constructor for more details
-   * @returns {ShaderSource} - the *vertex shader*
+   * @returns {string} id
    */
   createVertexShader(source) {
     const vertexShader = new ShaderSource(ShaderSource.VERTEX_SHADER, source);
     this.vertexShaders.set(vertexShader.id, vertexShader);
-    return vertexShader;
+    return vertexShader.id;
   }
 
   /**
    * @param {string|function|string[]} source - See `ShaderSource` constructor for more details
-   * @returns {ShaderSource} - the *fragment shader*
+   * @returns {string} id
    */
   createFragmentShader(source) {
     const fragmentShader = new ShaderSource(ShaderSource.FRAGMENT_SHADER, source);
     this.fragmentShaders.set(fragmentShader.id, fragmentShader);
-    return fragmentShader;
+    return fragmentShader.id;
   }
 
   /**
    * @param {string} id
    * @returns {VODescriptor}
    */
-  findDescriptor(id) {
+  getDescriptor(id) {
     return this.descriptors.get(id);
   }
 
@@ -77,7 +77,7 @@ export default class ResourceLibrary {
    * @param {string} id
    * @returns {ShaderSource} - the *vertex shader*
    */
-  findVertexShader(id) {
+  getVertexShader(id) {
     return this.vertexShaders.get(id);
   }
 
@@ -85,7 +85,7 @@ export default class ResourceLibrary {
    * @param {string} id
    * @returns {ShaderSource} - the *fragment shader*
    */
-  findFragmentShader(id) {
+  getFragmentShader(id) {
     return this.fragmentShaders.get(id);
   }
 }
