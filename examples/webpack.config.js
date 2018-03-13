@@ -4,7 +4,7 @@ module.exports = {
   mode: 'development',
   entry: {
     main: './src/main.js',
-    ClearBackground: './src/ClearBackground/index.js',
+    'ClearBackground/app': './src/ClearBackground/index.js',
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),
