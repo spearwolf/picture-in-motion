@@ -1,7 +1,7 @@
 /* eslint-env browser */
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { ElementIndexArray } from '@picimo/core'; // eslint-disable-line
+import { ElementIndexArray, VODescriptor } from '@picimo/core'; // eslint-disable-line
 
 import WebGlBuffer from '../WebGlBuffer';
 import WebGlRenderer from '../WebGlRenderer';
@@ -57,6 +57,43 @@ describe('WebGlResourceLibrary', () => {
       renderer.resources.freeBuffer(quadIndices.ref);
       const ref = renderer.resources.findBuffer(quadIndices.ref);
       assert.notExists(ref);
+      assert.isFalse(renderer.glx.gl.isBuffer(glBuffer));
+    });
+  });
+
+  describe('Resource: VOArray', () => {
+    const vod = new VODescriptor({
+      vertexCount: 3,
+      attributes: [
+        {
+          name: 'position',
+          type: 'float32',
+          size: 3,
+          attrNames: ['x', 'y', 'z'],
+        },
+      ],
+    });
+    const voArray = vod.createVOArray(100, { usage: 'static' });
+
+    it('loadBuffer()', () => {
+      const ref = renderer.resources.loadBuffer(voArray.ref);
+      assert.strictEqual(ref.type, 'WebGlBuffer', 'dataRef.type should be "WebGlBuffer"');
+      assert.instanceOf(ref.data, WebGlBuffer, 'dataRef.data should be an instance of WebGlBuffer');
+      assert.strictEqual(ref.id, voArray.ref.id, 'dataRef.id should be equals to VOArray.ref.id');
+      assert.strictEqual(ref.serial, 0, 'dataRef.serial should be initially set to 0');
+      assert.strictEqual(ref.data.usage, renderer.glx.gl.STATIC_DRAW, 'usage hint should be "static"');
+      assert.exists(ref.data.typedArray, 'typedArray hint should be created');
+    });
+
+    it('gl.isBuffer()', () => {
+      const ref = renderer.resources.findBuffer(voArray.ref);
+      ref.data.bufferData();
+      assert.isTrue(renderer.glx.gl.isBuffer(ref.data.glBuffer));
+    });
+
+    it('freeBuffer()', () => {
+      const { glBuffer } = renderer.resources.findBuffer(voArray.ref).data;
+      renderer.resources.freeBuffer(voArray.ref);
       assert.isFalse(renderer.glx.gl.isBuffer(glBuffer));
     });
   });

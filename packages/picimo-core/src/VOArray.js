@@ -80,8 +80,6 @@ export default class VOArray {
       throw new TypeError(`new VOArray: bytesPerVO must be divisible by 4 (but is not!) bytesPerVO=${bytesPerVO}`);
     }
 
-    this.ref = new DataRef('VOArray', this, hints);
-
     this.capacity = capacity;
     this.bytesPerVO = bytesPerVO;
     this.arrayTypes = arrayTypes.slice(0);
@@ -101,6 +99,10 @@ export default class VOArray {
     }
 
     Object.assign(this, createLinkedTypedArrays(this.buffer, this.bufferByteOffset, this.bufferByteLength, arrayTypes));
+
+    this.ref = new DataRef('VOArray', this, Object.assign({
+      typedArray: this.toUint32Array(),
+    }, hints));
   }
 
   /**
@@ -111,11 +113,7 @@ export default class VOArray {
    * @param {number} [toOffset=0] - `vertex object` destination offset
    */
   copy(from, toOffset = 0) {
-    const bytesPerElement = Uint32Array.BYTES_PER_ELEMENT;
-    const elementsPerVO = this.bytesPerVO / bytesPerElement;
-
-    const source = new Uint32Array(from.buffer, from.bufferByteOffset, from.capacity * elementsPerVO);
-    const target = new Uint32Array(this.buffer, this.bufferByteOffset, this.capacity * elementsPerVO);
+    const elementsPerVO = this.bytesPerVO / Uint32Array.BYTES_PER_ELEMENT;
 
     let offset = 0;
 
@@ -123,7 +121,23 @@ export default class VOArray {
       offset = toOffset * elementsPerVO;
     }
 
-    target.set(source, offset);
+    this.toUint32Array().set(from.toUint32Array(), offset);
+  }
+
+  /**
+   * Returns the array buffer converted to `Uint32Array`.
+   * As a side-effect the `uint32Array` property will be created (if it did not exist before).
+   *
+   * @return {Uint32Array}
+   */
+  toUint32Array() {
+    const { uint32Array } = this;
+    if (!uint32Array) {
+      const elementsPerVO = this.bytesPerVO / Uint32Array.BYTES_PER_ELEMENT;
+      this.uint32Array = new Uint32Array(this.buffer, this.bufferByteOffset, this.capacity * elementsPerVO);
+      return this.uint32Array;
+    }
+    return uint32Array;
   }
 
   /**

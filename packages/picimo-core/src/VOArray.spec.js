@@ -14,7 +14,7 @@ describe('VOArray', () => {
     assert.strictEqual(voa.buffer, voa.uint8Array.buffer);
     assert.equal(voa.int32Array, undefined);
     assert.equal(voa.int8Array, undefined);
-    assert.equal(voa.uint32Array, undefined);
+    // assert.equal(voa.uint32Array, undefined); <- may be created by .toUint32Array()
     assert.equal(voa.uint16Array, undefined);
   });
 
@@ -105,5 +105,18 @@ describe('VOArray', () => {
       17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
       33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
     ]);
+  });
+
+  it('toUint32Array() should create the uint32Array property', () => {
+    const values = Uint16Array.from([
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+      17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
+    ]);
+    const voa = new VOArray(2, 16 * Uint16Array.BYTES_PER_ELEMENT, ['uint16'], values);
+    const arr = voa.toUint32Array();
+
+    assert.equal(arr instanceof Uint32Array, true, 'toUint32Array() should return an instance of Uint32Array');
+    assert.ok(voa.uint32Array, 'uint32Array should be defined now');
+    assert.strictEqual(voa.toUint32Array(), arr, 'a subsequent call to toUint32Array() should return the cached instance');
   });
 });

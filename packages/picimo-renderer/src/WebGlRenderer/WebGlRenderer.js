@@ -141,7 +141,7 @@ export default class WebGlRenderer {
 
   /**
    * @desc
-   * Render a single frame.
+   * Initialize *rendering state* for the next frame!
    * Every call to `render()` will increase the `frameNo` counter.
    *
    * @param {number} [now] - *now* in *millis*. is read out from `performance.now()` by default
