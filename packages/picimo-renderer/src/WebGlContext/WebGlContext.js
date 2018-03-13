@@ -36,6 +36,13 @@ class WebGlContext {
     this.activeTexture(0); // enable first texture unit by default
   }
 
+  bindBuffer(target, buffer) {
+    if (this.boundBuffers.get(target) !== buffer) {
+      this.gl.bindBuffer(target, buffer);
+      this.boundBuffers.set(target, buffer);
+    }
+  }
+
   /**
    * @param {number} texUnit
    */

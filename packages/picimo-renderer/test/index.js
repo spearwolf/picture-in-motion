@@ -7,7 +7,8 @@ mocha.setup({
   noHighlighting: true,
 });
 
-require('./hello');
+require('../src/WebGlRenderer/WebGlRenderer.spec');
+require('../src/WebGlResourceLibrary/WebGlResourceLibrary.spec');
 
 mocha.checkLeaks();
 mocha.run();

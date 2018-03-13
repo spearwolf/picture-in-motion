@@ -12,8 +12,8 @@ class DataRef {
   constructor(type, data, hints = null) {
     this.type = type;
     this.data_ = data;
-    this.id = hints && hints.id != null ? String(hints.id) : generateUuid();
-    this.serial = hints && typeof hints.serial === 'number' ? hints.serial : 1;
+    this.id = (hints && hints.id) ? String(hints.id) : generateUuid();
+    this.serial = (hints && typeof hints.serial === 'number') ? hints.serial : 1;
     this.hints = hints;
   }
 

@@ -1,14 +1,14 @@
 import DataRef from './DataRef';
 
 export default class ElementIndexArray {
-  constructor(objectCount, itemCount = 1) {
+  constructor(objectCount, itemCount, usage = 'static') {
     this.objectCount = objectCount;
     this.itemCount = itemCount;
     this.length = objectCount * itemCount;
     this.array = new Uint16Array(this.length);
     this.ref = new DataRef('ElementIndexArray', this, {
+      usage,
       target: 'ELEMENT_ARRAY_BUFFER',
-      usage: 'static',
       typedArray: this.array,
     });
   }
@@ -16,8 +16,9 @@ export default class ElementIndexArray {
   /**
    * @param {number} objectCount
    * @param {number[]} indices
-   * @param {number} [stride=4]
+   * @param {number} stride
    * @param {number} [objectOffset=0]
+   * @param {string} [usage='static']
    * @return {ElementIndexArray}
    * @example
    * // Create a ElementIndexArray for 10 quads where each quad made up of 2x triangles (4x vertices and 6x indices)
@@ -25,8 +26,8 @@ export default class ElementIndexArray {
    * quadIndices.length        // => 60
    * quadIndices.itemCount     // => 6
    */
-  static Generate(objectCount, indices, stride = 4, objectOffset = 0) {
-    const arr = new ElementIndexArray(objectCount, indices.length);
+  static Generate(objectCount, indices, stride, objectOffset = 0, usage = 'static') {
+    const arr = new ElementIndexArray(objectCount, indices.length, usage);
 
     for (let i = 0; i < objectCount; ++i) {
       for (let j = 0; j < indices.length; ++j) {

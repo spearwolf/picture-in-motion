@@ -4,6 +4,8 @@ import { readOption } from '@picimo/core'; // eslint-disable-line
 import createCanvas from './createCanvas';
 import { createWebGlContext } from '../WebGlContext';
 
+import WebGlResourceLibrary from '../WebGlResourceLibrary';
+
 /**
  * The WebGL renderer.
  */
@@ -29,6 +31,11 @@ export default class WebGlRenderer {
      * WebGL context
      */
     this.glx = createWebGlContext(this.canvas, options);
+
+    /**
+     * @type {WebGlResourceLibrary}
+     */
+    this.resources = new WebGlResourceLibrary(this.glx);
 
     /**
      * Time in *seconds*

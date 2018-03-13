@@ -1,7 +1,7 @@
 /* eslint-env browser */
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { WebGlRenderer } from '../src';
+import WebGlRenderer from './WebGlRenderer';
 
 describe('WebGlRenderer', () => {
   describe('with a predefined <canvas> element as first argument passed to constructor', () => {
