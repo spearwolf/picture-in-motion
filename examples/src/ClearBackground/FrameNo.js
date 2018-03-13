@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { GetRenderer } from './Picimo';
+import { GetRenderer } from '@picimo/react'; // eslint-disable-line
 
 const FrameNo = ({ label }) => (
   <GetRenderer updateOnEachFrame>

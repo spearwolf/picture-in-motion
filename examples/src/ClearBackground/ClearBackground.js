@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { ChromePicker } from 'react-color';
 
-import { Clear } from './Picimo';
+import { Clear } from '@picimo/react'; // eslint-disable-line
 
 const Container = styled.div`
   max-width: 960px;
