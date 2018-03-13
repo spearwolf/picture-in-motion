@@ -24,11 +24,11 @@ export default class WebGlBuffer {
   /**
    * Upload array buffer content to gpu via `g.bufferData(..)`.
    *
-   * @param {TypedArray} [typedArray] - The buffer content as *typed array*
+   * @param {TypedArray} [typedArray] - The buffer content as *typed array*. If unspecified use the `typedArray` from the *contructor* call.
    */
-  bufferData(typedArray = this.typedArray) {
+  bufferData(typedArray) {
     this.bindBuffer();
-    this.glx.gl.bufferData(this.target, typedArray, this.usage);
+    this.glx.gl.bufferData(this.target, typedArray || this.typedArray, this.usage);
   }
 
   deleteBuffer() {

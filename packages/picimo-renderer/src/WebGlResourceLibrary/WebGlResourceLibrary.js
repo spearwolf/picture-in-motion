@@ -37,7 +37,8 @@ export default class WebGlResourceLibrary {
       // I. Create WebGlBuffer
       const target = readOption(ref.hints, 'target', WebGlBuffer.ARRAY_BUFFER);
       const usage = readOption(ref.hints, 'usage', 'dynamic');
-      const glBuffer = new WebGlBuffer(this.glx, target, WEB_GL_BUFFER_USAGE[usage]);
+      const typedArray = readOption(ref.hints, 'typedArray');
+      const glBuffer = new WebGlBuffer(this.glx, target, WEB_GL_BUFFER_USAGE[usage], typedArray);
       // II. Create DataRef
       bufferRef = new DataRef('WebGlBuffer', glBuffer, { id: ref.id, serial: 0 });
       this.buffer.set(ref.id, bufferRef);
