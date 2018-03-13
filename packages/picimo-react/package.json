@@ -24,6 +24,7 @@
     "eslint-plugin-react": "^7.7.0",
     "gl-matrix": "^2.4.0",
     "lodash": "^4.17.5",
+    "loglevel": "^1.6.1",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "tinycolor2": "^1.4.1",
@@ -32,6 +33,7 @@
   "peerDependencies": {
     "gl-matrix": "^2.4.0",
     "lodash": "^4.17.5",
+    "loglevel": "^1.6.1",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "tinycolor2": "^1.4.1",

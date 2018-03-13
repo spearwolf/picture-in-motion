@@ -1,3 +1,4 @@
+import { getLogger } from 'loglevel';
 import { readOption, DataRef } from '@picimo/core';  // eslint-disable-line
 
 import WebGlBuffer from '../WebGlBuffer';
@@ -6,6 +7,8 @@ const WEB_GL_BUFFER_USAGE = {
   static: WebGlBuffer.STATIC_DRAW,
   dynamic: WebGlBuffer.DYNAMIC_DRAW,
 };
+
+const log = getLogger('picimo.renderer.WebGlResourceLibrary');
 
 export default class WebGlResourceLibrary {
   constructor(glx) {
@@ -31,7 +34,7 @@ export default class WebGlResourceLibrary {
     let bufferRef = this.buffer.get(ref.id);
     if (!bufferRef) {
       if (!(ref.type === 'VOArray' || ref.type === 'ElementIndexArray')) {
-        console.warn(`WebGlResourceLibrary.loadBuffer() ref.type mismatch! should be "VOArray" or "ElementIndexArray" but is "${ref.type}"`); // eslint-disable-line
+        log.warn(`WebGlResourceLibrary.loadBuffer() ref.type="${ref.type}" mismatch! (should be "VOArray" or "ElementIndexArray")`);
         return;
       }
       // I. Create WebGlBuffer

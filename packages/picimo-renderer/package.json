@@ -11,6 +11,7 @@
   },
   "peerDependencies": {
     "gl-matrix": "^2.4.0",
+    "loglevel": "^1.6.1",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
@@ -32,6 +33,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "gl-matrix": "^2.4.0",
+    "loglevel": "^1.6.1",
     "mocha": "^5.0.4",
     "uuid": "^3.2.1",
     "webpack": "^4.1.1",
