@@ -6,6 +6,17 @@ import { createWebGlContext } from '../WebGlContext';
 
 import WebGlResourceLibrary from '../WebGlResourceLibrary';
 
+/** @private */
+const autotouchResource = (ref, autotouchedResources) => {
+  const { hints } = ref;
+  if (hints && hints.autotouch) {
+    if (!autotouchedResources.has(ref.id)) {
+      autotouchedResources.add(ref.id);
+      ref.touch();
+    }
+  }
+};
+
 /**
  * The WebGL renderer.
  */
@@ -61,6 +72,12 @@ export default class WebGlRenderer {
      * @private
      */
     this._pixelRatio = readOption(options, 'pixelRatio');
+
+    /**
+     * Will be cleared on each frame. Holds `id`'s of all autotouch'd resources (within the current frame context).
+     * @private
+     */
+    this._autotouchedResources = new Set();
 
     this.resize();
   }
@@ -155,6 +172,20 @@ export default class WebGlRenderer {
     }
     this.lastFrameTime = this.now;
 
+    this._autotouchedResources.clear();
+
     this.glx.gl.viewport(0, 0, this.width, this.height);
+  }
+
+  /**
+   * @param {VOArray|ElementIndexArray} - The buffer resource
+   * @return {WebGlBuffer}
+   */
+  syncBuffer({ ref }) {
+    autotouchResource(ref, this._autotouchedResources);
+
+    const bufferRef = this.resources.loadBuffer(ref);
+    bufferRef.sync(ref, buffer => buffer.bufferData());
+    return bufferRef.data;
   }
 }

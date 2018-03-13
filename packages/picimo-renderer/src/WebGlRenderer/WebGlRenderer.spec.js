@@ -1,7 +1,10 @@
 /* eslint-env browser */
 /* eslint-env mocha */
 import { assert } from 'chai';
+import sinon from 'sinon';
+import { VODescriptor } from '@picimo/core'; // eslint-disable-line
 import WebGlRenderer from './WebGlRenderer';
+import WebGlBuffer from '../WebGlBuffer';
 
 describe('WebGlRenderer', () => {
   describe('with a predefined <canvas> element as first argument passed to constructor', () => {
@@ -77,6 +80,107 @@ describe('WebGlRenderer', () => {
       assert.strictEqual(r.height, 300 * dpr, 'height');
 
       document.body.removeChild(container);
+    });
+  });
+
+  describe('syncBuffer()', () => {
+    const renderer = new WebGlRenderer(document.createElement('canvas'));
+    const vod = new VODescriptor({
+      vertexCount: 1,
+      attributes: [
+        {
+          name: 'position',
+          type: 'float32',
+          size: 3,
+          attrNames: ['x', 'y', 'z'],
+        },
+      ],
+    });
+    const voArray = vod.createVOArray(100, { usage: 'dynamic' });
+
+    it('syncBuffer() should return (synced) WebGlBuffer', () => {
+      assert.strictEqual(voArray.ref.serial, 1);
+      assert.notExists(renderer.resources.findBuffer(voArray.ref));
+
+      renderer.render();
+
+      const buf = renderer.syncBuffer(voArray);
+      assert.instanceOf(buf, WebGlBuffer, 'return value should be instance of WebGlBuffer');
+
+      const bufferRef = renderer.resources.findBuffer(voArray.ref);
+      assert.exists(bufferRef);
+      assert.strictEqual(buf, bufferRef.data);
+      assert.strictEqual(bufferRef.serial, 1);
+    });
+
+    it('2nd call to syncBuffer() should not sync', () => {
+      assert.strictEqual(voArray.ref.serial, 1);
+      const buf = renderer.resources.findBuffer(voArray.ref);
+      assert.exists(buf);
+      assert.strictEqual(renderer.resources.findBuffer(voArray.ref).serial, voArray.ref.serial);
+
+      sinon.spy(buf.data, 'bufferData');
+
+      renderer.render();
+
+      assert.exists(renderer.syncBuffer(voArray));
+      assert.isTrue(buf.data.bufferData.notCalled);
+
+      buf.data.bufferData.restore();
+
+      assert.strictEqual(voArray.ref.serial, 1);
+      assert.exists(renderer.resources.findBuffer(voArray.ref));
+      assert.strictEqual(renderer.resources.findBuffer(voArray.ref).serial, voArray.ref.serial);
+    });
+
+    it('3nd call to syncBuffer() should sync because touch() called', () => {
+      assert.strictEqual(voArray.ref.serial, 1);
+      const buf = renderer.resources.findBuffer(voArray.ref);
+      assert.exists(buf);
+      assert.strictEqual(renderer.resources.findBuffer(voArray.ref).serial, voArray.ref.serial);
+
+      voArray.ref.touch();
+
+      sinon.spy(buf.data, 'bufferData');
+
+      renderer.render();
+
+      assert.exists(renderer.syncBuffer(voArray));
+      assert.isTrue(buf.data.bufferData.calledOnce);
+
+      assert.exists(renderer.syncBuffer(voArray));
+      assert.isTrue(buf.data.bufferData.calledOnce);
+
+      buf.data.bufferData.restore();
+
+      assert.strictEqual(voArray.ref.serial, 2);
+      assert.exists(renderer.resources.findBuffer(voArray.ref));
+      assert.strictEqual(renderer.resources.findBuffer(voArray.ref).serial, voArray.ref.serial);
+    });
+
+    it('4nd call to syncBuffer() should sync because autotouch is activated', () => {
+      assert.strictEqual(voArray.ref.serial, 2);
+      const buf = renderer.resources.findBuffer(voArray.ref);
+      assert.exists(buf);
+      assert.strictEqual(renderer.resources.findBuffer(voArray.ref).serial, voArray.ref.serial);
+
+      voArray.ref.hints.autotouch = true;
+
+      sinon.spy(buf.data, 'bufferData');
+
+      renderer.render();
+
+      assert.exists(renderer.syncBuffer(voArray));
+      assert.isTrue(buf.data.bufferData.calledOnce);
+
+      assert.exists(renderer.syncBuffer(voArray)); // the second call should not trigger sync
+      assert.isTrue(buf.data.bufferData.calledOnce);
+
+      buf.data.bufferData.restore();
+
+      assert.strictEqual(voArray.ref.serial, 3);
+      assert.exists(renderer.resources.findBuffer(voArray.ref));
+      assert.strictEqual(renderer.resources.findBuffer(voArray.ref).serial, voArray.ref.serial);
     });
   });
 });

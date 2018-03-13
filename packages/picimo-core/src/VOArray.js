@@ -102,6 +102,7 @@ export default class VOArray {
 
     this.ref = new DataRef('VOArray', this, Object.assign({
       typedArray: this.toUint32Array(),
+      serial: 1,
     }, hints));
   }
 

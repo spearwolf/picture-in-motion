@@ -16,6 +16,7 @@ describe('VOArray', () => {
     assert.equal(voa.int8Array, undefined);
     // assert.equal(voa.uint32Array, undefined); <- may be created by .toUint32Array()
     assert.equal(voa.uint16Array, undefined);
+    assert.strictEqual(voa.ref.serial, 1, `ref.serial should be initialized with 1, but is ${voa.ref.serial}`);
   });
 
   it('should have a reference', () => {
