@@ -32,7 +32,7 @@ describe('WebGlResourceLibrary', () => {
     const quadIndices = ElementIndexArray.Generate(10, [0, 1, 2, 0, 2, 3], 4, 0, 'dynamic');
 
     it('loadBuffer()', () => {
-      const ref = renderer.resources.loadBuffer(quadIndices);
+      const ref = renderer.resources.loadBuffer(quadIndices.ref);
       assert.strictEqual(ref.type, 'WebGlBuffer', 'dataRef.type should be "WebGlBuffer"');
       assert.instanceOf(ref.data, WebGlBuffer, 'dataRef.data should be an instance of WebGlBuffer');
       assert.strictEqual(ref.id, quadIndices.ref.id, 'dataRef.id should be equals to ElementIndexArray.ref.id');
