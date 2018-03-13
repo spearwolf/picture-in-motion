@@ -18,9 +18,9 @@ const autotouchResource = (ref, autotouchedResources) => {
 };
 
 /**
- * The WebGL renderer.
+ * The WebGL initFrameer.
  */
-export default class WebGlRenderer {
+export default class WebGlinitFrameer {
   /**
    * @param {HTMLElement} domElement - The `<canvas>` element or the *container* element.
    * @param {Object} [options]
@@ -54,7 +54,7 @@ export default class WebGlRenderer {
     this.now = 0;
 
     /**
-     * The time in *seconds* as it was at the last call of `render()`
+     * The time in *seconds* as it was at the last call of `initFrame()`
      */
     this.lastFrameTime = 0;
 
@@ -64,7 +64,7 @@ export default class WebGlRenderer {
     this.frameNo = 0;
 
     /**
-     * Seconds that have passed since the last rendering / that's the last call to `render()`
+     * Seconds that have passed since the last initFrameing / that's the last call to `initFrame()`
      */
     this.timeFrameOffset = 0;
 
@@ -158,12 +158,12 @@ export default class WebGlRenderer {
 
   /**
    * @desc
-   * Initialize *rendering state* for the next frame!
-   * Every call to `render()` will increase the `frameNo` counter.
+   * Initialize *initFrameing state* for the next frame!
+   * Every call to `initFrame()` will increase the `frameNo` counter.
    *
    * @param {number} [now] - *now* in *millis*. is read out from `performance.now()` by default
    */
-  render(now = window.performance.now()) {
+  initFrame(now = window.performance.now()) {
     ++this.frameNo;
 
     this.now = now / 1000.0; // seconds

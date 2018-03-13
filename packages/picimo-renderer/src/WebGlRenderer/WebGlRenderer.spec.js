@@ -102,7 +102,7 @@ describe('WebGlRenderer', () => {
       assert.strictEqual(voArray.ref.serial, 1);
       assert.notExists(renderer.resources.findBuffer(voArray.ref));
 
-      renderer.render();
+      renderer.initFrame();
 
       const buf = renderer.syncBuffer(voArray);
       assert.instanceOf(buf, WebGlBuffer, 'return value should be instance of WebGlBuffer');
@@ -121,7 +121,7 @@ describe('WebGlRenderer', () => {
 
       sinon.spy(buf.data, 'bufferData');
 
-      renderer.render();
+      renderer.initFrame();
 
       assert.exists(renderer.syncBuffer(voArray));
       assert.isTrue(buf.data.bufferData.notCalled);
@@ -143,7 +143,7 @@ describe('WebGlRenderer', () => {
 
       sinon.spy(buf.data, 'bufferData');
 
-      renderer.render();
+      renderer.initFrame();
 
       assert.exists(renderer.syncBuffer(voArray));
       assert.isTrue(buf.data.bufferData.calledOnce);
@@ -168,7 +168,7 @@ describe('WebGlRenderer', () => {
 
       sinon.spy(buf.data, 'bufferData');
 
-      renderer.render();
+      renderer.initFrame();
 
       assert.exists(renderer.syncBuffer(voArray));
       assert.isTrue(buf.data.bufferData.calledOnce);
