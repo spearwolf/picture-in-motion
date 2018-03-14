@@ -1,0 +1,49 @@
+import { getLogger } from 'loglevel';
+import { ShaderSource } from '@picimo/core';  // eslint-disable-line
+
+const log = getLogger('picimo.renderer.WebGlShader');
+
+/** @private */
+const compileSource = (source) => {
+  if (!Array.isArray(source)) {
+    return String(source);
+  }
+  return source.map(compileSource).join('\n');
+};
+
+/** @private */
+const compileShader = (shader) => {
+  const { gl } = shader.glx;
+  const { glShader, source } = shader;
+
+  const src = compileSource(source.source);
+
+  gl.shaderSource(glShader, src);
+  gl.compileShader(glShader);
+
+  if (!gl.getShaderParameter(glShader, gl.COMPILE_STATUS)) {
+    const shaderInfoLog = gl.getShaderInfoLog(glShader);
+
+    log.debug(`WebGlShader: vertex shader source =>\n${src}`);
+    throw new Error(`WebGlShader: gl.compileShader(..) panic!\n${shaderInfoLog}`);
+  }
+};
+
+export default class WebGlShader {
+  constructor(glx, source) {
+    this.glx = glx;
+
+    if (!(source instanceof ShaderSource)) {
+      throw new Error('WebGlShader panic! source must be an instance of ShaderSource!');
+    }
+
+    this.source = source;
+
+    const { gl } = glx;
+    this.shaderType = gl[source.type];
+    this.glShader = gl.createShader(this.shaderType);
+
+    compileShader(this);
+  }
+}
+

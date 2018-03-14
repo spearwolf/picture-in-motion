@@ -1,7 +1,13 @@
 /* eslint-env browser */
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { ElementIndexArray, VODescriptor } from '@picimo/core'; // eslint-disable-line
+
+import {
+  ElementIndexArray,
+  ShaderSource,
+  ShaderTool,
+  VODescriptor,
+} from '@picimo/core'; // eslint-disable-line
 
 import WebGlBuffer from '../WebGlBuffer';
 import WebGlRenderer from '../WebGlRenderer';
@@ -95,6 +101,54 @@ describe('WebGlResourceLibrary', () => {
       const { glBuffer } = renderer.resources.findBuffer(voArray.ref).data;
       renderer.resources.freeBuffer(voArray.ref);
       assert.isFalse(renderer.glx.gl.isBuffer(glBuffer));
+    });
+  });
+
+  describe('Resource: Shader', () => {
+    it('compile vertexShader', () => {
+      const shaderSource = new ShaderSource(ShaderSource.VERTEX_SHADER, `
+
+        attribute vec2 pos2d;
+        attribute float posZ;
+        attribute vec2 uv;
+        attribute vec2 translate;
+        attribute float rotate;
+        attribute float scale;
+        attribute float opacity;
+
+        uniform mat4 viewMatrix;
+
+        varying vec4 vTextureCoordScaleOpacity;
+
+        ${ShaderTool.rotate('rotateZ', 0.0, 0.0, 1.0)}
+
+        void main(void)
+        {
+          mat4 rotationMatrix = rotateZ(rotate);
+          gl_Position = viewMatrix * ((rotationMatrix * (vec4(scale, scale, scale, 1.0) * vec4(pos2d.xy, posZ, 1.0))) + vec4(translate.xy, 0.0, 0.0));
+          vTextureCoordScaleOpacity = vec4(uv.xy, opacity, 0.0);
+        }
+
+      `);
+
+      const vertexShader = renderer.resources.loadVertexShader(shaderSource);
+      assert.exists(vertexShader);
+    });
+
+    it('compile fragmentShader', () => {
+      const shaderSource = new ShaderSource(ShaderSource.FRAGMENT_SHADER, `
+        precision mediump float;
+
+        varying vec4 vTextureCoordScaleOpacity;
+        uniform sampler2D tex;
+
+        void main(void) {
+          gl_FragColor = vTextureCoordScaleOpacity.z * texture2D(tex, vec2(vTextureCoordScaleOpacity.s, vTextureCoordScaleOpacity.t));
+        }
+      `);
+
+      const fragmentShader = renderer.resources.loadFragementShader(shaderSource);
+      assert.exists(fragmentShader);
     });
   });
 });

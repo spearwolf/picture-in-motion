@@ -2,6 +2,7 @@ import { getLogger } from 'loglevel';
 import { readOption, DataRef } from '@picimo/core';  // eslint-disable-line
 
 import WebGlBuffer from '../WebGlBuffer';
+import WebGlShader from '../WebGlShader';
 
 const WEB_GL_BUFFER_USAGE = {
   static: WebGlBuffer.STATIC_DRAW,
@@ -66,5 +67,23 @@ export default class WebGlResourceLibrary {
       this.buffer.delete(bufferRef.id);
       bufferRef.data.deleteBuffer();
     }
+  }
+
+  loadVertexShader(shaderSource) {
+    let glShader = this.vertexShader.get(shaderSource.id);
+    if (!glShader) {
+      glShader = new WebGlShader(this.glx, shaderSource);
+      this.vertexShader.set(shaderSource.id, glShader);
+    }
+    return glShader;
+  }
+
+  loadFragementShader(shaderSource) {
+    let glShader = this.fragmentShader.get(shaderSource.id);
+    if (!glShader) {
+      glShader = new WebGlShader(this.glx, shaderSource);
+      this.vertexShader.set(shaderSource.id, glShader);
+    }
+    return glShader;
   }
 }

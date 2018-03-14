@@ -1,3 +1,5 @@
+import * as ShaderTool from './ShaderTool';
+
 export { default as AABB2 } from './AABB2';
 export { default as DataRef } from './DataRef';
 export { default as ElementIndexArray } from './ElementIndexArray';
@@ -9,6 +11,7 @@ export { default as ShaderAttribVariable } from './ShaderAttribVariable';
 export { default as ShaderContext } from './ShaderContext';
 export { default as ShaderProgram } from './ShaderProgram';
 export { default as ShaderSource } from './ShaderSource';
+export { ShaderTool };
 // export { default as ShaderTexture2dVariable } from './ShaderTexture2dVariable';
 // export { default as ShaderTextureGroup } from './ShaderTextureGroup';
 export { default as ShaderUniformVariable } from './ShaderUniformVariable';
