@@ -8,12 +8,9 @@ import WebGlResourceLibrary from '../WebGlResourceLibrary';
 
 /** @private */
 const autotouchResource = (ref, autotouchedResources) => {
-  const { hints } = ref;
-  if (hints && hints.autotouch) {
-    if (!autotouchedResources.has(ref.id)) {
-      autotouchedResources.add(ref.id);
-      ref.touch();
-    }
+  if (!autotouchedResources.has(ref.id)) {
+    autotouchedResources.add(ref.id);
+    ref.touch();
   }
 };
 
@@ -182,10 +179,20 @@ export default class WebGlRenderer {
    * @return {WebGlBuffer}
    */
   syncBuffer({ ref }) {
-    autotouchResource(ref, this._autotouchedResources);
+    if (ref.hasHint('autotouch', true)) {
+      autotouchResource(ref, this._autotouchedResources);
+    }
 
     const bufferRef = this.resources.loadBuffer(ref);
-    bufferRef.sync(ref, buffer => buffer.bufferData());
+
+    bufferRef.sync(ref, (buffer) => {
+      if (ref.hasHint('doubleBuffer', true)) {
+        buffer.doubleBufferData();
+      } else {
+        buffer.bufferData();
+      }
+    });
+
     return bufferRef.data;
   }
 }

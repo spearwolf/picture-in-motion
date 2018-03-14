@@ -61,6 +61,22 @@ class DataRef {
       this.serial = otherRef.serial;
     }
   }
+
+  /**
+   * Returns `true` if a hint exists and the hint value is as expected.
+   * If you leave out the expected value (call the method with just one argument)
+   * the methods just ckecks if the hint exists (regardless ofthe value).
+   *
+   * @param {string} hintKey 
+   * @param {*} expectedValue 
+   * @returns {boolean}
+   */
+  hasHint(hintKey, expectedValue) {
+    if (arguments.length === 1) {
+      return Boolean(this.hints && hintKey in this.hints);
+    }
+    return Boolean(this.hints && hintKey in this.hints && this.hints[hintKey] === expectedValue);
+  }
 }
 
 export default DataRef;

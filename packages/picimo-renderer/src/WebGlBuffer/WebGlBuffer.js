@@ -14,6 +14,11 @@ export default class WebGlBuffer {
     this.usage = gl[usage];
     this.typedArray = typedArray;
 
+    /** @private */
+    this.clonedTypedArray = undefined;
+    /** @private */
+    this.lastTypedArray = undefined;
+
     this.glBuffer = gl.createBuffer();
   }
 
@@ -29,6 +34,25 @@ export default class WebGlBuffer {
   bufferData(typedArray) {
     this.bindBuffer();
     this.glx.gl.bufferData(this.target, typedArray || this.typedArray, this.usage);
+  }
+
+  /**
+   * Upload array buffer content to gpu via `gl.bufferData(..)`.
+   * This has the same `outcome` as `bufferData(typedData)` but before the call
+   * to `gl.bufferData()` the *typed array* will be cloned (*double buffering*).
+   *
+   * @param {TypedArray} [typedArray] - The buffer content as *typed array*. If unspecified use the `typedArray` from the *contructor* call.
+   */
+  doubleBufferData(typedArray) {
+    const arr = typedArray || this.typedArray;
+    if (this.clonedTypedArray === undefined || arr !== this.lastTypedArray) {
+      this.clonedTypedArray = new arr.constructor(arr.length);
+      this.clonedTypedArray.set(arr);
+      this.lastTypedArray = arr;
+    } else {
+      this.clonedTypedArray.set(arr);
+    }
+    this.bufferData(this.clonedTypedArray);
   }
 
   deleteBuffer() {

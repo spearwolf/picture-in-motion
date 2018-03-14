@@ -13,7 +13,8 @@ export default class VOPool {
    * @param {VertexObject} [options.voZero] - *vertex object* prototype
    * @param {VertexObject} [options.voNew] - *vertex object* prototype
    * @param {number} [options.maxAllocVOSize] - never allocate more than `maxAllocVOSize` *vertex objects* at once
-   * @param {string} [options.usage='dynamic'] - buffer usage hint, choose between `dynamic` or `static`
+   * @param {string} [options.usage='dynamic'] - buffer `usage` hint, choose between `dynamic` or `static`
+   * @param {string} [options.doubleBuffer] - buffer `doubleBuffer` hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
    */
 
   constructor(descriptor, options) {
@@ -24,7 +25,10 @@ export default class VOPool {
     this.voZero = readOption(options, 'voZero', () => descriptor.createVO());
     this.voNew = readOption(options, 'voNew', () => descriptor.createVO());
     this.usage = readOption(options, 'usage', 'dynamic');
-    this.voArray = readOption(options, 'voArray', () => descriptor.createVOArray(this.capacity, { usage: this.usage }));
+    this.voArray = readOption(options, 'voArray', () => descriptor.createVOArray(this.capacity, {
+      usage: this.usage,
+      doubleBuffer: readOption(options, 'doubleBuffer', this.usage === 'dynamic'),
+    }));
 
     this.availableVOs = [];
     this.usedVOs = [];

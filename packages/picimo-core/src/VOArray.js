@@ -68,7 +68,6 @@ export default class VOArray {
    *
    * If `data` is defined, no new buffer is created but a *view* of the buffer passed is generated.
    *
-   *
    * @param {number} capacity - Number of `vertex objects`
    * @param {number} bytesPerVO - Size of a single `vertex object` in *bytes*. **Must be divisible by 4**.
    * @param {Array<string>} arrayTypes - List of allowed *typed array types*. Should have at least one type included.

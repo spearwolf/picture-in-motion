@@ -96,7 +96,7 @@ describe('WebGlRenderer', () => {
         },
       ],
     });
-    const voArray = vod.createVOArray(100, { usage: 'dynamic' });
+    const voArray = vod.createVOArray(100, { usage: 'dynamic', doubleBuffer: false });
 
     it('syncBuffer() should return (synced) WebGlBuffer', () => {
       assert.strictEqual(voArray.ref.serial, 1);
@@ -181,6 +181,38 @@ describe('WebGlRenderer', () => {
       assert.strictEqual(voArray.ref.serial, 3);
       assert.exists(renderer.resources.findBuffer(voArray.ref));
       assert.strictEqual(renderer.resources.findBuffer(voArray.ref).serial, voArray.ref.serial);
+    });
+  });
+
+  describe('syncBuffer(hint:doubleBuffer=true)', () => {
+    const renderer = new WebGlRenderer(document.createElement('canvas'));
+    const vod = new VODescriptor({
+      vertexCount: 1,
+      attributes: [
+        {
+          name: 'position',
+          type: 'float32',
+          size: 3,
+          attrNames: ['x', 'y', 'z'],
+        },
+      ],
+    });
+    const voArray = vod.createVOArray(100, { usage: 'dynamic', doubleBuffer: true });
+
+    it('should call WebGlBuffer.doubleBufferData() instead if .bufferData()', () => {
+      renderer.initFrame();
+      renderer.syncBuffer(voArray);
+      voArray.ref.touch();
+
+      const buf = renderer.resources.findBuffer(voArray.ref);
+      sinon.spy(buf.data, 'doubleBufferData');
+
+      renderer.initFrame();
+      renderer.syncBuffer(voArray);
+
+      assert.isTrue(buf.data.doubleBufferData.calledOnce);
+
+      buf.data.doubleBufferData.restore();
     });
   });
 });

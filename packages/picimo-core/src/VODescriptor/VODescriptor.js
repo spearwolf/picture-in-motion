@@ -83,6 +83,7 @@ export default class VODescriptor {
     return new VOArray(size, this.bytesPerVO, this.typeList, null, Object.assign({
       descriptor: this,
       usage: 'dynamic',
+      doubleBuffer: true,
     }, hints));
   }
 

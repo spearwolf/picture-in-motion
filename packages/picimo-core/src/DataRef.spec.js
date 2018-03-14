@@ -57,4 +57,32 @@ describe('DataRef', () => {
     ref.touch();
     assert.strictEqual(ref.serial, 2);
   });
+
+  it('hasHint() should work as expected', () => {
+    const ref = new DataRef('ttt', {}, {
+      truthy: true,
+      falsy: false,
+      blank: null,
+      undef: undefined,
+      foo: 'bar',
+    });
+    assert.strictEqual(ref.hasHint('truthy', true), true, 'truthy is true');
+    assert.strictEqual(ref.hasHint('truthy', false), false, 'truthy is not false');
+    assert.strictEqual(ref.hasHint('truthy'), true, 'truthy exists');
+    assert.strictEqual(ref.hasHint('falsy', true), false, 'falsy is not true');
+    assert.strictEqual(ref.hasHint('falsy', false), true, 'falsly is false');
+    assert.strictEqual(ref.hasHint('falsy'), true, 'falsy exists');
+    assert.strictEqual(ref.hasHint('blank', null), true, 'blank is null');
+    assert.strictEqual(ref.hasHint('blank', undefined), false, 'blank is not undefined');
+    assert.strictEqual(ref.hasHint('blank'), true, 'blank exists');
+    assert.strictEqual(ref.hasHint('undef', undefined), true, 'undef is undefined');
+    assert.strictEqual(ref.hasHint('undef', null), false, 'undef is not null');
+    assert.strictEqual(ref.hasHint('undef'), true, 'undef exists');
+    assert.strictEqual(ref.hasHint('foo', 'bar'), true, 'foo is bar');
+    assert.strictEqual(ref.hasHint('foo', 'foo'), false, 'foo is not bar');
+    assert.strictEqual(ref.hasHint('foo'), true, 'foo exists');
+    assert.strictEqual(ref.hasHint('unknown', undefined), false, 'unknown is not undefined');
+    assert.strictEqual(ref.hasHint('unknown', null), false, 'unknown is not null');
+    assert.strictEqual(ref.hasHint('unknown'), false, 'unknown does not exist');
+  });
 });
