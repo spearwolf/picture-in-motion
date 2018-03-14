@@ -18,9 +18,9 @@ const autotouchResource = (ref, autotouchedResources) => {
 };
 
 /**
- * The WebGL initFrameer.
+ * The *main* WebGL renderer.
  */
-export default class WebGlinitFrameer {
+export default class WebGlRenderer {
   /**
    * @param {HTMLElement} domElement - The `<canvas>` element or the *container* element.
    * @param {Object} [options]
@@ -158,10 +158,10 @@ export default class WebGlinitFrameer {
 
   /**
    * @desc
-   * Initialize *initFrameing state* for the next frame!
+   * Initialize *renderer state* for the next frame!
    * Every call to `initFrame()` will increase the `frameNo` counter.
    *
-   * @param {number} [now] - *now* in *millis*. is read out from `performance.now()` by default
+   * @param {number} [now] - *now* in *millis*. is read out from `performance.now()` if it not specified
    */
   initFrame(now = window.performance.now()) {
     ++this.frameNo;
