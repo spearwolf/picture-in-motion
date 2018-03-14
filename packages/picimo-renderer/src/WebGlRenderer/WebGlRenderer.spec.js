@@ -199,7 +199,7 @@ describe('WebGlRenderer', () => {
     });
     const voArray = vod.createVOArray(100, { usage: 'dynamic', doubleBuffer: true });
 
-    it('should call WebGlBuffer.doubleBufferData() instead if .bufferData()', () => {
+    it('should call WebGlBuffer.doubleBufferData() instead of .bufferData()', () => {
       renderer.initFrame();
       renderer.syncBuffer(voArray);
       voArray.ref.touch();
