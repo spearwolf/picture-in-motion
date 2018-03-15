@@ -1,8 +1,8 @@
 import { getLogger } from 'loglevel';
 import { readOption, DataRef } from '@picimo/core';  // eslint-disable-line
 
-import WebGlBuffer from '../WebGlBuffer';
-import WebGlShader from '../WebGlShader';
+import WebGlBuffer from './WebGlBuffer';
+import WebGlShader from './WebGlShader';
 
 const WEB_GL_BUFFER_USAGE = {
   static: WebGlBuffer.STATIC_DRAW,

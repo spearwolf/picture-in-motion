@@ -4,7 +4,7 @@ import { assert } from 'chai';
 import sinon from 'sinon';
 import { VODescriptor } from '@picimo/core'; // eslint-disable-line
 import WebGlRenderer from './WebGlRenderer';
-import WebGlBuffer from '../WebGlBuffer';
+import WebGlBuffer from './WebGlBuffer';
 
 describe('WebGlRenderer', () => {
   describe('with a predefined <canvas> element as first argument passed to constructor', () => {

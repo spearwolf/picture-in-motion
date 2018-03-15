@@ -9,8 +9,8 @@ import {
   VODescriptor,
 } from '@picimo/core'; // eslint-disable-line
 
-import WebGlBuffer from '../WebGlBuffer';
-import WebGlRenderer from '../WebGlRenderer';
+import WebGlBuffer from './WebGlBuffer';
+import WebGlRenderer from './WebGlRenderer';
 import WebGlResourceLibrary from './WebGlResourceLibrary';
 
 describe('WebGlResourceLibrary', () => {

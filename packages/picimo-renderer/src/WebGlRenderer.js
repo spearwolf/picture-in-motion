@@ -1,10 +1,20 @@
 /* eslint-env browser */
 import { readOption } from '@picimo/core'; // eslint-disable-line
 
-import createCanvas from './createCanvas';
-import { createWebGlContext } from '../WebGlContext';
+import { createWebGlContext } from './WebGlContext';
 
-import WebGlResourceLibrary from '../WebGlResourceLibrary';
+import WebGlResourceLibrary from './WebGlResourceLibrary';
+
+/** @private */
+const createCanvas = (domElement) => {
+  if (domElement.tagName === 'CANVAS') {
+    return domElement;
+  }
+
+  const canvas = document.createElement('canvas');
+  domElement.appendChild(canvas);
+  return canvas;
+};
 
 /** @private */
 const autotouchResource = (ref, autotouchedResources) => {
