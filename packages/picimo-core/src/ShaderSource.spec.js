@@ -3,6 +3,7 @@
 import { assert } from 'chai';
 
 import ShaderSource from './ShaderSource';
+import * as ShaderTool from './ShaderTool';
 
 describe('ShaderSource', () => {
   it('create vertex shader source', () => {
@@ -10,7 +11,7 @@ describe('ShaderSource', () => {
       attribute vec2 position;
       uniform mat4 viewMatrix;
 
-      ${({ tool }) => tool.rotate('rotateZ', 0.0, 0.0, 1.0)}
+      ${ShaderTool.rotate('rotateZ', 0.0, 0.0, 1.0)}
 
       void main(void)
       {

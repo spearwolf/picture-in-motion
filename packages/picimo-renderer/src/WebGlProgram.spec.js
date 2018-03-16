@@ -23,7 +23,7 @@ describe('WebGlProgram', () => {
     document.body.appendChild(container);
     renderer = new WebGlRenderer(container);
 
-    vertexShader = new ShaderSource(ShaderSource.VERTEX_SHADER, `
+    vertexShader = ShaderSource.vertexShader()`
 
       attribute vec2 pos2d;
       attribute float posZ;
@@ -46,9 +46,9 @@ describe('WebGlProgram', () => {
         vTextureCoordScaleOpacity = vec4(uv.xy, opacity, 0.0);
       }
 
-    `);
+    `;
 
-    fragmentShader = new ShaderSource(ShaderSource.FRAGMENT_SHADER, `
+    fragmentShader = ShaderSource.fragmentShader()`
       precision mediump float;
 
       varying vec4 vTextureCoordScaleOpacity;
@@ -57,7 +57,7 @@ describe('WebGlProgram', () => {
       void main(void) {
         gl_FragColor = vTextureCoordScaleOpacity.z * texture2D(tex, vec2(vTextureCoordScaleOpacity.s, vTextureCoordScaleOpacity.t));
       }
-    `);
+    `;
   });
 
   after(() => {

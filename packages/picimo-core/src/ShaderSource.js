@@ -1,6 +1,5 @@
 /* eslint-env browser */
 import generateUuid from './generateUuid';
-import * as ShaderTool from './ShaderTool';
 
 export default class ShaderSource {
   /**
@@ -21,9 +20,7 @@ export default class ShaderSource {
     this.type = type;
 
     /** @private */
-    this.ctx = Object.assign({
-      tool: ShaderTool,
-    }, ctx);
+    this.ctx = Object.assign({}, ctx);
 
     if (source instanceof HTMLElement) {
       this.strings = [source.textContent];
@@ -42,7 +39,7 @@ export default class ShaderSource {
    */
   compile(context) {
     const source = [this.strings[0]];
-    const ctx = Object.assign(this.ctx, context);
+    const ctx = Object.assign({}, this.ctx, context);
     this.values.forEach((value, i) => {
       let val = value;
       if (typeof value === 'function') {
