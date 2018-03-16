@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: 0 */
 
+// https://developer.mozilla.org/de/docs/Web/API/WebGL_API/WebGL_best_practices
 // https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-WebGL.html
 
 /**
