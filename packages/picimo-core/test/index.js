@@ -17,6 +17,7 @@ require('../src/pick.spec.js');
 require('../src/PowerOf2Image.spec.js');
 require('../src/Projection.spec.js');
 require('../src/ShaderContext.spec.js');
+require('../src/ShaderSource.spec.js');
 require('../src/ShaderVariable.spec.js');
 require('../src/SpriteGroup.spec.js');
 require('../src/StackedContext.spec.js');

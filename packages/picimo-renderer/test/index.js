@@ -9,6 +9,7 @@ mocha.setup({
 
 require('../src/WebGlRenderer.spec');
 require('../src/WebGlResourceLibrary.spec');
+require('../src/WebGlProgram.spec');
 
 mocha.checkLeaks();
 mocha.run();

@@ -1,6 +1,6 @@
 /* eslint no-param-reassign: 0 */
 
-export default class TextureManager {
+export default class TextureUnitManager {
   /**
    * @param {WebGlContext} glx
    */

@@ -3,12 +3,25 @@ import { readOption, DataRef } from '@picimo/core';  // eslint-disable-line
 
 import WebGlBuffer from './WebGlBuffer';
 import WebGlShader from './WebGlShader';
+import WebGlProgram from './WebGlProgram';
 
+/** @private */
 const WEB_GL_BUFFER_USAGE = {
   static: WebGlBuffer.STATIC_DRAW,
   dynamic: WebGlBuffer.DYNAMIC_DRAW,
 };
 
+/** @private */
+const loadResource = (cache, resource, callback) => {
+  let glResource = cache.get(resource.id);
+  if (!glResource) {
+    glResource = callback(resource);
+    cache.set(resource.id, glResource);
+  }
+  return glResource;
+};
+
+/** @private */
 const log = getLogger('picimo.renderer.WebGlResourceLibrary');
 
 export default class WebGlResourceLibrary {
@@ -32,8 +45,7 @@ export default class WebGlResourceLibrary {
    * @returns {DataRef} The reference to the `WebGlBuffer`
    */
   loadBuffer(ref) {
-    let bufferRef = this.buffer.get(ref.id);
-    if (!bufferRef) {
+    return loadResource(this.buffer, ref, () => {
       if (!(ref.type === 'VOArray' || ref.type === 'ElementIndexArray')) {
         log.warn(`WebGlResourceLibrary.loadBuffer() ref.type="${ref.type}" mismatch! (should be "VOArray" or "ElementIndexArray")`);
         return;
@@ -44,10 +56,8 @@ export default class WebGlResourceLibrary {
       const typedArray = readOption(ref.hints, 'typedArray');
       const glBuffer = new WebGlBuffer(this.glx, target, WEB_GL_BUFFER_USAGE[usage], typedArray);
       // II. Create DataRef
-      bufferRef = new DataRef('WebGlBuffer', glBuffer, { id: ref.id, serial: 0 });
-      this.buffer.set(ref.id, bufferRef);
-    }
-    return bufferRef;
+      return new DataRef('WebGlBuffer', glBuffer, { id: ref.id, serial: 0 });
+    });
   }
 
   /**
@@ -69,21 +79,31 @@ export default class WebGlResourceLibrary {
     }
   }
 
+  /**
+   * @param {ShaderSource} shaderSource - vertex shader
+   * @returns {WebGlShader}
+   */
   loadVertexShader(shaderSource) {
-    let glShader = this.vertexShader.get(shaderSource.id);
-    if (!glShader) {
-      glShader = new WebGlShader(this.glx, shaderSource);
-      this.vertexShader.set(shaderSource.id, glShader);
-    }
-    return glShader;
+    return loadResource(this.vertexShader, shaderSource, () => new WebGlShader(this.glx, shaderSource));
   }
 
+  /**
+   * @param {ShaderSource} shaderSource - fragment shader
+   * @returns {WebGlShader}
+   */
   loadFragementShader(shaderSource) {
-    let glShader = this.fragmentShader.get(shaderSource.id);
-    if (!glShader) {
-      glShader = new WebGlShader(this.glx, shaderSource);
-      this.vertexShader.set(shaderSource.id, glShader);
-    }
-    return glShader;
+    return loadResource(this.fragmentShader, shaderSource, () => new WebGlShader(this.glx, shaderSource));
+  }
+
+  /**
+   * @param {ShaderProgram} shaderProgram
+   * @returns {WebGlProgram}
+   */
+  loadProgram(shaderProgram) {
+    return loadResource(this.shaderProgram, shaderProgram, () => {
+      const vs = this.loadVertexShader(shaderProgram.vertexShader);
+      const fs = this.loadFragementShader(shaderProgram.fragmentShader);
+      return new WebGlProgram(this.glx, vs, fs);
+    });
   }
 }

@@ -99,4 +99,3 @@ mat4 ${funcName}(float angle) {
 }`;
 
 export const rotateZ = (funcName = 'rotateZ') => rotate(funcName, 0, 0, 1);
-

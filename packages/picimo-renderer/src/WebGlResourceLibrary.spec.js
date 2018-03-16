@@ -106,7 +106,7 @@ describe('WebGlResourceLibrary', () => {
 
   describe('Resource: Shader', () => {
     it('compile vertexShader', () => {
-      const shaderSource = new ShaderSource(ShaderSource.VERTEX_SHADER, `
+      const shaderSource = ShaderSource.vertexShader()`
 
         attribute vec2 pos2d;
         attribute float posZ;
@@ -128,15 +128,14 @@ describe('WebGlResourceLibrary', () => {
           gl_Position = viewMatrix * ((rotationMatrix * (vec4(scale, scale, scale, 1.0) * vec4(pos2d.xy, posZ, 1.0))) + vec4(translate.xy, 0.0, 0.0));
           vTextureCoordScaleOpacity = vec4(uv.xy, opacity, 0.0);
         }
-
-      `);
+      `;
 
       const vertexShader = renderer.resources.loadVertexShader(shaderSource);
       assert.exists(vertexShader);
     });
 
     it('compile fragmentShader', () => {
-      const shaderSource = new ShaderSource(ShaderSource.FRAGMENT_SHADER, `
+      const shaderSource = ShaderSource.fragmentShader()`
         precision mediump float;
 
         varying vec4 vTextureCoordScaleOpacity;
@@ -145,7 +144,7 @@ describe('WebGlResourceLibrary', () => {
         void main(void) {
           gl_FragColor = vTextureCoordScaleOpacity.z * texture2D(tex, vec2(vTextureCoordScaleOpacity.s, vTextureCoordScaleOpacity.t));
         }
-      `);
+      `;
 
       const fragmentShader = renderer.resources.loadFragementShader(shaderSource);
       assert.exists(fragmentShader);

@@ -54,13 +54,13 @@ function linkProgram(program, vertexShader, fragmentShader) {
 }
 
 export default class WebGlProgram {
-  constructor(renderer, shaderProgram) {
-    this.glx = renderer.glx;
+  constructor(glx, vertexShader, fragmentShader) {
+    this.glx = glx;
 
-    this.vertexShader = renderer.resources.loadVertexShader(shaderProgram.vertexShader);
-    this.fragmentShader = renderer.resources.loadFragementShader(shaderProgram.fragmentShader);
+    this.vertexShader = vertexShader;
+    this.fragmentShader = fragmentShader;
 
-    const { gl } = renderer.glx;
+    const { gl } = glx;
     this.glProgram = gl.createProgram();
 
     linkProgram(this, this.vertexShader.glShader, this.fragmentShader.glShader);

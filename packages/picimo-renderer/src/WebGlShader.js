@@ -4,19 +4,11 @@ import { ShaderSource } from '@picimo/core';  // eslint-disable-line
 const log = getLogger('picimo.renderer.WebGlShader');
 
 /** @private */
-const compileSource = (source) => {
-  if (!Array.isArray(source)) {
-    return String(source);
-  }
-  return source.map(compileSource).join('\n');
-};
-
-/** @private */
 const compileShader = (shader) => {
   const { gl } = shader.glx;
   const { glShader, source } = shader;
 
-  const src = compileSource(source.source);
+  const src = source.compile({ glx: shader.glx });
 
   gl.shaderSource(glShader, src);
   gl.compileShader(glShader);
