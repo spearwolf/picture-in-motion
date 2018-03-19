@@ -3,8 +3,7 @@
 import { assert } from 'chai';
 
 import {
-  ShaderProgram,
-  ShaderSource,
+  ShaderProgram, ShaderSource,
   ShaderTool,
 } from '@picimo/core'; // eslint-disable-line
 
@@ -97,5 +96,12 @@ describe('WebGlProgram', () => {
   it('use()', () => {
     assert.isTrue(glProgram.use());
     console.debug('renderer.glx.enabledVertexAttribLocations=', renderer.glx.enabledVertexAttribLocations);
+  });
+
+  it.skip('useShaderProgram()', () => {
+    renderer.initFrame();
+    const success = renderer.useShaderProgram(prg);
+    console.debug('renderer.glx.enabledVertexAttribLocations=', renderer.glx.enabledVertexAttribLocations);
+    assert.isTrue(success, 'renderer.useShaderProgram(..) returned with errors');
   });
 });

@@ -33,24 +33,24 @@ const autotouchResource = (ref, autotouchedResources) => {
  */
 export default class WebGlRenderer {
   /**
-   * @param {HTMLElement} domElement - The `<canvas>` element or the *container* element.
+   * @param {HTMLElement} domElement - The `<canvas>` or the *container* element.
    * @param {Object} [options]
    * @param {number} [options.pixelRatio] - Set `pixelRatio` to a fixed value instead of reading from `window.devicePixelRatio` (default)
    * @param {number} [options.disableWebGL2] - Set to `true` if you want to force a WebGL1 context instead of an WebGL2 (default if possible)
    */
   constructor(domElement, options) {
     /**
-     * The `<canvas>` or the *container* element / that's the first argument you passed to the constructor
+     * The `<canvas>` or the *container* element.
      */
     this.domElement = domElement;
 
     /**
-     * The `<canvas>` element
+     * The `<canvas>` element.
      */
     this.canvas = createCanvas(domElement);
 
     /**
-     * WebGL context
+     * WebGL context.
      */
     this.glx = createWebGlContext(this.canvas, options);
 
@@ -60,37 +60,39 @@ export default class WebGlRenderer {
     this.resources = new WebGlResourceLibrary(this.glx);
 
     /**
+     * The global shader variable context.
      * @type {ShaderContext}
      */
     this.shaderContext = new ShaderContext();
 
     /**
-     * Time in *seconds*
+     * Time in *seconds*.
      */
     this.now = 0;
 
     /**
-     * The time in *seconds* as it was at the last call of `initFrame()`
+     * The time in *seconds* as it was at the last call of `initFrame()`.
      */
     this.lastFrameTime = 0;
 
     /**
-     * Current frame number (initially set to 0)
+     * Current frame number. Initially set to 0.
      */
     this.frameNo = 0;
 
     /**
-     * Seconds that have passed since the last initFrameing / that's the last call to `initFrame()`
+     * Seconds passed since the last render / previous call to `initFrame()`.
      */
     this.timeFrameOffset = 0;
 
     /**
+     * Force set *pixel ratio* to a custom value.
      * @private
      */
     this._pixelRatio = readOption(options, 'pixelRatio');
 
     /**
-     * Will be cleared on each frame. Holds `id`'s of all autotouch'd resources (within the current frame context).
+     * Will be cleared on each frame. Holds `id`'s of all autotouch'd resources (within the current frame).
      * @private
      */
     this._autotouchedResources = new Set();
@@ -104,14 +106,16 @@ export default class WebGlRenderer {
   }
 
   /**
-   * The *pixel ratio* used to calculate the *webgl canvas* width and height.
+   * The *pixel ratio* used to calculate the canvas *pixels*. Default is read from `window.devicePixelRatio`.
    */
   get pixelRatio() {
     return this._pixelRatio || window.devicePixelRatio || 1;
   }
 
   /**
-   * Resize the *webgl canvas* according to the `<canvas>` styles.
+   * Resize the webgl canvas according to the `<canvas>` styles.
+   * If the canvas has an explicit container element (given as the first constructor argument),
+   * the size is determinated by the container element styles.
    */
   resize() {
     const { canvas, domElement } = this;
@@ -142,12 +146,12 @@ export default class WebGlRenderer {
 
     if (w !== this.width || h !== this.height) {
       /**
-       * The width in *pixels* of the *webgl canvas*
+       * The width in *pixels* of our webgl canvas.
        */
       this.width = w;
 
       /**
-       * The height in *pixels* of the *webgl canvas*
+       * The height in *pixels* of out webgl canvas.
        */
       this.height = h;
 
@@ -180,15 +184,21 @@ export default class WebGlRenderer {
   }
 
   /**
-   * @desc
-   * Initialize *renderer state* for the next frame!
-   * Every call to `initFrame()` will increase the `frameNo` counter.
+   * Initialize the *renderer state* for the next frame.
    *
-   * @param {number} [now] - *now* in *millis*. is read out from `performance.now()` if it not specified
+   * Each call to `initFrame()` will ..
+   * 1. increase the frame number `frameNo`
+   * 2. update the frame *time* (`now`, `lastFrameTime` and `shaderGlobals`:uniform:`time`)
+   * 3. initialize shader variable context
+   * 4. set the webgl viewport (to full canvas size)
+   *
+   * @param {number} [now] - *now* in *millis*. Is read out from `performance.now()` if not specified.
    */
   initFrame(now = window.performance.now()) {
+    // 1) increase frame number
     ++this.frameNo;
 
+    // 2) update frame time
     this.now = now / 1000.0; // seconds
     if (this.frameNo !== 1) {
       this.timeFrameOffset = this.now - this.lastFrameTime;
@@ -196,13 +206,16 @@ export default class WebGlRenderer {
     this.lastFrameTime = this.now;
     this.shaderGlobals.time.data = this.now;
 
+    // -) reset internal frame context
     this._autotouchedResources.clear();
 
+    // 3) initialize shader variable context
     this.shaderContext.clear();
     Object.values(this.shaderGlobals).forEach((shaderVar) => {
       this.shaderContext.pushVar(shaderVar);
     });
 
+    // 5) set webgl viewport
     this.glx.gl.viewport(0, 0, this.width, this.height);
   }
 
@@ -245,8 +258,9 @@ export default class WebGlRenderer {
   useShaderProgram(shaderProgram) {
     const program = this.resources.loadProgram(shaderProgram);
     const { shaderContext } = this;
-    program.use();
-    program.loadUniforms(shaderContext, this);
-    program.loadAttributes(shaderContext, this);
+    const success = program.use();
+    const successUniforms = program.loadUniforms(shaderContext, this);
+    const successAttributes = program.loadAttributes(shaderContext, this);
+    return success && successUniforms && successAttributes;
   }
 }

@@ -71,7 +71,7 @@ export default class WebGlProgram {
   }
 
   /**
-   * @return {boolean}
+   * @return {boolean} success
    */
   use() {
     const { glx } = this;
@@ -85,8 +85,10 @@ export default class WebGlProgram {
   /**
    * @param {ShaderContext} shaderContext
    * @param {WebGlRenderer} renderer
+   * @return {boolean} success
    */
   loadUniforms(shaderContext, renderer) {
+    let success = true;
     this.uniformNames.forEach((name) => {
       let shaderVar = shaderContext.curUniform(name);
       if (shaderVar == null) {
@@ -99,10 +101,13 @@ export default class WebGlProgram {
           }
         } else {
           log.error('WebGlProgram: could not load uniform:', name);
+          success = false;
+          return;
         }
       }
-      this.uniforms[name].setValue(shaderVar.value);
+      this.uniforms[name].setValue(shaderVar.data);
     });
+    return success;
   }
 
   /**
@@ -110,12 +115,21 @@ export default class WebGlProgram {
    *
    * @param {ShaderContext} shaderContext
    * @param {WebGlRenderer} renderer
+   * @return {boolean} success
    */
   loadAttributes(shaderContext, renderer) {
+    let success = true;
     this.attributeNames.forEach((name) => {
-      const attribValue = shaderContext.curAttrib(name).value;
-      renderer.syncBuffer(attribValue).bindBuffer();
-      this.attributes[name].vertexAttribPointer(attribValue.descriptor);
+      const attrib = shaderContext.curAttrib(name);
+      if (attrib) {
+        const attribValue = attrib.data;
+        renderer.syncBuffer(attribValue).bindBuffer();
+        this.attributes[name].vertexAttribPointer(attribValue.descriptor);
+      } else {
+        log.error('WebGlProgram: could not load attribute:', name);
+        success = false;
+      }
     });
+    return success;
   }
 }
