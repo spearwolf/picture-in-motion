@@ -11,6 +11,7 @@ const pickVOPoolOpts = pick([
   'usage',
   'maxAllocVOSize',
   'voArray',
+  'doubleBuffer',
 ]);
 
 /**
@@ -29,6 +30,7 @@ const pickVOPoolOpts = pick([
  * @param {string|ShaderSource} [options.vertexShader] - The *vertex shader*
  * @param {string|ShaderSource} [options.fragmentShader] - The *fragment shader*
  * @param {Object} [options.textures] - The *shader variable name* to *texture* mapping
+ * @param {string} [options.doubleBuffer] - buffer `doubleBuffer` hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
  */
 export default class SpriteGroup {
   constructor(descriptor, textureLibrary, options = {}) {

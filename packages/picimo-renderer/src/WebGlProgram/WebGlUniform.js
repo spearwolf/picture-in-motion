@@ -49,4 +49,3 @@ export default class WebGlUniform {
     this.setValue = createUniformSetter(this);
   }
 }
-

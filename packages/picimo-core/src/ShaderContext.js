@@ -103,6 +103,18 @@ export default class ShaderContext {
   }
 
   /**
+   * Return the current *uniform origin* by *shader var name*.
+   * @param {string} name
+   * @return {*}
+   */
+  curUniformOrigin(name) {
+    const uniform = this.curUniform(name);
+    if (uniform) {
+      return uniform.origin;
+    }
+  }
+
+  /**
    * Return current _attribute_ shader variable by name.
    * @param {string} name
    * @return {ShaderAttribVariable} or `null`

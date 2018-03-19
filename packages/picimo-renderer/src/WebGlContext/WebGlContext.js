@@ -34,6 +34,8 @@ class WebGlContext {
       this.boundTextures[i] = { TEXTURE_2D: null };
     }
 
+    this.enabledVertexAttribLocations = [];
+
     this.activeTexture(0); // enable first texture unit by default
   }
 
@@ -68,6 +70,37 @@ class WebGlContext {
       bound.TEXTURE_2D = glTextureId;
       gl.bindTexture(gl.TEXTURE_2D, glTextureId);
     }
+  }
+
+  /**
+   * @return {boolean}
+   */
+  useProgram(glProgram) {
+    if (this.currentProgram !== glProgram) {
+      this.gl.useProgram(glProgram);
+      this.currentProgram = glProgram;
+      return true;
+    }
+    return false;
+  }
+
+  enableVertexAttribArrays(enableLocations) {
+    const { gl } = this;
+
+    this.enabledVertexAttribLocations
+      .filter(location => enableLocations.indexOf(location) === -1)
+      .forEach((location) => {
+        gl.disableVertexAttribArray(location);
+        this.enabledVertexAttribLocations.splice(enableLocations.indexOf(location), 1);
+      });
+
+    enableLocations.forEach((location) => {
+      const idx = this.enabledVertexAttribLocations.indexOf(location);
+      if (idx === -1) {
+        gl.enableVertexAttribArray(location);
+        this.enabledVertexAttribLocations.push(location);
+      }
+    });
   }
 }
 

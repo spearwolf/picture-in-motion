@@ -91,10 +91,15 @@ export default class WebGlProgram {
       let shaderVar = shaderContext.curUniform(name);
       if (shaderVar == null) {
         shaderVar = shaderContext.curTex2d(name);
-        if (shaderVar == null) {
+        if (shaderVar) {
+          const { texture } = shaderVar;
+          if (texture) {
+            // Sync texture to gpu and update `.data` with the *gl texture unit*.
+            shaderVar.data = renderer.syncTexture(texture).bind();
+          }
+        } else {
           log.error('WebGlProgram: could not load uniform:', name);
         }
-        shaderVar.syncTextureAndValue(renderer); // TODO
       }
       this.uniforms[name].setValue(shaderVar.value);
     });
@@ -114,4 +119,3 @@ export default class WebGlProgram {
     });
   }
 }
-

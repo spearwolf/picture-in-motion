@@ -1,4 +1,5 @@
 /* eslint-env jest */
+/* eslint-env browser */
 /* eslint no-console: 0 */
 import { assert } from 'chai';
 
@@ -76,5 +77,49 @@ describe('ShaderSource', () => {
     assert.isAbove(source.id.length, 0);
     assert.strictEqual(source.type, ShaderSource.FRAGMENT_SHADER);
     assert.isTrue(compiledSource.indexOf('vec4 foo') >= 0);
+  });
+
+  it('vertex shader fromElement()', () => {
+    const el = document.createElement('script');
+    el.setAttribute('type', 'x-shader/vertex');
+    el.setAttribute('id', 'plah');
+    el.textContent = `
+      attribute vec3 position;
+
+      void main() {
+        gl_Position = vec4(position, 1.0);
+      }
+    `;
+
+    const source = ShaderSource.fromElement(el);
+    assert.instanceOf(source, ShaderSource);
+    assert.strictEqual(source.id, 'plah');
+    assert.strictEqual(source.type, ShaderSource.VERTEX_SHADER);
+    assert.isTrue(source.compile().indexOf('gl_Position = vec4') >= 0);
+  });
+
+  it('fragment shader fromElement()', () => {
+    const el = document.createElement('script');
+    el.setAttribute('type', 'x-shader/fragment');
+    el.textContent = `
+      precision mediump float;
+
+      uniform float time;
+      uniform vec2 resolution;
+
+      void main( void ) {
+        vec2 position = - 1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
+        float red = abs( sin( position.x * position.y + time / 5.0 ) );
+        float green = abs( sin( position.x * position.y + time / 4.0 ) );
+        float blue = abs( sin( position.x * position.y + time / 3.0 ) );
+        gl_FragColor = vec4( red, green, blue, 1.0 );
+      }
+    `;
+
+    const source = ShaderSource.fromElement(el);
+    assert.instanceOf(source, ShaderSource);
+    assert.isAbove(source.id.length, 0);
+    assert.strictEqual(source.type, ShaderSource.FRAGMENT_SHADER);
+    assert.isTrue(source.compile().indexOf('gl_FragColor = vec4') >= 0);
   });
 });

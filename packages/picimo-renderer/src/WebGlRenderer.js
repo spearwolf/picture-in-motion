@@ -1,5 +1,9 @@
 /* eslint-env browser */
-import { readOption } from '@picimo/core'; // eslint-disable-line
+import {
+  readOption,
+  ShaderContext,
+  ShaderUniformVariable,
+} from '@picimo/core'; // eslint-disable-line
 
 import { createWebGlContext } from './WebGlContext';
 
@@ -56,6 +60,11 @@ export default class WebGlRenderer {
     this.resources = new WebGlResourceLibrary(this.glx);
 
     /**
+     * @type {ShaderContext}
+     */
+    this.shaderContext = new ShaderContext();
+
+    /**
      * Time in *seconds*
      */
     this.now = 0;
@@ -85,6 +94,11 @@ export default class WebGlRenderer {
      * @private
      */
     this._autotouchedResources = new Set();
+
+    this.shaderGlobals = {
+      time: new ShaderUniformVariable('time', 0),
+      resolution: new ShaderUniformVariable('resolution', [0, 0]),
+    };
 
     this.resize();
   }
@@ -136,6 +150,8 @@ export default class WebGlRenderer {
        * The height in *pixels* of the *webgl canvas*
        */
       this.height = h;
+
+      this.shaderGlobals.resolution.data = [w, h];
     }
   }
 
@@ -178,8 +194,14 @@ export default class WebGlRenderer {
       this.timeFrameOffset = this.now - this.lastFrameTime;
     }
     this.lastFrameTime = this.now;
+    this.shaderGlobals.time.data = this.now;
 
     this._autotouchedResources.clear();
+
+    this.shaderContext.clear();
+    Object.values(this.shaderGlobals).forEach((shaderVar) => {
+      this.shaderContext.pushVar(shaderVar);
+    });
 
     this.glx.gl.viewport(0, 0, this.width, this.height);
   }
@@ -204,5 +226,27 @@ export default class WebGlRenderer {
     });
 
     return bufferRef.data;
+  }
+
+  /**
+   * @param {Texture} texture
+   * @return {WebGlTexture}
+   */
+  syncTexture(texture) {
+    const texRef = texture.ref;
+    const glTexRef = this.resources.loadTexture(texRef);
+    glTexRef.sync(texRef, tex => tex.uploadImageData());
+    return glTexRef.data;
+  }
+
+  /**
+   * @param {ShaderProgram} shaderProgram
+   */
+  useShaderProgram(shaderProgram) {
+    const program = this.resources.loadProgram(shaderProgram);
+    const { shaderContext } = this;
+    program.use();
+    program.loadUniforms(shaderContext, this);
+    program.loadAttributes(shaderContext, this);
   }
 }

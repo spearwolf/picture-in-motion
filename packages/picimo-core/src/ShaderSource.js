@@ -63,3 +63,15 @@ ShaderSource.PARTIAL = 'PARTIAL';
 ShaderSource.vertexShader = ctx => (strings, ...values) => new ShaderSource(ShaderSource.VERTEX_SHADER, [strings, values], ctx && ctx.id, ctx);
 ShaderSource.fragmentShader = ctx => (strings, ...values) => new ShaderSource(ShaderSource.FRAGMENT_SHADER, [strings, values], ctx && ctx.id, ctx);
 ShaderSource.partial = ctx => (strings, ...values) => new ShaderSource(ShaderSource.PARTIAL, [strings, values], ctx && ctx.id, ctx);
+
+ShaderSource.fromElement = (el) => {
+  let type = el.getAttribute('type');
+  if (type === 'x-shader/vertex') {
+    type = ShaderSource.VERTEX_SHADER;
+  } else if (type === 'x-shader/fragment') {
+    type = ShaderSource.FRAGMENT_SHADER;
+  } else {
+    throw new Error(`ShaderSource.fromElement() panic! Invalid type="${type}" attribute value (should be "x-shader/vertex" or "x-shader/fragment")`);
+  }
+  return new ShaderSource(type, el, el.getAttribute('id'));
+};

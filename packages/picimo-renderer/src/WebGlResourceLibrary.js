@@ -4,6 +4,7 @@ import { readOption, DataRef } from '@picimo/core';  // eslint-disable-line
 import WebGlBuffer from './WebGlBuffer';
 import WebGlShader from './WebGlShader';
 import WebGlProgram from './WebGlProgram';
+import WebGlTexture from './WebGlTexture';
 
 /** @private */
 const WEB_GL_BUFFER_USAGE = {
@@ -105,5 +106,28 @@ export default class WebGlResourceLibrary {
       const fs = this.loadFragementShader(shaderProgram.fragmentShader);
       return new WebGlProgram(this.glx, vs, fs);
     });
+  }
+
+  /**
+   * @param {DataRef} texRef - Reference to texture
+   * @returns {DataRef} Reference to WebGlTexture
+   */
+  loadTexture(texRef) {
+    let glTextureRef = this.texture.get(texRef.id);
+    if (!glTextureRef) {
+      // create WebGlTexture
+      const glTex = new WebGlTexture(
+        this.glx,
+        texRef.data.imgEl,
+        texRef.hints.flipY,
+        texRef.hints.repeatable,
+        texRef.hints.premultiplyAlpha,
+        texRef.hints.nearest,
+      );
+      // create ResourceRef
+      glTextureRef = new DataRef('WebGlTexture', glTex, { id: texRef.id, serial: 0 });
+      this.texture.set(texRef.id, glTextureRef);
+    }
+    return glTextureRef;
   }
 }

@@ -28,6 +28,7 @@ export default class VOPool {
     this.voArray = readOption(options, 'voArray', () => descriptor.createVOArray(this.capacity, {
       usage: this.usage,
       doubleBuffer: readOption(options, 'doubleBuffer', this.usage === 'dynamic'),
+      // TODO tripleBuffer / read and write to different buffers for dynamic...
     }));
 
     this.availableVOs = [];
@@ -132,4 +133,3 @@ export default class VOPool {
     vo.voArray.copy(this.voZero.voArray);
   }
 }
-

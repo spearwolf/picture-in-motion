@@ -33,13 +33,14 @@ export default class Projection {
   }
 
   createUniform() {
-    return new ShaderUniformVariable(this.uniformName, new Mat4());
+    return new ShaderUniformVariable(this.uniformName, new Mat4(), this);
   }
 
   set uniformName(uniformName) {
     const name = uniformName || UNIFORM_NAME;
+    // TODO lazy create
     if (!this.uniform || this.uniform.name !== name) {
-      this.uniform = new ShaderUniformVariable(name, new Mat4());
+      this.uniform = new ShaderUniformVariable(name, new Mat4(), this);
     }
   }
 

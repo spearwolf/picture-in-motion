@@ -93,4 +93,9 @@ describe('WebGlProgram', () => {
       'uv',
     ]);
   });
+
+  it('use()', () => {
+    assert.isTrue(glProgram.use());
+    console.debug('renderer.glx.enabledVertexAttribLocations=', renderer.glx.enabledVertexAttribLocations);
+  });
 });
