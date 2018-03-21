@@ -1,7 +1,4 @@
 import Mat4 from './Mat4';
-import ShaderUniformVariable from './ShaderUniformVariable';
-
-const UNIFORM_NAME = 'viewMatrix';
 
 /**
  * @param {object} options
@@ -10,7 +7,6 @@ const UNIFORM_NAME = 'viewMatrix';
  * @param {number} [options.pixelRatio] - pixel ratio
  * @param {number} [options.perspective=0] - perspective distance (0 means no perspective)
  * @param {string} [options.sizeFit] - `cover`, `contain` or `fill`
- * @param {string} [options.uniformName='viewMatrix'] - name of the uniform value
  */
 export default class Projection {
   constructor({
@@ -18,42 +14,17 @@ export default class Projection {
     desiredHeight,
     pixelRatio,
     sizeFit,
-    uniformName,
     perspective,
   }) {
     this.desiredWidth = desiredWidth;
     this.desiredHeight = desiredHeight;
     this.pixelRatio = pixelRatio;
     this.sizeFit = sizeFit;
-    this.uniformName = uniformName;
     this.perspective = perspective;
     this.lastPerspective = undefined;
     this.width = 0;
     this.height = 0;
-  }
-
-  createUniform() {
-    return new ShaderUniformVariable(this.uniformName, new Mat4(), this);
-  }
-
-  set uniformName(uniformName) {
-    const name = uniformName || UNIFORM_NAME;
-    // TODO lazy create
-    if (!this.uniform || this.uniform.name !== name) {
-      this.uniform = new ShaderUniformVariable(name, new Mat4(), this);
-    }
-  }
-
-  get uniformName() {
-    return (this.uniform && this.uniform.name) || UNIFORM_NAME;
-  }
-
-  get mat4() {
-    return this.uniform.data;
-  }
-
-  get serial() {
-    return this.uniform.serial;
+    this.mat4 = new Mat4();
   }
 
   set perspective(distance) {
@@ -71,11 +42,10 @@ export default class Projection {
       this.height = height;
       this.lastPerspective = perspective;
       if (perspective > 0) {
-        this.uniform.data.perspective(width, height, perspective);
+        this.mat4.perspective(width, height, perspective);
       } else {
-        this.uniform.data.ortho(width, height);
+        this.mat4.ortho(width, height);
       }
-      this.uniform.touch();
     }
   }
 

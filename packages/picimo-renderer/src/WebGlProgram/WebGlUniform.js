@@ -6,6 +6,8 @@ function createUniformSetter(uniform) {
   const { type, location } = uniform;
   const { gl } = uniform.glx;
 
+  // https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html
+
   switch (type) {
     case gl.FLOAT:
       return value => gl.uniform1f(location, value);

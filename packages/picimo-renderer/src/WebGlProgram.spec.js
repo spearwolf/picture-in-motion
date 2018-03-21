@@ -1,5 +1,6 @@
 /* eslint-env browser */
 /* eslint-env mocha */
+/* eslint no-console: 0 */
 import { assert } from 'chai';
 
 import {
@@ -96,12 +97,5 @@ describe('WebGlProgram', () => {
   it('use()', () => {
     assert.isTrue(glProgram.use());
     console.debug('renderer.glx.enabledVertexAttribLocations=', renderer.glx.enabledVertexAttribLocations);
-  });
-
-  it.skip('useShaderProgram()', () => {
-    renderer.initFrame();
-    const success = renderer.useShaderProgram(prg);
-    console.debug('renderer.glx.enabledVertexAttribLocations=', renderer.glx.enabledVertexAttribLocations);
-    assert.isTrue(success, 'renderer.useShaderProgram(..) returned with errors');
   });
 });

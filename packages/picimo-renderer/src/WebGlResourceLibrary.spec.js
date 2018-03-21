@@ -1,21 +1,30 @@
 /* eslint-env browser */
 /* eslint-env mocha */
+/* eslint no-console: 0 */
 import { assert } from 'chai';
 
 import {
   ElementIndexArray,
+  Mat4,
+  ShaderProgram,
   ShaderSource,
-  ShaderTool,
+  ShaderUniformVariable,
+  ShaderVariableBufferGroup,
   VODescriptor,
 } from '@picimo/core'; // eslint-disable-line
 
 import WebGlBuffer from './WebGlBuffer';
 import WebGlRenderer from './WebGlRenderer';
 import WebGlResourceLibrary from './WebGlResourceLibrary';
+import WebGlShader from './WebGlShader';
 
 describe('WebGlResourceLibrary', () => {
   let container;
   let renderer;
+  let voDescriptor;
+  let voArray;
+  let vsSource;
+  let fsSource;
 
   before(() => {
     container = document.createElement('div');
@@ -77,9 +86,16 @@ describe('WebGlResourceLibrary', () => {
           size: 3,
           attrNames: ['x', 'y', 'z'],
         },
+        {
+          name: 'color',
+          type: 'float32',
+          size: 4,
+          attrNames: ['r', 'g', 'b', 'a'],
+        },
       ],
     });
-    const voArray = vod.createVOArray(100, { usage: 'static' });
+    voDescriptor = vod;
+    voArray = vod.createVOArray(100, { usage: 'static' });
 
     it('loadBuffer()', () => {
       const ref = renderer.resources.loadBuffer(voArray.ref);
@@ -108,46 +124,62 @@ describe('WebGlResourceLibrary', () => {
     it('compile vertexShader', () => {
       const shaderSource = ShaderSource.vertexShader()`
 
-        attribute vec2 pos2d;
-        attribute float posZ;
-        attribute vec2 uv;
-        attribute vec2 translate;
-        attribute float rotate;
-        attribute float scale;
-        attribute float opacity;
+        attribute vec3 position;
+        attribute vec4 color;
 
         uniform mat4 viewMatrix;
+        uniform float time;
 
-        varying vec4 vTextureCoordScaleOpacity;
-
-        ${ShaderTool.rotate('rotateZ', 0.0, 0.0, 1.0)}
+        varying vec4 vColor;
+        varying vec4 vTime;
 
         void main(void)
         {
-          mat4 rotationMatrix = rotateZ(rotate);
-          gl_Position = viewMatrix * ((rotationMatrix * (vec4(scale, scale, scale, 1.0) * vec4(pos2d.xy, posZ, 1.0))) + vec4(translate.xy, 0.0, 0.0));
-          vTextureCoordScaleOpacity = vec4(uv.xy, opacity, 0.0);
+          gl_Position = viewMatrix * vec4(position.xyz, 1.0);
+          vColor = color;
+          float t = (((time - floor(time)) * 180.0) - 90.0) * 3.1415926535897932384626433832795 / 180.0;
+          vTime = vec4(sin(t), cos(t), sin(t + 0.666), 1.0);
         }
       `;
 
       const vertexShader = renderer.resources.loadVertexShader(shaderSource);
       assert.exists(vertexShader);
+      assert.instanceOf(vertexShader, WebGlShader, 'vertexShader should be an instance of WebGlShader');
+
+      vsSource = shaderSource;
     });
 
     it('compile fragmentShader', () => {
       const shaderSource = ShaderSource.fragmentShader()`
         precision mediump float;
 
-        varying vec4 vTextureCoordScaleOpacity;
-        uniform sampler2D tex;
+        varying vec4 vColor;
+        varying vec4 vTime;
 
         void main(void) {
-          gl_FragColor = vTextureCoordScaleOpacity.z * texture2D(tex, vec2(vTextureCoordScaleOpacity.s, vTextureCoordScaleOpacity.t));
+          gl_FragColor = vColor * vTime;
         }
       `;
 
       const fragmentShader = renderer.resources.loadFragementShader(shaderSource);
       assert.exists(fragmentShader);
+      assert.instanceOf(fragmentShader, WebGlShader, 'vertexShader should be an instance of WebGlShader');
+
+      fsSource = shaderSource;
+    });
+
+    describe('useShaderProgram', () => {
+      it('initialize shader context', () => {
+        renderer.initFrame();
+        renderer.shaderContext.pushVar(new ShaderUniformVariable('viewMatrix', new Mat4()));
+        renderer.shaderContext.pushVar(new ShaderVariableBufferGroup(voArray, voDescriptor));
+      });
+
+      it('useShaderProgram()', () => {
+        const success = renderer.useShaderProgram(new ShaderProgram(vsSource, fsSource));
+        console.debug('renderer.glx.enabledVertexAttribLocations=', renderer.glx.enabledVertexAttribLocations);
+        assert.isTrue(success, 'renderer.useShaderProgram(..) returned with errors');
+      });
     });
   });
 });

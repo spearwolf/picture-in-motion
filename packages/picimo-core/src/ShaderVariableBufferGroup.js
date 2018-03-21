@@ -9,11 +9,12 @@ import ShaderVariableGroup from './ShaderVariableGroup';
  */
 export default class ShaderVariableBufferGroup extends ShaderVariableGroup {
   /**
-   * @param {VOPool} bufferSource
+   * @param {VOPool|VOArray} bufferSource
+   * @param {VODescriptor} descriptor, only needed if `bufferSource` is an `VOArray`
    */
-  constructor(bufferSource) {
+  constructor(bufferSource, voDescriptor) {
     super([]);
-    const { descriptor } = bufferSource;
+    const descriptor = voDescriptor || bufferSource.descriptor;
     let firstVar;
     Object.keys(descriptor.attr).forEach((attrName) => {
       if (!firstVar) {

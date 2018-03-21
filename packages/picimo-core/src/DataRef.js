@@ -67,8 +67,8 @@ class DataRef {
    * If you leave out the expected value (call the method with just one argument)
    * the methods just ckecks if the hint exists (regardless ofthe value).
    *
-   * @param {string} hintKey 
-   * @param {*} expectedValue 
+   * @param {string} hintKey
+   * @param {*} expectedValue
    * @returns {boolean}
    */
   hasHint(hintKey, expectedValue) {
@@ -76,6 +76,16 @@ class DataRef {
       return Boolean(this.hints && hintKey in this.hints);
     }
     return Boolean(this.hints && hintKey in this.hints && this.hints[hintKey] === expectedValue);
+  }
+
+  /**
+   * Returns a hint value.
+   *
+   * @param {string} hintKey
+   * @returns {*}
+   */
+  hint(hintKey) {
+    return this.hints && this.hints[hintKey];
   }
 }
 

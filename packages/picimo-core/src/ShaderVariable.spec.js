@@ -25,6 +25,13 @@ describe('ShaderVariable', () => {
     assert.equal(tex.serial, 0);
   });
 
+  it('new ShaderUniformVariable() with hints', () => {
+    const uniform = new ShaderUniformVariable('uni', 666, { foo: 'bar' });
+    assert.equal(uniform.data, 666);
+    assert.equal(uniform.serial, 0);
+    assert.equal(uniform.hint('foo'), 'bar');
+  });
+
   it('serial increase on value change', () => {
     const val = new ShaderVariable('bar', ShaderVariable.ATTRIB);
     val.data = 16;

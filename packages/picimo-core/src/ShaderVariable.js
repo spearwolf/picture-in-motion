@@ -14,9 +14,10 @@ export default class ShaderVariable extends DataRef {
    * @param {string} name
    * @param {string} type
    * @param {number|Object} value
+   * @param {Object} [hints]
    */
-  constructor(name, type, value) {
-    super(type, value, { serial: 0 });
+  constructor(name, type, value, hints) {
+    super(type, value, Object.assign({ serial: 0 }, hints));
 
     this.name = name;
   }

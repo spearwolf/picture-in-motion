@@ -10,7 +10,6 @@ describe('Projection', () => {
       proj.update(5000, 2000);
       expect(proj.width).to.equal(666);
       expect(proj.height).to.equal(999);
-      expect(proj.uniform.serial).to.be.above(0);
     });
     it('works for portrait views', () => {
       const proj = new Projection({ sizeFit: 'fill', desiredWidth: 888, desiredHeight: 777 });
