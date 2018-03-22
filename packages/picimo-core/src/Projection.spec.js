@@ -5,19 +5,19 @@ import { Projection } from '.';
 
 describe('Projection', () => {
   describe('fill', () => {
-    it('works for landscape views', () => {
+    it('landscape view', () => {
       const proj = new Projection({ sizeFit: 'fill', desiredWidth: 666, desiredHeight: 999 });
       proj.update(5000, 2000);
       expect(proj.width).to.equal(666);
       expect(proj.height).to.equal(999);
     });
-    it('works for portrait views', () => {
+    it('portrait view', () => {
       const proj = new Projection({ sizeFit: 'fill', desiredWidth: 888, desiredHeight: 777 });
       proj.update(3000, 1000);
       expect(proj.width).to.equal(888);
       expect(proj.height).to.equal(777);
     });
-    it('works for quadric views', () => {
+    it('quadric view', () => {
       const proj = new Projection({ sizeFit: 'fill', desiredWidth: 444, desiredHeight: 333 });
       proj.update(1000, 1000);
       expect(proj.width).to.equal(444);
@@ -26,7 +26,7 @@ describe('Projection', () => {
   });
 
   describe('contain', () => {
-    describe('works for landscape views', () => {
+    describe('landscape view', () => {
       describe('landscape layout', () => {
         it('view ratio < desired ratio', () => {
           const proj = new Projection({ sizeFit: 'contain', desiredWidth: 1000, desiredHeight: 600 }); // 0.6
@@ -56,7 +56,7 @@ describe('Projection', () => {
         expect(proj.height).to.equal(800);
       });
     });
-    describe('works for portrait views', () => {
+    describe('portrait view', () => {
       describe('portrait layout', () => {
         it('view ratio > desired ratio', () => {
           const proj = new Projection({ sizeFit: 'contain', desiredWidth: 600, desiredHeight: 1000 }); // 1.66
@@ -86,10 +86,30 @@ describe('Projection', () => {
         expect(proj.height).to.be.above(800);
       });
     });
+    describe('quadric view', () => {
+      it('landscape layout', () => {
+        const proj = new Projection({ sizeFit: 'contain', desiredWidth: 1000, desiredHeight: 600 }); // 0.6 landscape
+        proj.update(4000, 4000); // 1
+        expect(proj.width).to.be.equal(1000);
+        expect(proj.height).to.above(600);
+      });
+      it('portrait layout', () => {
+        const proj = new Projection({ sizeFit: 'contain', desiredWidth: 600, desiredHeight: 1000 }); // 1.667 portrait
+        proj.update(4000, 4000);
+        expect(proj.width).to.be.above(600);
+        expect(proj.height).to.equal(1000);
+      });
+      it('quadric layout', () => {
+        const proj = new Projection({ sizeFit: 'contain', desiredWidth: 800, desiredHeight: 800 }); // 1 quadric
+        proj.update(4000, 4000);
+        expect(proj.width).to.be.equal(800);
+        expect(proj.height).to.equal(800);
+      });
+    });
   });
 
   describe('cover', () => {
-    describe('works for landscape views', () => {
+    describe('landscape view', () => {
       describe('landscape layout', () => {
         it('view ratio < desired ratio', () => {
           const proj = new Projection({ sizeFit: 'cover', desiredWidth: 1000, desiredHeight: 600 }); // 0.6
@@ -119,7 +139,7 @@ describe('Projection', () => {
         expect(proj.height).to.be.below(800);
       });
     });
-    describe('works for portrait views', () => {
+    describe('portrait view', () => {
       describe('portrait layout', () => {
         it('view ratio > desired ratio', () => {
           const proj = new Projection({ sizeFit: 'cover', desiredWidth: 600, desiredHeight: 1000 }); // 1.66
@@ -146,6 +166,26 @@ describe('Projection', () => {
         const proj = new Projection({ sizeFit: 'cover', desiredWidth: 800, desiredHeight: 800 });
         proj.update(2000, 4000);
         expect(proj.width).to.be.below(800);
+        expect(proj.height).to.equal(800);
+      });
+    });
+    describe('quadric view', () => {
+      it('landscape layout', () => {
+        const proj = new Projection({ sizeFit: 'cover', desiredWidth: 1000, desiredHeight: 600 }); // 0.6 landscape
+        proj.update(4000, 4000); // 1
+        expect(proj.width).to.be.below(1000);
+        expect(proj.height).to.equal(600);
+      });
+      it('portrait layout', () => {
+        const proj = new Projection({ sizeFit: 'cover', desiredWidth: 600, desiredHeight: 1000 }); // 1.667 portrait
+        proj.update(4000, 4000);
+        expect(proj.width).to.be.equal(600);
+        expect(proj.height).to.below(1000);
+      });
+      it('quadric layout', () => {
+        const proj = new Projection({ sizeFit: 'cover', desiredWidth: 800, desiredHeight: 800 }); // 1 quadric
+        proj.update(4000, 4000);
+        expect(proj.width).to.be.equal(800);
         expect(proj.height).to.equal(800);
       });
     });
