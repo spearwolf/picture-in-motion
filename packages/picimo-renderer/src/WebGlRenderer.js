@@ -215,7 +215,7 @@ export default class WebGlRenderer {
       this.shaderContext.pushVar(shaderVar);
     });
 
-    // 5) set webgl viewport
+    // 4) set webgl viewport
     this.glx.gl.viewport(0, 0, this.width, this.height);
   }
 
