@@ -1,0 +1,47 @@
+{
+  "name": "@picimo/ecs",
+  "version": "0.0.1",
+  "private": true,
+  "module": "src/index.js",
+  "author": "Wolfger Schramm <wolfger@spearwolf.de> (https:/www.spearwolf.de)",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "webpack-dev-server",
+    "docs": "esdoc"
+  },
+  "peerDependencies": {
+    "gl-matrix": "^2.4.0",
+    "loglevel": "^1.6.1",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.40",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.40",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.40",
+    "@babel/polyfill": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
+    "assert": "^1.4.1",
+    "babel-core": "^7.0.0-0",
+    "babel-loader": "^8.0.0-beta",
+    "chai": "^4.1.2",
+    "esdoc": "^1.0.4",
+    "esdoc-standard-plugin": "^1.0.0",
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "gl-matrix": "^2.4.0",
+    "loglevel": "^1.6.1",
+    "mocha": "^5.0.4",
+    "sinon": "^4.4.4",
+    "uuid": "^3.2.1",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11",
+    "webpack-dev-server": "^3"
+  },
+  "dependencies": {
+    "@spearwolf/eventize": "^0.6.5"
+  }
+}
