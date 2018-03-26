@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import Mat4 from './Mat4';
 
 export const COVER = 'cover';
@@ -6,29 +7,39 @@ export const FILL = 'fill';
 
 /**
  * @param {object} options
- * @param {number} [options.desiredWidth=0] - desired width
- * @param {number} [options.desiredHeight=0] - desired height
- * @param {number} [options.pixelRatio] - TODO pixel ratio
+ * @param {number} [options.pixelRatio] - generate width & height by a pixel ratio
+ * @param {number} [options.devicePixelRatio] - force set `devicePixelRatio` to a fixed value (default is read out from `window.devicePixelRatio`)
+ * @param {number} [options.width=0] - desired width
+ * @param {number} [options.height=0] - desired height
  * @param {number} [options.perspective=0] - perspective distance (0 means no perspective)
- * @param {string} [options.sizeFit] - `cover`, `contain` or `fill`
+ * @param {string} [options.fit] - `cover`, `contain` or `fill`
  */
 export default class Projection {
   constructor({
-    desiredWidth,
-    desiredHeight,
-    pixelRatio,
-    sizeFit,
+    devicePixelRatio,
+    fit,
+    height,
     perspective,
+    pixelRatio,
+    width,
   }) {
-    this.desiredWidth = desiredWidth || 0;
-    this.desiredHeight = desiredHeight || 0;
-    this.pixelRatio = pixelRatio;
-    this.sizeFit = sizeFit;
+    this.desiredWidth = width || 0;
+    this.desiredHeight = height || 0;
+    this.desiredPixelRatio = pixelRatio;
+    this.customDevicePixelRatio = devicePixelRatio;
+    this.fit = fit;
     this.perspective = perspective;
     this.lastPerspective = undefined;
     this.width = 0;
     this.height = 0;
+    this.pixelRatio = 0;
+    this.rawWidth = 0;
+    this.rawHeight = 0;
     this.mat4 = new Mat4();
+  }
+
+  get devicePixelRatio() {
+    return this.customDevicePixelRatio || window.devicePixelRatio || 1;
   }
 
   set perspective(distance) {
@@ -53,6 +64,7 @@ export default class Projection {
       } else {
         this.mat4.ortho(width, height);
       }
+      this.pixelRatio = this.rawHeight / height;
       return true;
     }
     return false;
@@ -62,13 +74,27 @@ export default class Projection {
    * @return {bool} returns `true` if projection `mat4` updated, returns `false` if unchanged
    */
   update(currentWidth, currentHeight) {
-    if (this.sizeFit === FILL && this.desiredWidth > 0 && this.desiredHeight > 0) {
+    this.rawWidth = currentWidth;
+    this.rawHeight = currentHeight;
+    const { desiredPixelRatio } = this;
+    if (typeof desiredPixelRatio === 'number' && desiredPixelRatio > 0) {
+      // pixelRatio
+      // ----------
+      const r = this.devicePixelRatio * desiredPixelRatio;
+      const width = currentWidth / r;
+      const height = currentHeight / r;
+      return this.updateOrtho(width, height);
+    } else if (this.fit === FILL && this.desiredWidth > 0 && this.desiredHeight > 0) {
+      // FILL
+      // ----
       return this.updateOrtho(this.desiredWidth, this.desiredHeight);
-    } else if ((this.sizeFit === COVER || this.sizeFit === CONTAIN) &&
+    } else if ((this.fit === COVER || this.fit === CONTAIN) &&
+      // COVER|CONTAIN
+      // -------------
       this.desiredWidth >= 0 && this.desiredHeight >= 0) {
       const currentRatio = currentHeight / currentWidth; // <1 : landscape, >1 : portrait
       const desiredRatio = this.desiredHeight / this.desiredWidth;
-      const isCover = this.sizeFit === COVER;
+      const isCover = this.fit === COVER;
 
       let width = this.desiredWidth;
       let height = this.desiredHeight;
@@ -90,7 +116,6 @@ export default class Projection {
       }
       return this.updateOrtho(width, height);
     }
-    // TODO pixelRatio and currentPixelRatio
     return false;
   }
 }

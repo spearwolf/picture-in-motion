@@ -6,6 +6,7 @@ export { default as ElementIndexArray } from './ElementIndexArray';
 export { default as Mat4 } from './Mat4';
 export { default as PowerOf2Image } from './PowerOf2Image';
 export { default as Projection } from './Projection';
+export { default as ProjectionUniform } from './ProjectionUniform';
 export { default as ResourceLibrary } from './ResourceLibrary';
 // export { default as ShaderAttribValue } from './ShaderAttribValue';
 export { default as ShaderAttribVariable } from './ShaderAttribVariable';

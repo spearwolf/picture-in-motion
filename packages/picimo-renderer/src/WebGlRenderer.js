@@ -1,8 +1,10 @@
 /* eslint-env browser */
 import {
-  readOption,
+  Projection,
+  ProjectionUniform,
   ShaderContext,
   ShaderUniformVariable,
+  readOption,
 } from '@picimo/core'; // eslint-disable-line
 
 import { createWebGlContext } from './WebGlContext';
@@ -100,6 +102,7 @@ export default class WebGlRenderer {
     this.shaderGlobals = {
       time: new ShaderUniformVariable('time', 0),
       resolution: new ShaderUniformVariable('resolution', [0, 0]),
+      projection: new ProjectionUniform(new Projection({ pixelRatio: 1 }), 'projection'),
     };
 
     this.resize();
@@ -156,6 +159,7 @@ export default class WebGlRenderer {
       this.height = h;
 
       this.shaderGlobals.resolution.data = [w, h];
+      this.shaderGlobals.projection.updateProjection(w, h);
     }
   }
 

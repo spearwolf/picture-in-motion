@@ -127,6 +127,7 @@ describe('WebGlResourceLibrary', () => {
         attribute vec3 position;
         attribute vec4 color;
 
+        uniform mat4 projection;
         uniform mat4 viewMatrix;
         uniform float time;
 
@@ -135,7 +136,7 @@ describe('WebGlResourceLibrary', () => {
 
         void main(void)
         {
-          gl_Position = viewMatrix * vec4(position.xyz, 1.0);
+          gl_Position = projection * viewMatrix * vec4(position.xyz, 1.0);
           vColor = color;
           float t = (((time - floor(time)) * 180.0) - 90.0) * 3.1415926535897932384626433832795 / 180.0;
           vTime = vec4(sin(t), cos(t), sin(t + 0.666), 1.0);

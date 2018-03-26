@@ -7,7 +7,7 @@ import ProjectionUniform from './ProjectionUniform';
 
 describe('ProjectionUniform', () => {
   it('create', () => {
-    const projection = new Projection({ desiredWidth: 640, desiredHeight: 360, sizeFit: 'contain' });
+    const projection = new Projection({ width: 640, height: 360, fit: 'contain' });
     const uniform = new ProjectionUniform(projection, 'plah');
     assert.instanceOf(uniform.data, Mat4, 'data should be instance of Mat4');
     assert.strictEqual(uniform.serial, 0);
@@ -16,7 +16,7 @@ describe('ProjectionUniform', () => {
   });
 
   it('create without name argument', () => {
-    const projection = new Projection({ desiredWidth: 640, desiredHeight: 360, sizeFit: 'contain' });
+    const projection = new Projection({ width: 640, height: 360, fit: 'contain' });
     const uniform = new ProjectionUniform(projection);
     assert.instanceOf(uniform.data, Mat4, 'data should be instance of Mat4');
     assert.strictEqual(uniform.serial, 0);
@@ -25,7 +25,7 @@ describe('ProjectionUniform', () => {
   });
 
   it('updateProjection()', () => {
-    const projection = new Projection({ desiredWidth: 640, desiredHeight: 360, sizeFit: 'contain' });
+    const projection = new Projection({ width: 640, height: 360, fit: 'contain' });
     const uniform = new ProjectionUniform(projection);
     assert.strictEqual(uniform.serial, 0);
 
