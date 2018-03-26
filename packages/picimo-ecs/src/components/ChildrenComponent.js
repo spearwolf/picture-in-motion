@@ -1,10 +1,10 @@
 import { readOption } from '@picimo/core'; // eslint-disable-line
 
-const CHILDREN_COMPONENT = 'children';
+const CHILDREN = 'children';
 
 export default class ChildrenComponent {
   static componentName() {
-    return CHILDREN_COMPONENT;
+    return CHILDREN;
   }
 
   constructor(entity, options) {
@@ -13,13 +13,23 @@ export default class ChildrenComponent {
     this.children = [];
   }
 
+  forEach(callback, hasComponents) {
+    this.children.forEach((child) => {
+      if (hasComponents && child.hasComponent(hasComponents)) {
+        callback(child);
+      } else {
+        callback(child);
+      }
+    });
+  }
+
   setParent(parent) {
     const prevParent = this.parent;
     this.parent = parent;
-    if (prevParent && prevParent.hasComponent(CHILDREN_COMPONENT)) {
+    if (prevParent && prevParent.hasComponent(CHILDREN)) {
       prevParent.children.removeChild(this.entity);
     }
-    if (parent && parent.hasComponent(CHILDREN_COMPONENT)) {
+    if (parent && parent.hasComponent(CHILDREN)) {
       if (!parent.children.hasChild(this.entity)) {
         parent.children.children.push(this.entity);
       }
@@ -35,7 +45,7 @@ export default class ChildrenComponent {
     if (idx >= 0) {
       this.children.splice(idx, 1);
     }
-    if (child.hasComponent(CHILDREN_COMPONENT)) {
+    if (child.hasComponent(CHILDREN)) {
       child.children.setParent(null);
     }
   }

@@ -1,5 +1,8 @@
 import { generateUuid } from '@picimo/core'; // eslint-disable-line
 import eventize from '@spearwolf/eventize';
+import getComponentName from './getComponentName';
+
+const hasComponent = entity => name => entity.components.has(getComponentName(name));
 
 export default class Entity {
   constructor(ecs, id = generateUuid()) {
@@ -37,7 +40,7 @@ export default class Entity {
   }
 
   hasComponent(name) {
-    return this.components.has(name);
+    return Array.isArray(name) ? name.every(hasComponent(this)) : hasComponent(this)(name);
   }
 
   deleteComponent(name) {

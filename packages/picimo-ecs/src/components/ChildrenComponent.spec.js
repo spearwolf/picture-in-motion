@@ -38,6 +38,13 @@ describe('ChildrenComponent', () => {
     assert.isTrue(entity2.children.hasChild(entity));
   });
 
+  it('entity.hasComponent()', () => {
+    assert.isTrue(entity.hasComponent(ChildrenComponent));
+    assert.isTrue(entity2.hasComponent([ChildrenComponent]));
+    assert.isTrue(entity.hasComponent('children'));
+    assert.isTrue(entity2.hasComponent(['children']));
+  });
+
   it('removeChild()', () => {
     entity2.children.removeChild(entity);
     assert.isFalse(entity2.children.hasChild(entity));

@@ -1,6 +1,4 @@
-
-/** @private */
-const getComponentName = name => (name && typeof name.componentName === 'function' && name.componentName()) || name;
+import getComponentName from './getComponentName';
 
 export default class ComponentRegistry {
   constructor() {
