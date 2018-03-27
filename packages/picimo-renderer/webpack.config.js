@@ -35,7 +35,6 @@ module.exports = {
                     'firefox 57',
                     'samsung 6.2',
                     'edge 16',
-                    'ie 11',
                   ],
                 },
               }],

@@ -16,8 +16,9 @@ module.exports = {
   resolve: {
     alias: {
       '@picimo/core': path.resolve(__dirname, '../packages/picimo-core'),
-      '@picimo/renderer': path.resolve(__dirname, '../packages/picimo-renderer'),
+      '@picimo/ecs': path.resolve(__dirname, '../packages/picimo-ecs'),
       '@picimo/react': path.resolve(__dirname, '../packages/picimo-react'),
+      '@picimo/renderer': path.resolve(__dirname, '../packages/picimo-renderer'),
     },
   },
   module: {
@@ -40,7 +41,6 @@ module.exports = {
                     'firefox 57',
                     'samsung 6.2',
                     'edge 16',
-                    'ie 11',
                   ],
                 },
               }],
