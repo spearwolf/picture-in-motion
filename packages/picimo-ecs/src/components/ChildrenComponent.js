@@ -14,13 +14,15 @@ export default class ChildrenComponent {
   }
 
   forEach(callback, hasComponents) {
-    this.children.forEach((child) => {
-      if (hasComponents && child.hasComponent(hasComponents)) {
-        callback(child);
-      } else {
-        callback(child);
-      }
-    });
+    if (hasComponents) {
+      this.children.forEach((child) => {
+        if (child.hasComponent(hasComponents)) {
+          callback(child);
+        }
+      });
+    } else {
+      this.children.forEach(callback);
+    }
   }
 
   setParent(parent) {

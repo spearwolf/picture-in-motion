@@ -8,8 +8,9 @@ mocha.setup({
 });
 
 require('../src/ECS.spec');
-require('../src/components/ChildrenComponent.spec');
 require('../src/getComponentName.spec');
+require('../src/components/ChildrenComponent.spec');
+require('../src/components/RenderableComponent.spec');
 
 mocha.checkLeaks();
 mocha.run();
