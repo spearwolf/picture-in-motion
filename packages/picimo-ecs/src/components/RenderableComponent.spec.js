@@ -33,10 +33,13 @@ describe('RenderableComponent', () => {
     entity.on('renderFrame', renderFrameSpy);
     entity.on('postRenderFrame', postRenderFrameSpy);
 
-    entity.renderable.renderFrame({});
+    const re = {};
+    entity.renderable.renderFrame(re);
 
     assert.isTrue(renderFrameSpy.called, 'renderFrame event should be called');
+    assert.isTrue(renderFrameSpy.calledWith(re));
     assert.isTrue(postRenderFrameSpy.called, 'postRenderFrame event should be called');
+    assert.isTrue(postRenderFrameSpy.calledWith(re));
   });
 
   it('renderFrame() with children', () => {
@@ -53,9 +56,11 @@ describe('RenderableComponent', () => {
     a.children.setParent(root);
     b.children.setParent(root);
 
-    root.renderable.renderFrame({});
+    const re = {};
+    root.renderable.renderFrame(re);
 
     assert.isTrue(aSpy.called, 'renderFrame should be called on children with the renderable component');
+    assert.isTrue(aSpy.calledWith(re));
     assert.isFalse(bSpy.called, 'renderFrame should not be called on a child without the renderable component');
   });
 });
