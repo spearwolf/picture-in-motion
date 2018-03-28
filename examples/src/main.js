@@ -2,8 +2,8 @@
 import '@babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import AppShell from './AppShell';
 
-console.log('Welcome to tafl-i!'); // eslint-disable-line
+console.log('welcome to the picimo app shell :-)'); // eslint-disable-line
 
-ReactDOM.render(<App />, document.getElementById('tafl-i'));
+ReactDOM.render(<AppShell />, document.getElementById('picimo-examples'));

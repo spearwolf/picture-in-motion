@@ -24,6 +24,14 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(png|jpg|gif|svg)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[hash].[ext]',
+          publicPath: 'http://localhost:8080/',
+        },
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
