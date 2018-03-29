@@ -14,14 +14,15 @@ const MainLayout = styled.div`
 
 const Header = styled.div`
   background-color: #fff;
+  text-align: center;
 `;
 
 const Logo = styled.img`
   display: inline-block;
-  margin: 10px 20px;
+  margin: 6px 14px 0;
   padding: 0;
   border: 0;
-  height: 60px;
+  height: 95px;
 `;
 
 const SideNav = styled.div`
@@ -33,7 +34,7 @@ const SideNav = styled.div`
 `;
 
 const SideNavContent = styled.div`
-  background-color: #e8f2f8;
+  background-color: #def;
   flex-grow: 1;
   padding: 0 20px;
   overflow: hidden;
@@ -117,7 +118,7 @@ class AppShell extends React.Component {
           { this.state.demoUrl && (
             <DemoIFrame title={this.state.selectedDemo} src={this.state.demoUrl} scrolling="no" frameborder="0" />
           )}
-          <BevelledEdges north="20px" northOffset="8px" east="40px" eastOffset="8px" south="40px" southOffset="10px" west="30px" westOffset="4px" />
+          <BevelledEdges north="20px" northOffset="8px" east="40px" eastOffset="8px" south="30px" southOffset="10px" west="10px" westOffset="4px" />
         </DemoView>
       </MainLayout>
     );
