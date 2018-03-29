@@ -267,4 +267,35 @@ export default class WebGlRenderer {
     const successAttributes = program.loadAttributes(shaderContext, this);
     return success && successUniforms && successAttributes;
   }
+
+  /**
+   * @param {string} primitive
+   * @param {number} count
+   * @param {number} [startIndex=0]
+   */
+  drawArrays(primitive, count, startIndex = 0) {
+    // applyBlendMode(this)
+
+    const { gl } = this.glx;
+    gl.drawArrays(gl[primitive], startIndex, count);
+  }
+
+  /**
+   * @param {string} primitive
+   * @param {ElementIndexArray} elementIndexArray
+   * @param {number} [count]
+   * @param {number} [offset=0]
+   */
+  drawIndexed(primitive, elementIndexArray, count, offset = 0) {
+    // applyBlendMode(this)
+    this.syncBuffer(elementIndexArray).bindBuffer();
+
+    const { gl } = this.glx;
+    gl.drawElements(
+      gl[primitive],
+      count || elementIndexArray.length,
+      gl.UNSIGNED_SHORT,
+      offset * elementIndexArray.array.BYTES_PER_ELEMENT,
+    );
+  }
 }

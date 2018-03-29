@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 import BevelledEdges from './BevelledEdges';
 
+import DEMOS from './demos';
+
 const MainLayout = styled.div`
   display: flex;
   align-items: stretch;
@@ -60,7 +62,7 @@ const DemoLink = styled.a`
   font-weight: 400;
   font-size: 16px;
   text-decoration: none;
-  color: ${props => (props.active ? '#f03' : '#28C')};
+  color: ${props => (props.active ? '#d06' : '#28C')};
   cursor: pointer;
   text-transform: lowercase;
 `;
@@ -71,13 +73,6 @@ const DemoIFrame = styled.iframe`
   height: 100%;
   border: 0;
 `;
-
-const EXAMPLES = [
-  {
-    title: 'clear background',
-    url: '/ClearBackground/',
-  },
-];
 
 class AppShell extends React.Component {
   constructor(props) {
@@ -101,16 +96,20 @@ class AppShell extends React.Component {
           </Header>
           <SideNavContent>
             <BevelledEdges north="10px" east="30px" />
-            <Headline>examples</Headline>
-            { EXAMPLES.map(({ title, url }) => (
-              <DemoLink
-                key={title}
-                url={url}
-                active={this.state.selectedDemo === title}
-                onClick={() => this.runDemo(title, url)}
-              >
-                { title }
-              </DemoLink>
+            { DEMOS.map(({ section, demos }) => (
+              <Fragment key={section}>
+                <Headline>{ section }</Headline>
+                { demos.map(({ title, url }) => (
+                  <DemoLink
+                    key={title}
+                    url={url}
+                    active={this.state.selectedDemo === title}
+                    onClick={() => this.runDemo(title, url)}
+                  >
+                    { title }
+                  </DemoLink>
+                ))}
+              </Fragment>
             ))}
           </SideNavContent>
         </SideNav>

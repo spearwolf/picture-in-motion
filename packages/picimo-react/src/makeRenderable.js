@@ -23,7 +23,7 @@ const createChildContext = (renderable, context) => {
   return childContext;
 };
 
-const hasRenderCtl = component => component.childContext && component.childContext[RENDERCTL];
+const hasRenderCtl = component => Boolean(component.childContext && component.childContext[RENDERCTL]);
 
 const withRenderCtl = ({ childContext }, callback) => {
   if (childContext) {

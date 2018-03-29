@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     main: './src/main.js',
     'ClearBackground/app': './src/ClearBackground/index.js',
+    'HelloWorld/bundle': './src/HelloWorld/index.js',
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),
