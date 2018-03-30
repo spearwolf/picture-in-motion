@@ -1,13 +1,13 @@
 export default [{
   section: 'basics',
   demos: [{
-    title: 'hello world',
+    title: 'VOPool / quads',
     url: '/HelloWorld/',
   }],
 }, {
   section: 'react',
   demos: [{
-    title: 'clear background',
+    title: '<ClearBackground/>',
     url: '/ClearBackground/',
   }],
 }];

@@ -65,7 +65,10 @@ const DemoLink = styled.a`
   text-decoration: none;
   color: ${props => (props.active ? '#d06' : '#28C')};
   cursor: pointer;
-  text-transform: lowercase;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const DemoIFrame = styled.iframe`
