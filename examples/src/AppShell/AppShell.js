@@ -56,6 +56,21 @@ const Headline = styled.h2`
   text-transform: uppercase;
 `;
 
+const GitHubLink = styled.a`
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background-image: url(/images/github-361.png);
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-size: contain;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+`;
+
 const DemoLink = styled.a`
   font-family: 'Special Elite';
   font-weight: 400;
@@ -87,11 +102,12 @@ class AppShell extends React.Component {
     this.state = {
       selectedDemo: null,
       demoUrl: null,
+      demoSourceUrl: null,
     };
   }
 
-  runDemo(selectedDemo, demoUrl) {
-    this.setState({ selectedDemo, demoUrl });
+  runDemo(selectedDemo, demoUrl, demoSourceUrl) {
+    this.setState({ selectedDemo, demoUrl, demoSourceUrl });
   }
 
   render() {
@@ -105,12 +121,12 @@ class AppShell extends React.Component {
             { DEMOS.map(({ section, demos }) => (
               <Fragment key={section}>
                 <Headline>{ section }</Headline>
-                { demos.map(({ title, url }) => (
+                { demos.map(({ title, url, sourceUrl }) => (
                   <DemoLink
                     key={title}
                     url={url}
                     active={this.state.selectedDemo === title}
-                    onClick={() => this.runDemo(title, url)}
+                    onClick={() => this.runDemo(title, url, sourceUrl)}
                   >
                     { title }
                   </DemoLink>
@@ -121,7 +137,10 @@ class AppShell extends React.Component {
         </SideNav>
         <DemoView>
           { this.state.demoUrl && (
-            <DemoIFrame title={this.state.selectedDemo} src={this.state.demoUrl} scrolling="no" frameborder="0" />
+            <Fragment>
+              <DemoIFrame title={this.state.selectedDemo} src={this.state.demoUrl} scrolling="no" frameborder="0" />
+              <GitHubLink href={this.state.demoSourceUrl} target="_blank" />
+            </Fragment>
           )}
         </DemoView>
       </MainLayout>

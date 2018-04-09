@@ -28,8 +28,9 @@ const ControlsLayout = styled.section`
 
 const Controls = styled.div`
   display: inline-block;
-  border-radius: 20px;
+  border-radius: 3px;
   max-width: 100vw;
+  min-width: 240px;
   padding: 15px 15px;
   background-color: #fff;
   z-index: 10;

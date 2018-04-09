@@ -128,10 +128,10 @@ const voPoolShaderVars = new ShaderVariableBufferGroup(voPool);
 const quad = voPool.alloc();
 
 quad.setPosition(
-  -200, 200, 0,
-  200, 200, 0,
-  200, -200, 0,
-  -200, -200, 0,
+  -150, 150, 0,
+  150, 150, 0,
+  150, -150, 0,
+  -150, -150, 0,
 );
 
 quad.setColor(
