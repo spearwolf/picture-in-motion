@@ -128,17 +128,17 @@ const voPoolShaderVars = new ShaderVariableBufferGroup(voPool);
 const quad = voPool.alloc();
 
 quad.setPosition(
-  -100, 100, 0,
-  100, 100, 0,
-  100, -100, 0,
-  -100, -100, 0,
+  -200, 200, 0,
+  200, 200, 0,
+  200, -200, 0,
+  -200, -200, 0,
 );
 
 quad.setColor(
-  1, 0, 0, 1,
-  0.8, 0, 0.7, 1,
-  0.8, 0.7, 0, 1,
-  1, 1, 0, 1,
+  0, 1, 0, 1,
+  0, 1, 1, 1,
+  1, 0, 1, 1,
+  0, 0, 1, 1,
 );
 
 console.log('quad vertices', quad.toArray(['position']), 'colors', quad.toArray(['color']));

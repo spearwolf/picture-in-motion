@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
-import BevelledEdges from './BevelledEdges';
+// import BevelledEdges from './BevelledEdges';
 
 import DEMOS from './demos';
 
@@ -13,7 +13,6 @@ const MainLayout = styled.div`
 `;
 
 const Header = styled.div`
-  background-color: #fff;
   text-align: center;
 `;
 
@@ -30,11 +29,10 @@ const SideNav = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  background-color: #0a3;
+  background-color: #f8f8f8;
 `;
 
 const SideNavContent = styled.div`
-  background-color: #def;
   flex-grow: 1;
   padding: 0 20px;
   overflow: hidden;
@@ -49,21 +47,26 @@ const DemoView = styled.div`
 `;
 
 const Headline = styled.h2`
-  font-family: Inconsolata;
+  font-family: 'Poor Story';
   font-weight: 400;
-  font-size: 21px;
+  font-size: 28px;
   line-height: 1;
   margin-top: 1.5em;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.75em;
   text-transform: uppercase;
 `;
 
 const DemoLink = styled.a`
-  font-family: Inconsolata;
+  font-family: 'Special Elite';
   font-weight: 400;
   font-size: 16px;
   text-decoration: none;
-  color: ${props => (props.active ? '#d06' : '#28C')};
+  color: ${props => (props.active ? '#FFFEA3' : '#28C')};
+  background-color: ${props => (props.active ? '#79BD8F' : 'transparent')};
+  text-shadow: 1px 1px 1px ${props => (props.active ? '#499C60' : '#FFF')};
+  padding: 10px 14px 5px;
+  border-radius: 16px;
+  margin-left: -7px;
   cursor: pointer;
 
   &:hover {
@@ -96,10 +99,9 @@ class AppShell extends React.Component {
       <MainLayout>
         <SideNav>
           <Header>
-            <Logo src="/images/180327-picimo-logo-2-blue.png" alt="picimo" />
+            <Logo src="/images/picimo-logo-original.png" alt="picimo" />
           </Header>
           <SideNavContent>
-            <BevelledEdges north="10px" east="30px" />
             { DEMOS.map(({ section, demos }) => (
               <Fragment key={section}>
                 <Headline>{ section }</Headline>
@@ -121,7 +123,6 @@ class AppShell extends React.Component {
           { this.state.demoUrl && (
             <DemoIFrame title={this.state.selectedDemo} src={this.state.demoUrl} scrolling="no" frameborder="0" />
           )}
-          <BevelledEdges north="20px" northOffset="8px" east="40px" eastOffset="8px" south="30px" southOffset="10px" west="10px" westOffset="4px" />
         </DemoView>
       </MainLayout>
     );

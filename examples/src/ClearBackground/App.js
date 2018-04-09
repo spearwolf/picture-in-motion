@@ -36,7 +36,7 @@ const Controls = styled.div`
 `;
 
 const App = () => (
-  <PicimoCanvas alpha disableWebGL2>
+  <PicimoCanvas alpha>
     <ControlsLayout>
       <Controls>
         <FrameNo />
