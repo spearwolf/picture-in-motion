@@ -5,11 +5,12 @@ import pick from './pick';
 
 /** @private */
 const pickVOPoolOpts = pick([
+  'autotouch',
   'capacity',
-  'usage',
-  'maxAllocVOSize',
-  'voArray',
   'doubleBuffer',
+  'maxAllocVOSize',
+  'usage',
+  'voArray',
 ]);
 
 /** @private */
@@ -40,6 +41,7 @@ const createSpriteSizeSetter = (setSize = 'size') => {
  * @param {string|ShaderSource} [options.fragmentShader] - The *fragment shader*
  * @param {Object} [options.textures] - The *shader variable name* to *texture* mapping
  * @param {string} [options.doubleBuffer] - buffer `doubleBuffer` hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`
+ * @param {string} [options.autotouch] - auto touch vertex buffers hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
  */
 export default class SpriteGroup {
   constructor(descriptor, primitiveFactory, options = {}) {

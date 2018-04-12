@@ -313,6 +313,7 @@ export default class WebGlRenderer {
    * @param {SpriteGroup} spriteGroup
    */
   drawSpriteGroup(spriteGroup) {
+    this.syncBuffer(spriteGroup.voPool.voArray);
     this.shaderContext.pushVar(spriteGroup.voPoolShaderAttribs);
     this.useShaderProgram(spriteGroup.shaderProgram);
     this.drawIndexedPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);

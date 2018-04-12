@@ -12,19 +12,9 @@ import {
 
 import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 
-
 // ---------------------------------------------------------------------------
 //
-// 1) create picimo renderer
-//
-// ---------------------------------------------------------------------------
-
-const renderer = new WebGlRenderer(document.getElementById('picimo'), { alpha: true });
-
-
-// ---------------------------------------------------------------------------
-//
-// 2) create vertex object definition
+// 1) create vertex object (aka sprite) definition
 //
 // ---------------------------------------------------------------------------
 
@@ -62,7 +52,7 @@ const descriptor = new VODescriptor({
 
 // ---------------------------------------------------------------------------
 //
-// 3) create vertex shader
+// 2) create vertex shader
 //
 // ---------------------------------------------------------------------------
 
@@ -90,7 +80,7 @@ const vertexShader = ShaderSource.vertexShader()`
 
 // ---------------------------------------------------------------------------
 //
-// 4) create fragment shader
+// 3) create fragment shader
 //
 // ---------------------------------------------------------------------------
 
@@ -109,7 +99,7 @@ const fragmentShader = ShaderSource.fragmentShader()`
 
 // ---------------------------------------------------------------------------
 //
-// 5) create the sprite group
+// 4) create the sprite group
 //
 // ---------------------------------------------------------------------------
 
@@ -118,16 +108,20 @@ const sprites = new SpriteGroup(descriptor, IndexedPrimitive.createQuads, {
   fragmentShader,
 
   capacity: 100,
+
+  setSpriteSize: (sprite, w, h) => sprite.setSize(w, h),
 });
 
+console.log('VOPool', sprites.voPool);
+
 
 // ---------------------------------------------------------------------------
 //
-// 6) create a quad
+// 5) create a sprite
 //
 // ---------------------------------------------------------------------------
 
-const quad = sprites.createSprite();
+const quad = sprites.createSprite(300);
 
 quad.setColor(
   1, 1, 0, 1,
@@ -136,7 +130,14 @@ quad.setColor(
   1, 0.5, 0, 1,
 );
 
-console.log('quad vertices', quad.toArray(['position']), 'colors', quad.toArray(['color']));
+
+// ---------------------------------------------------------------------------
+//
+// 6) create picimo renderer
+//
+// ---------------------------------------------------------------------------
+
+const renderer = new WebGlRenderer(document.getElementById('picimo'), { alpha: true });
 
 
 // ---------------------------------------------------------------------------
@@ -151,7 +152,6 @@ function animate() {
 
   const { now } = renderer;
   quad.setSize(200 + (Math.sin(now) * 100), 200 + (Math.cos(now) * 100));
-  sprites.touchVertexBuffers();
 
   renderer.drawSpriteGroup(sprites);
 

@@ -15,6 +15,7 @@ export default class VOPool {
    * @param {number} [options.maxAllocVOSize] - never allocate more than `maxAllocVOSize` *vertex objects* at once
    * @param {string} [options.usage='dynamic'] - buffer `usage` hint, choose between `dynamic` or `static`
    * @param {string} [options.doubleBuffer] - buffer `doubleBuffer` hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
+   * @param {string} [options.autotouch] - auto touch vertex buffers hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
    */
 
   constructor(descriptor, options) {
@@ -27,6 +28,7 @@ export default class VOPool {
     this.usage = readOption(options, 'usage', 'dynamic');
     this.voArray = readOption(options, 'voArray', () => descriptor.createVOArray(this.capacity, {
       usage: this.usage,
+      autotouch: readOption(options, 'autotouch', this.usage === 'dynamic'),
       doubleBuffer: readOption(options, 'doubleBuffer', this.usage === 'dynamic'),
       // TODO tripleBuffer / read and write to different buffers for dynamic...
     }));
