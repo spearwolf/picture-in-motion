@@ -72,6 +72,7 @@ const GitHubLink = styled.a`
 `;
 
 const DemoLink = styled.a`
+  display: block;
   font-family: 'Special Elite';
   font-weight: 400;
   font-size: 16px;

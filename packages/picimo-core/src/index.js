@@ -3,6 +3,7 @@ import * as ShaderTool from './ShaderTool';
 export { default as AABB2 } from './AABB2';
 export { default as DataRef } from './DataRef';
 export { default as ElementIndexArray } from './ElementIndexArray';
+export { default as IndexedPrimitive } from './IndexedPrimitive';
 export { default as Mat4 } from './Mat4';
 export { default as PowerOf2Image } from './PowerOf2Image';
 export { default as Projection } from './Projection';

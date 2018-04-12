@@ -298,4 +298,23 @@ export default class WebGlRenderer {
       offset * elementIndexArray.array.BYTES_PER_ELEMENT,
     );
   }
+
+  /**
+   * @param {IndexedPrimitive} indexedPrimitive
+   * @param {number} [primCount]
+   * @param {number} [primOffset=0]
+   */
+  drawIndexedPrimitive({ primitiveType, elementIndexArray }, primCount, primOffset) {
+    const { itemCount } = elementIndexArray;
+    this.drawIndexed(primitiveType, elementIndexArray, primCount * itemCount, primOffset * itemCount);
+  }
+
+  /**
+   * @param {SpriteGroup} spriteGroup
+   */
+  drawSpriteGroup(spriteGroup) {
+    this.shaderContext.pushVar(spriteGroup.voPoolShaderAttribs);
+    this.useShaderProgram(spriteGroup.shaderProgram);
+    this.drawIndexedPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
+  }
 }
