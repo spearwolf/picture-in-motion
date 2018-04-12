@@ -44,6 +44,19 @@ const descriptor = new VODescriptor({
       attrNames: ['r', 'g', 'b', 'a'],
     },
   ],
+  proto: {
+    setSize(w, h) {
+      const w2 = w / 2;
+      const h2 = h / 2;
+
+      this.setPosition(
+        -w2, h2, 0,
+        w2, h2, 0,
+        w2, -h2, 0,
+        -w2, -h2, 0,
+      );
+    },
+  },
 });
 
 
@@ -103,19 +116,8 @@ const fragmentShader = ShaderSource.fragmentShader()`
 const sprites = new SpriteGroup(descriptor, IndexedPrimitive.createQuads, {
   vertexShader,
   fragmentShader,
+
   capacity: 100,
-
-  setSpriteSize: (sprite, w, h) => {
-    const w2 = w / 2;
-    const h2 = h / 2;
-
-    sprite.setPosition(
-      -w2, h2, 0,
-      w2, h2, 0,
-      w2, -h2, 0,
-      -w2, -h2, 0,
-    );
-  },
 });
 
 
@@ -125,7 +127,7 @@ const sprites = new SpriteGroup(descriptor, IndexedPrimitive.createQuads, {
 //
 // ---------------------------------------------------------------------------
 
-const quad = sprites.createSprite(300, 250);
+const quad = sprites.createSprite();
 
 quad.setColor(
   1, 1, 0, 1,
@@ -146,6 +148,10 @@ console.log('quad vertices', quad.toArray(['position']), 'colors', quad.toArray(
 function animate() {
   renderer.resize();
   renderer.initFrame();
+
+  const { now } = renderer;
+  quad.setSize(200 + (Math.sin(now) * 100), 200 + (Math.cos(now) * 100));
+  sprites.touchVertexBuffers();
 
   renderer.drawSpriteGroup(sprites);
 
