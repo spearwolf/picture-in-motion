@@ -16,17 +16,24 @@ export default (descriptor, attributes) => {
     for (let i = 0; i < attributes.length; ++i) {
       const attr = attributes[i];
 
-      if (attr.size === undefined) throw new Error('VODescriptor:createAttributes: attribute descriptor has no :size property!');
+      let attrSize = attr.size;
+      if (attrSize === undefined) {
+        if (Array.isArray(attr.attrNames)) {
+          attrSize = attr.attrNames.length;
+        } else {
+          throw new Error('VODescriptor:createAttributes: attribute descriptor has no :size (or :attrNames) property!');
+        }
+      }
 
       const type = attr.type || DEFAULT_ATTR_TYPE;
 
       if (attr.name !== undefined) {
         descriptor.attrNames.push(attr.name);
-        descriptor.attr[attr.name] = new VOAttrDescriptor(attr.name, type, attr.size, offset, byteOffset, !!attr.uniform, attr.attrNames);
+        descriptor.attr[attr.name] = new VOAttrDescriptor(attr.name, type, attrSize, offset, byteOffset, !!attr.uniform, attr.attrNames);
       }
 
-      offset += attr.size;
-      byteOffset += BYTES_PER_ELEMENT[type] * attr.size;
+      offset += attrSize;
+      byteOffset += BYTES_PER_ELEMENT[type] * attrSize;
     }
 
     // bytes per vertex is always aligned to 4-bytes!

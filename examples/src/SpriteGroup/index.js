@@ -20,21 +20,20 @@ import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 
 const descriptor = new VODescriptor({
   vertexCount: 4,
+
   attributes: [
     {
       name: 'position',
-      type: 'float32',
-      size: 3,
       attrNames: ['x', 'y', 'z'],
     },
     {
       name: 'color',
-      type: 'float32',
-      size: 4,
       attrNames: ['r', 'g', 'b', 'a'],
     },
   ],
+
   proto: {
+
     setSize(w, h) {
       const w2 = w / 2;
       const h2 = h / 2;
