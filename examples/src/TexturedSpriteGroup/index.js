@@ -76,7 +76,7 @@ const descriptor = new VODescriptor({
 
 const vertexShader = ShaderSource.vertexShader()`
 
-  precision mediump float;
+  precision highp float;
 
   attribute vec3 position;
   attribute vec2 texCoords;
@@ -127,6 +127,7 @@ const sprites = new TexturedSpriteGroup(descriptor, IndexedPrimitive.createQuads
   fragmentShader,
 
   capacity: 100,
+  usage: 'static',
 
   setSpriteSize: (sprite, w, h) => sprite.setSize(w, h),
   setSpriteTexCoordsByTexture: (sprite, texture) => sprite.setTexCoordsByTexture(texture),
@@ -150,6 +151,8 @@ sprites.loadTextureAtlas('tex', '/assets/nobinger.json').then((atlas) => {
     sprites.createSprite(atlas.randomFrame()).translate(x, 0);
     x += STEP_X;
   }
+
+  sprites.touchVertexBuffers(); // inform the renderer that our vertices have been changed and need to be uploaded to gpu memory
 });
 
 
