@@ -39,6 +39,7 @@ export default class Texture {
    * @param {boolean} [hints.flipY=false]
    * @param {boolean} [hints.repeatable=false]
    * @param {boolean} [hints.premultiplyAlpha=true]
+   * @param {boolean} [hints.nearest=true]
    */
   constructor(source, width, height, x = 0, y = 0, hints = undefined) {
     let width_ = width;
@@ -61,7 +62,7 @@ export default class Texture {
         flipY: readOption(hints, 'flipY', false),
         repeatable: readOption(hints, 'repeatable', false),
         premultiplyAlpha: readOption(hints, 'premultiplyAlpha', true),
-        nearest: readOption(hints, 'nearest', false),
+        nearest: readOption(hints, 'nearest', true),
       });
 
       if ('origWidth' in source && 'origHeight' in source) {

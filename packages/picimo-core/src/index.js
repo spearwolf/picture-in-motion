@@ -27,6 +27,7 @@ export { default as StackedContext } from './StackedContext';
 export { default as Texture } from './Texture';
 export { default as TextureAtlas } from './TextureAtlas';
 export { default as TextureLibrary } from './TextureLibrary';
+export { default as TexturedSpriteGroup } from './TexturedSpriteGroup';
 export { default as VOArray } from './VOArray';
 export { default as VODescriptor } from './VODescriptor';
 export { default as VOPool } from './VOPool';

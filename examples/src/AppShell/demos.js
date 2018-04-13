@@ -8,6 +8,10 @@ export default [{
     title: 'SpriteGroup / quads',
     url: '/SpriteGroup/',
     sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/SpriteGroup/index.js',
+  }, {
+    title: 'TexturedSpriteGroup / quads',
+    url: '/TexturedSpriteGroup/',
+    sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/TexturedSpriteGroup/index.js',
   }],
 }, {
   section: 'react',

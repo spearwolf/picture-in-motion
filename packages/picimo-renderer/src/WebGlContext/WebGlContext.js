@@ -1,4 +1,5 @@
 /* eslint no-param-reassign: 0 */
+import TextureUnitManager from './TextureUnitManager';
 
 // https://developer.mozilla.org/de/docs/Web/API/WebGL_API/WebGL_best_practices
 // https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-WebGL.html
@@ -33,6 +34,8 @@ class WebGlContext {
     for (let i = 0; i < this.boundTextures.length; i++) {
       this.boundTextures[i] = { TEXTURE_2D: null };
     }
+
+    this.textureUnitManager = new TextureUnitManager(this);
 
     this.enabledVertexAttribLocations = [];
 

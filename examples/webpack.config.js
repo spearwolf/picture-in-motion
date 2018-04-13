@@ -7,6 +7,7 @@ module.exports = {
     'ClearBackground/app': './src/ClearBackground/index.js',
     'HelloWorld/bundle': './src/HelloWorld/index.js',
     'SpriteGroup/bundle': './src/SpriteGroup/index.js',
+    'TexturedSpriteGroup/bundle': './src/TexturedSpriteGroup/index.js',
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),

@@ -4,6 +4,7 @@ import {
   ProjectionUniform,
   ShaderContext,
   ShaderUniformVariable,
+  TexturedSpriteGroup,
   readOption,
 } from '@picimo/core'; // eslint-disable-line
 
@@ -313,9 +314,19 @@ export default class WebGlRenderer {
    * @param {SpriteGroup} spriteGroup
    */
   drawSpriteGroup(spriteGroup) {
-    this.syncBuffer(spriteGroup.voPool.voArray);
-    this.shaderContext.pushVar(spriteGroup.voPoolShaderAttribs);
-    this.useShaderProgram(spriteGroup.shaderProgram);
-    this.drawIndexedPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
+    if (spriteGroup instanceof TexturedSpriteGroup) {
+      spriteGroup.whenTexturesLoaded((texUniforms) => {
+        this.syncBuffer(spriteGroup.voPool.voArray);
+        this.shaderContext.pushVar(texUniforms);
+        this.shaderContext.pushVar(spriteGroup.voPoolShaderAttribs);
+        this.useShaderProgram(spriteGroup.shaderProgram);
+        this.drawIndexedPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
+      });
+    } else {
+      this.syncBuffer(spriteGroup.voPool.voArray);
+      this.shaderContext.pushVar(spriteGroup.voPoolShaderAttribs);
+      this.useShaderProgram(spriteGroup.shaderProgram);
+      this.drawIndexedPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
+    }
   }
 }

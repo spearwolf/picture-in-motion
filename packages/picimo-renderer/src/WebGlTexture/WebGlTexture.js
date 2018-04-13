@@ -24,7 +24,7 @@ export default class WebGlTexture {
   }
 
   bind() {
-    return this.glx.textureManager.bindWebGlTexture(this);
+    return this.glx.textureUnitManager.bindWebGlTexture(this);
   }
 
   uploadImageData() {

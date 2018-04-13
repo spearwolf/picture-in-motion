@@ -75,7 +75,7 @@ const DemoLink = styled.a`
   display: block;
   font-family: 'Special Elite';
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   text-decoration: none;
   color: ${props => (props.active ? '#FFFEA3' : '#28C')};
   background-color: ${props => (props.active ? '#79BD8F' : 'transparent')};
