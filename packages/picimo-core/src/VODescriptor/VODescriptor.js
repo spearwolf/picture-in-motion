@@ -38,10 +38,10 @@ import createVO from './createVO';
  *
  *     attributes: [
  *
- *         { name: 'position',  type: 'float32', size: 3, attrNames: [ 'x', 'y', 'z' ] },
+ *         { name: 'position',  type: 'float32', size: 3, scalars: [ 'x', 'y', 'z' ] },
  *         { name: 'rotate',    type: 'float32', size: 1, uniform: true },
- *         { name: 'texCoords', type: 'float32', size: 2, attrNames: [ 's', 't' ] },
- *         { name: 'translate', type: 'float32', size: 2, attrNames: [ 'tx', 'ty' ], uniform: true },
+ *         { name: 'texCoords', type: 'float32', size: 2, scalars: [ 's', 't' ] },
+ *         { name: 'translate', type: 'float32', size: 2, scalars: [ 'tx', 'ty' ], uniform: true },
  *         { name: 'scale',     type: 'float32', size: 1, uniform: true },
  *         { name: 'opacity',   type: 'float32', size: 1, uniform: true }
  *

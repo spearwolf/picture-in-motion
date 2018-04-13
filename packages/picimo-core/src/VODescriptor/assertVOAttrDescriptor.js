@@ -1,7 +1,7 @@
 import assert from 'assert';
 
 /** @private */
-export default (descriptor, names, size, offset, uniform, attrNames) => {
+export default (descriptor, names, size, offset, uniform, scalars) => {
   const name = Array.isArray(names) ? names[0] : names;
   const alias = Array.isArray(names) ? names[1] : names;
   assert(descriptor.hasAttribute(name, size), `descriptor.hasAttribute("${name}", ${size})`);
@@ -11,9 +11,9 @@ export default (descriptor, names, size, offset, uniform, attrNames) => {
   assert.equal(attr.size, size, '.size');
   assert.equal(attr.offset, offset, '.offset');
   assert.equal(attr.uniform, uniform, '.uniform');
-  if (attrNames) {
-    assert.deepEqual(attr.attrNames, attrNames, '.attrNames');
+  if (scalars) {
+    assert.deepEqual(attr.scalars, scalars, '.scalars');
   } else {
-    assert(attr.attrNames === undefined, '.attrNames');
+    assert(attr.scalars === undefined, '.scalars');
   }
 };

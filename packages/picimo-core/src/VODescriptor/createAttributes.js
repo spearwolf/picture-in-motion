@@ -7,7 +7,7 @@ const DEFAULT_ATTR_TYPE = 'float32';
 /** @private */
 export default (descriptor, attributes) => {
   descriptor.attr = {};
-  descriptor.attrNames = [];
+  descriptor.scalars = [];
 
   if (Array.isArray(attributes)) {
     let offset = 0;
@@ -18,18 +18,18 @@ export default (descriptor, attributes) => {
 
       let attrSize = attr.size;
       if (attrSize === undefined) {
-        if (Array.isArray(attr.attrNames)) {
-          attrSize = attr.attrNames.length;
+        if (Array.isArray(attr.scalars)) {
+          attrSize = attr.scalars.length;
         } else {
-          throw new Error('VODescriptor:createAttributes: attribute descriptor has no :size (or :attrNames) property!');
+          throw new Error('VODescriptor:createAttributes: attribute descriptor has no :size (or :scalars) property!');
         }
       }
 
       const type = attr.type || DEFAULT_ATTR_TYPE;
 
       if (attr.name !== undefined) {
-        descriptor.attrNames.push(attr.name);
-        descriptor.attr[attr.name] = new VOAttrDescriptor(attr.name, type, attrSize, offset, byteOffset, !!attr.uniform, attr.attrNames);
+        descriptor.scalars.push(attr.name);
+        descriptor.attr[attr.name] = new VOAttrDescriptor(attr.name, type, attrSize, offset, byteOffset, !!attr.uniform, attr.scalars);
       }
 
       offset += attrSize;
@@ -43,5 +43,5 @@ export default (descriptor, attributes) => {
     descriptor.vertexAttrCount = offset;
   }
 
-  descriptor.attrList = descriptor.attrNames.map(name => descriptor.attr[name]);
+  descriptor.attrList = descriptor.scalars.map(name => descriptor.attr[name]);
 };

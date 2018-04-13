@@ -3,10 +3,10 @@
 import VOAttrDescriptor from './VOAttrDescriptor';
 
 /** @private */
-const toArray = descriptor => function (attrNames) {
+const toArray = descriptor => function (scalars) {
   const arr = [];
-  const attrList = Array.isArray(attrNames)
-    ? attrNames.map(name => descriptor.attr[name])
+  const attrList = Array.isArray(scalars)
+    ? scalars.map(name => descriptor.attr[name])
     : descriptor.attrList;
   const len = attrList.length;
 

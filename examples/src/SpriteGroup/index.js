@@ -24,11 +24,11 @@ const descriptor = new VODescriptor({
   attributes: [
     {
       name: 'position',
-      attrNames: ['x', 'y', 'z'],
+      scalars: ['x', 'y', 'z'],
     },
     {
       name: 'color',
-      attrNames: ['r', 'g', 'b', 'a'],
+      scalars: ['r', 'g', 'b', 'a'],
     },
   ],
 

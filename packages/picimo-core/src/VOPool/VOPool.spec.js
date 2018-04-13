@@ -21,13 +21,13 @@ describe('VOPool', () => {
         name: 'position',
         type: 'float32',
         size: 3,
-        attrNames: ['x', 'y', 'z'],
+        scalars: ['x', 'y', 'z'],
       },
       {
         name: 'color',
         type: 'uint8',
         size: 4,
-        attrNames: ['r', 'g', 'b', 'a'],
+        scalars: ['r', 'g', 'b', 'a'],
       },
     ],
   });
@@ -39,7 +39,7 @@ describe('VOPool', () => {
     assert.equal(descriptor.rightPadBytesPerVertex, 0);
     assert.equal(descriptor.bytesPerVO, 48);
     assert.deepEqual(descriptor.typeList, ['float32', 'uint8'].sort());
-    assert.deepEqual(descriptor.attrNames, ['position', 'color']);
+    assert.deepEqual(descriptor.scalars, ['position', 'color']);
     assert.deepEqual(descriptor.attrList.map(attr => attr.name), ['position', 'color']);
   });
 

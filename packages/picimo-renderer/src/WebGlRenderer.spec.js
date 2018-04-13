@@ -92,7 +92,7 @@ describe('WebGlRenderer', () => {
           name: 'position',
           type: 'float32',
           size: 3,
-          attrNames: ['x', 'y', 'z'],
+          scalars: ['x', 'y', 'z'],
         },
       ],
     });
@@ -193,7 +193,7 @@ describe('WebGlRenderer', () => {
           name: 'position',
           type: 'float32',
           size: 3,
-          attrNames: ['x', 'y', 'z'],
+          scalars: ['x', 'y', 'z'],
         },
       ],
     });

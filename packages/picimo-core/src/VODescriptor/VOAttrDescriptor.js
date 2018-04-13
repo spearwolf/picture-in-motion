@@ -11,8 +11,8 @@ const camelize = name => name[0].toUpperCase() + name.substr(1);
 
 /** @private */
 const attrPostfix = (attrDesc, name, index) => {
-  if (attrDesc.attrNames) {
-    const postfix = attrDesc.attrNames[index];
+  if (attrDesc.scalars) {
+    const postfix = attrDesc.scalars[index];
 
     if (postfix !== undefined) {
       return postfix;
@@ -74,14 +74,14 @@ export default class VOAttrDescriptor {
    * @param {number} [offset] - either `offset` or `byteOffset` must be specified
    * @param {number} [byteOffset] - either `offset` or `byteOffset` must be specified
    * @param {boolean} uniform
-   * @param {string[]} [attrNames]
+   * @param {string[]} [scalars]
    */
-  constructor(name, type, size, offset, byteOffset, uniform, attrNames) {
+  constructor(name, type, size, offset, byteOffset, uniform, scalars) {
     this.name = name;
     this.type = type;
     this.size = size;
     this.uniform = uniform;
-    this.attrNames = attrNames;
+    this.scalars = scalars;
 
     this.bytesPerElement = BYTES_PER_ELEMENT[this.type];
     this.bytesPerVertex = this.bytesPerElement * size;

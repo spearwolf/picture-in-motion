@@ -40,7 +40,7 @@ describe('VODescriptor', () => {
           name: 'position',
           type: 'float32',
           size: 3,
-          attrNames: ['x', 'y', 'z'],
+          scalars: ['x', 'y', 'z'],
         },
         {
           name: 'rotate',
@@ -52,13 +52,13 @@ describe('VODescriptor', () => {
           name: 'texCoords',
           type: 'float32',
           size: 2,
-          attrNames: ['s', 't'],
+          scalars: ['s', 't'],
         },
         {
           name: 'translate',
           type: 'float32',
           size: 2,
-          attrNames: ['tx', 'ty'],
+          scalars: ['tx', 'ty'],
           uniform: true,
         },
         {
@@ -513,19 +513,19 @@ describe('VODescriptor with mixed element types', () => {
         name: 'position',
         type: 'float32',
         size: 3,
-        attrNames: ['x', 'y', 'z'],
+        scalars: ['x', 'y', 'z'],
       },
       {
         name: 'color',
         type: 'uint8',
         size: 4,
-        attrNames: ['r', 'g', 'b', 'a'],
+        scalars: ['r', 'g', 'b', 'a'],
       },
       {
         name: 'translate',
         type: 'uint16',
         size: 2,
-        attrNames: ['tx', 'ty'],
+        scalars: ['tx', 'ty'],
         uniform: true,
       },
       {

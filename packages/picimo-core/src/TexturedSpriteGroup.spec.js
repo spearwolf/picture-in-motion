@@ -17,16 +17,16 @@ describe('TexturedSpriteGroup', () => {
       name: 'position',
       type: 'int32',
       size: 2,
-      attrNames: ['x', 'y'],
+      scalars: ['x', 'y'],
     }, {
       name: 'size',
       type: 'int32',
       size: 2,
-      attrNames: ['w', 'h'],
+      scalars: ['w', 'h'],
     }, {
       name: 'texCoords',
       type: 'int32',
-      attrNames: ['s', 't'],
+      scalars: ['s', 't'],
       uniform: true,
     }],
 

@@ -15,7 +15,7 @@ export default (descriptor, aliases) => {
         descriptor.attr[name] = attr;
       }
     } else {
-      descriptor.attr[name] = new VOAttrDescriptor(name, attr.type, attr.size, attr.offset, attr.byteOffset, !!attr.uniform, attr.attrNames);
+      descriptor.attr[name] = new VOAttrDescriptor(name, attr.type, attr.size, attr.offset, attr.byteOffset, !!attr.uniform, attr.scalars);
     }
   });
 };

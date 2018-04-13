@@ -129,7 +129,7 @@ describe('ShaderContext', () => {
           name: 'position',
           type: 'float32',
           size: 3,
-          attrNames: [
+          scalars: [
             'x',
             'y',
             'z',
@@ -139,7 +139,7 @@ describe('ShaderContext', () => {
           name: 'color',
           type: 'uint8',
           size: 4,
-          attrNames: [
+          scalars: [
             'r',
             'g',
             'b',
@@ -150,7 +150,7 @@ describe('ShaderContext', () => {
           name: 'translate',
           type: 'uint16',
           size: 2,
-          attrNames: [
+          scalars: [
             'tx',
             'ty',
           ],

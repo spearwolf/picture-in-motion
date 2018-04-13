@@ -84,13 +84,13 @@ describe('WebGlResourceLibrary', () => {
           name: 'position',
           type: 'float32',
           size: 3,
-          attrNames: ['x', 'y', 'z'],
+          scalars: ['x', 'y', 'z'],
         },
         {
           name: 'color',
           type: 'float32',
           size: 4,
-          attrNames: ['r', 'g', 'b', 'a'],
+          scalars: ['r', 'g', 'b', 'a'],
         },
       ],
     });
