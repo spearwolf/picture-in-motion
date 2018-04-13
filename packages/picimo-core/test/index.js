@@ -17,7 +17,6 @@ require('../src/ShaderContext.spec.js');
 require('../src/ShaderSource.spec.js');
 require('../src/ShaderVariable.spec.js');
 require('../src/SpriteGroup.spec.js');
-require('../src/SpriteGroupOLD.spec.js');
 require('../src/StackedContext.spec.js');
 require('../src/Texture.spec.js');
 require('../src/TextureAtlas.spec.js');
