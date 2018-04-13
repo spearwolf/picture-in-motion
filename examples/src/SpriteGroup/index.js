@@ -108,7 +108,7 @@ const sprites = new SpriteGroup(descriptor, IndexedPrimitive.createQuads, {
 
   capacity: 100,
 
-  setSpriteSize: (sprite, w, h) => sprite.setSize(w, h),
+  setSize: (sprite, w, h) => sprite.setSize(w, h),
 });
 
 console.log('VOPool', sprites.voPool);

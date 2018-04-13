@@ -14,7 +14,7 @@ const pickVOPoolOpts = pick([
 ]);
 
 /** @private */
-const createSpriteSizeSetter = (setSize = 'size') => {
+const createSpriteSizeHook = (setSize = 'size') => {
   switch (typeof setSize) {
     case 'string':
       return (sprite, w, h, descriptor) => descriptor.attr[setSize].setValue(sprite, [w, h]);
@@ -33,7 +33,7 @@ const createSpriteSizeSetter = (setSize = 'size') => {
  * @param {VOArray} [options.voArray] - The internal *vertex object array*
  * @param {Object|function} [options.voZero] - *vertex object* prototype
  * @param {Object|function} [options.voNew] - *vertex object* prototype
- * @param {function|string} [options.setSpriteSize='size'] - A function that takes three arguments (sprite, width, height) and sets the size of sprite (called by `.createSprite(w, h)`). Or you can specify the *name* of the size attribute (should be a 2d vector unform).
+ * @param {function|string} [options.setSize='size'] - A function that takes three arguments (sprite, width, height) and sets the size of sprite (called by `.createSprite(w, h)`). Or you can specify the *name* of the size attribute (should be a 2d vector unform).
  * @param {number} [options.maxAllocVOSize] - Never allocate more than `maxAllocVOSize` *sprites* at once
  * @param {string} [options.usage='dynamic'] - Buffer usage hint, choose between `dynamic` or `static`
  * @param {ShaderProgram} [options.shader] - The `ShaderProgram`. As alternative you can use the `vertexShader` option together with `fragmentShader`
@@ -58,7 +58,9 @@ export default class SpriteGroup {
       voZero = descriptor.createVO(null, voZero);
     }
 
-    this.setSpriteSize = createSpriteSizeSetter(options.setSpriteSize);
+    this.spriteHook = {
+      setSize: createSpriteSizeHook(options.setSize),
+    };
 
     this.voPool = new VOPool(descriptor, Object.assign({
       maxAllocVOSize: 1000,
@@ -96,7 +98,7 @@ export default class SpriteGroup {
   createSprite(width, height) {
     const sprite = this.voPool.alloc(1);
     if (width !== undefined) {
-      this.setSpriteSize(sprite, width, height !== undefined ? height : width, this.descriptor);
+      this.spriteHook.setSize(sprite, width, height !== undefined ? height : width, this.descriptor);
     }
     return sprite;
   }

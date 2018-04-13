@@ -129,8 +129,8 @@ const sprites = new TexturedSpriteGroup(descriptor, IndexedPrimitive.createQuads
   capacity: 100,
   usage: 'static',
 
-  setSpriteSize: (sprite, w, h) => sprite.setSize(w, h),
-  setSpriteTexCoordsByTexture: (sprite, texture) => sprite.setTexCoordsByTexture(texture),
+  setSize: (sprite, w, h) => sprite.setSize(w, h),
+  setTexCoordsByTexture: (sprite, texture) => sprite.setTexCoordsByTexture(texture),
 });
 
 console.log('TexturedSpriteGroup', sprites);

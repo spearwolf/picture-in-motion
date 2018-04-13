@@ -9,7 +9,7 @@ export default class TexturedSpriteGroup extends SpriteGroup {
 
     this.textureLibrary = readOption(options, 'textureLibrary', () => new TextureLibrary());
 
-    this.setSpriteTexCoordsByTexture = options.setSpriteTexCoordsByTexture || ((sprite, texture) => sprite.setTexCoordsByTexture(texture));
+    this.spriteHook.setTexCoordsByTexture = options.setTexCoordsByTexture || ((sprite, texture) => sprite.setTexCoordsByTexture(texture));
 
     this.textures = Object.assign({}, options.textures);
     this.shaderTextureGroup = null;
@@ -62,7 +62,7 @@ export default class TexturedSpriteGroup extends SpriteGroup {
     const sprite = super.createSprite(w, h);
 
     if (texture) {
-      this.setSpriteTexCoordsByTexture(sprite, texture);
+      this.spriteHook.setTexCoordsByTexture(sprite, texture);
     }
 
     return sprite;

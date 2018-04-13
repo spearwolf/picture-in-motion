@@ -64,11 +64,11 @@ describe('SpriteGroup', () => {
     });
   });
 
-  describe('setSpriteSize', () => {
+  describe('setSize', () => {
     it('attribute name', () => {
       const sg = new SpriteGroup(voDescriptor, IndexedPrimitive.createQuads, {
         capacity: 10,
-        setSpriteSize: 'size',
+        setSize: 'size',
       });
       const sprite = sg.createSprite(44, 88);
       assert.strictEqual(sprite.w, 44);
@@ -78,7 +78,7 @@ describe('SpriteGroup', () => {
     it('function', () => {
       const sg = new SpriteGroup(voDescriptor, IndexedPrimitive.createQuads, {
         capacity: 10,
-        setSpriteSize: (sprite, w, h) => sprite.setSize(w + 1, h + 2),
+        setSize: (sprite, w, h) => sprite.setSize(w + 1, h + 2),
       });
       const sprite = sg.createSprite(44, 88);
       assert.strictEqual(sprite.w, 45);
