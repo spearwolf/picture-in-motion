@@ -4,13 +4,14 @@ import {
   ProjectionUniform,
   ShaderContext,
   ShaderUniformVariable,
+  StackedContext,
   TexturedSpriteGroup,
   readOption,
 } from '@picimo/core'; // eslint-disable-line
 
 import { createWebGlContext } from './WebGlContext';
-
 import WebGlResourceLibrary from './WebGlResourceLibrary';
+import BlendMode from './BlendMode';
 
 /** @private */
 const createCanvas = (domElement) => {
@@ -28,6 +29,14 @@ const autotouchResource = (ref, autotouchedResources) => {
   if (!autotouchedResources.has(ref.id)) {
     autotouchedResources.add(ref.id);
     ref.touch();
+  }
+};
+
+/** @private */
+const applyBlendMode = (renderer) => {
+  const blendMode = renderer.universalContext.get('blend');
+  if (blendMode) {
+    renderer.glx.blend(blendMode);
   }
 };
 
@@ -67,6 +76,8 @@ export default class WebGlRenderer {
      * @type {ShaderContext}
      */
     this.shaderContext = new ShaderContext();
+
+    this.universalContext = new StackedContext();
 
     /**
      * Time in *seconds*.
@@ -214,6 +225,11 @@ export default class WebGlRenderer {
     // -) reset internal frame context
     this._autotouchedResources.clear();
 
+    // -) reset universal context
+    this.universalContext.clear();
+
+    this.universalContext.push('blend', BlendMode.make('orderDependent'));
+
     // 3) initialize shader variable context
     this.shaderContext.clear();
     Object.values(this.shaderGlobals).forEach((shaderVar) => {
@@ -275,7 +291,7 @@ export default class WebGlRenderer {
    * @param {number} [startIndex=0]
    */
   drawArrays(primitive, count, startIndex = 0) {
-    // applyBlendMode(this)
+    applyBlendMode(this);
 
     const { gl } = this.glx;
     gl.drawArrays(gl[primitive], startIndex, count);
@@ -288,7 +304,7 @@ export default class WebGlRenderer {
    * @param {number} [offset=0]
    */
   drawIndexed(primitive, elementIndexArray, count, offset = 0) {
-    // applyBlendMode(this)
+    applyBlendMode(this);
     this.syncBuffer(elementIndexArray).bindBuffer();
 
     const { gl } = this.glx;

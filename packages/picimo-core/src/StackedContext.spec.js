@@ -25,6 +25,24 @@ describe('StackedContext', () => {
     expect(ctx.get('foo')).to.equal(undefined);
     expect(ctx.get('bar')).to.equal(789);
   });
+  it('pop with index', () => {
+    const ctx = new StackedContext();
+    expect(ctx.get('foo')).to.equal(undefined);
+
+    ctx.push('foo', 123);
+    expect(ctx.get('foo')).to.equal(123);
+
+    const idx = ctx.push('foo', 456);
+    expect(ctx.get('foo')).to.equal(456);
+
+    ctx.push('foo', 789);
+    expect(ctx.get('foo')).to.equal(789);
+    ctx.push('foo', 999);
+    expect(ctx.get('foo')).to.equal(999);
+
+    ctx.pop('foo', idx);
+    expect(ctx.get('foo')).to.equal(123);
+  });
   it('clear clears all', () => {
     const ctx = new StackedContext();
     expect(ctx.get('foo')).to.equal(undefined);

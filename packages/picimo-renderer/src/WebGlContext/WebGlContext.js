@@ -27,6 +27,8 @@ class WebGlContext {
     this.gl = gl;
     this.contextAttributes = gl.getContextAttributes();
 
+    this.currentBlendMode = null;
+
     this.boundBuffers = new Map();
     readGlState(this, gl);
 
@@ -104,6 +106,26 @@ class WebGlContext {
         this.enabledVertexAttribLocations.push(location);
       }
     });
+  }
+
+  /**
+   * @param {BlendMode} blendMode
+   */
+  blend(blendMode) {
+    if (blendMode === this.currentBlendMode) return;
+    this.currentBlendMode = blendMode;
+
+    const { gl } = this;
+    if (blendMode.enable) {
+      if (!this.blendEnabled) {
+        gl.enable(gl.BLEND);
+        this.blendEnabled = true;
+      }
+      gl.blendFunc(gl[blendMode.sfactor], gl[blendMode.dfactor]);
+    } else if (this.blendEnabled) {
+      gl.disable(gl.BLEND);
+      this.blendEnabled = false;
+    }
   }
 }
 

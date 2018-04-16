@@ -9,16 +9,19 @@ export default class StackedContext {
     const stack = this.context.get(name);
     if (stack) {
       stack.push(value);
-    } else {
-      this.context.set(name, [value]);
+      return stack.length - 1;
     }
-    return value;
+    this.context.set(name, [value]);
+    return 0;
   }
 
-  pop(name) {
+  pop(name, idx) {
     const stack = this.context.get(name);
     if (stack) {
-      return stack.pop();
+      if (idx === undefined) {
+        return stack.pop();
+      }
+      return stack.splice(idx, stack.length - idx);
     }
   }
 
