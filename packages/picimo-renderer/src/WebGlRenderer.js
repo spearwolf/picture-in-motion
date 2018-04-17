@@ -205,8 +205,9 @@ export default class WebGlRenderer {
    * Each call to `initFrame()` will ..
    * 1. increase the frame number `frameNo`
    * 2. update the frame *time* (`now`, `lastFrameTime` and `shaderGlobals`:uniform:`time`)
-   * 3. initialize shader variable context
-   * 4. set the webgl viewport (to full canvas size)
+   * 3. initialize shader variable context (time, resolution, projection, ..)
+   * 4. initialize universal context (blend, ..)
+   * 5. set the webgl viewport (to full canvas size)
    *
    * @param {number} [now] - *now* in *millis*. Is read out from `performance.now()` if not specified.
    */
@@ -225,18 +226,17 @@ export default class WebGlRenderer {
     // -) reset internal frame context
     this._autotouchedResources.clear();
 
-    // -) reset universal context
+    // 3) initialize universal context
     this.universalContext.clear();
-
     this.universalContext.push('blend', BlendMode.make('orderDependent'));
 
-    // 3) initialize shader variable context
+    // 4) initialize shader variable context
     this.shaderContext.clear();
     Object.values(this.shaderGlobals).forEach((shaderVar) => {
       this.shaderContext.pushVar(shaderVar);
     });
 
-    // 4) set webgl viewport
+    // 5) set webgl viewport
     this.glx.gl.viewport(0, 0, this.width, this.height);
   }
 
