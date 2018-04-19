@@ -20,4 +20,11 @@ export default [{
     url: '/ClearBackground/',
     sourceUrl: 'https://github.com/spearwolf/picimo-next/tree/master/examples/src/ClearBackground',
   }],
+}, {
+  section: 'demo or die',
+  demos: [{
+    title: 'Starscape',
+    url: '/Starscape/',
+    sourceUrl: 'https://github.com/spearwolf/picimo-next/tree/master/examples/src/Starscape/index.js',
+  }],
 }];

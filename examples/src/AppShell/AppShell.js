@@ -25,7 +25,7 @@ const Logo = styled.img`
 `;
 
 const SideNav = styled.div`
-  flex: 0 0 260px;
+  flex: 0 0 300px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -47,7 +47,7 @@ const DemoView = styled.div`
 `;
 
 const Headline = styled.h2`
-  font-family: 'Poor Story';
+  font-family: 'Poor Story', Georgia, sans-serif;
   font-weight: 400;
   font-size: 28px;
   line-height: 1;
@@ -73,7 +73,7 @@ const GitHubLink = styled.a`
 
 const DemoLink = styled.a`
   display: block;
-  font-family: 'Special Elite';
+  font-family: 'Special Elite', Courier, monospace;
   font-weight: 400;
   font-size: 14px;
   text-decoration: none;
