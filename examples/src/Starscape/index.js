@@ -211,7 +211,7 @@ function animate() {
   renderer.resize();
   renderer.initFrame();
 
-  projection.updateProjection(renderer.width, renderer.height);
+  projection.update(renderer.width, renderer.height);
   renderer.shaderContext.pushVar(projection);
 
   speed.data = [

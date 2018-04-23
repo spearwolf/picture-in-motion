@@ -24,21 +24,21 @@ describe('ProjectionUniform', () => {
     assert.strictEqual(uniform.projection, projection);
   });
 
-  it('updateProjection()', () => {
+  it('update()', () => {
     const projection = new Projection({ width: 640, height: 360, fit: 'contain' });
     const uniform = new ProjectionUniform(projection);
     assert.strictEqual(uniform.serial, 0);
 
-    uniform.updateProjection(600, 600);
+    uniform.update(600, 600);
     assert.strictEqual(uniform.serial, 1, 'first update() should increase serial');
 
-    uniform.updateProjection(600, 600);
+    uniform.update(600, 600);
     assert.strictEqual(uniform.serial, 1, 'second update() should not increase serial because the size has not changed');
 
-    uniform.updateProjection(900, 900);
+    uniform.update(900, 900);
     assert.strictEqual(uniform.serial, 1, 'third update() should not increase serial because the size has not changed');
 
-    uniform.updateProjection(1920, 1200);
+    uniform.update(1920, 1200);
     assert.strictEqual(uniform.serial, 2, 'fourth update() should increase serial because the size changed');
   });
 });

@@ -11,7 +11,7 @@ export default class ProjectionUniform extends ShaderUniformVariable {
     return this.hint('projection');
   }
 
-  updateProjection(width, height) {
+  update(width, height) {
     if (this.projection.update(width, height)) {
       this.touch();
     }

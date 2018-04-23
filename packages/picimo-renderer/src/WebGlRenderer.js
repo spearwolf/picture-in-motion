@@ -171,7 +171,7 @@ export default class WebGlRenderer {
       this.height = h;
 
       this.shaderGlobals.resolution.data = [w, h];
-      this.shaderGlobals.projection.updateProjection(w, h);
+      this.shaderGlobals.projection.update(w, h);
     }
   }
 
