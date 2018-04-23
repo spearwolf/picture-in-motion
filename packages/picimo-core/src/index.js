@@ -17,6 +17,7 @@ export { default as ShaderSource } from './ShaderSource';
 export { ShaderTool };
 // export { default as ShaderTexture2dVariable } from './ShaderTexture2dVariable';
 // export { default as ShaderTextureGroup } from './ShaderTextureGroup';
+export { default as ShaderUniformGroup } from './ShaderUniformGroup';
 export { default as ShaderUniformVariable } from './ShaderUniformVariable';
 // export { default as ShaderVariable } from './ShaderVariable';
 // export { default as ShaderVariableAlias } from './ShaderVariableAlias';

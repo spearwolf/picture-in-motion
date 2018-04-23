@@ -1,9 +1,8 @@
 /* eslint-env browser */
 import {
   Projection,
-  ProjectionUniform,
   ShaderContext,
-  ShaderUniformVariable,
+  ShaderUniformGroup,
   StackedContext,
   TexturedSpriteGroup,
   readOption,
@@ -111,11 +110,11 @@ export default class WebGlRenderer {
      */
     this._autotouchedResources = new Set();
 
-    this.shaderGlobals = {
-      time: new ShaderUniformVariable('time', 0),
-      resolution: new ShaderUniformVariable('resolution', [0, 0]),
-      projection: new ProjectionUniform(new Projection({ pixelRatio: 1 }), 'projection'),
-    };
+    this.shaderGlobals = new ShaderUniformGroup({
+      time: 0,
+      resolution: [0, 0],
+      projection: new Projection({ pixelRatio: 1 }),
+    });
 
     this.resize();
   }
@@ -170,8 +169,8 @@ export default class WebGlRenderer {
        */
       this.height = h;
 
-      this.shaderGlobals.resolution.data = [w, h];
-      this.shaderGlobals.projection.update(w, h);
+      this.shaderGlobals.resolution = [w, h];
+      this.shaderGlobals.projectionUniform.update(w, h);
     }
   }
 
@@ -221,7 +220,7 @@ export default class WebGlRenderer {
       this.timeFrameOffset = this.now - this.lastFrameTime;
     }
     this.lastFrameTime = this.now;
-    this.shaderGlobals.time.data = this.now;
+    this.shaderGlobals.time = this.now;
 
     // -) reset internal frame context
     this._autotouchedResources.clear();
@@ -232,9 +231,7 @@ export default class WebGlRenderer {
 
     // 4) initialize shader variable context
     this.shaderContext.clear();
-    Object.values(this.shaderGlobals).forEach((shaderVar) => {
-      this.shaderContext.pushVar(shaderVar);
-    });
+    this.shaderGlobals.pushVar(this.shaderContext);
 
     // 5) set webgl viewport
     this.glx.gl.viewport(0, 0, this.width, this.height);

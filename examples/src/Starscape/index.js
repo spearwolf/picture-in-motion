@@ -5,9 +5,8 @@ import '@babel/polyfill';
 import {
   IndexedPrimitive,
   Projection,
-  ProjectionUniform,
   ShaderSource,
-  ShaderUniformVariable,
+  ShaderUniformGroup,
   TexturedSpriteGroup,
   VODescriptor,
 } from '@picimo/core'; // eslint-disable-line
@@ -176,20 +175,21 @@ sprites.loadTextureAtlas('tex', '/assets/starscape.json').then((atlas) => {
 
 // ---------------------------------------------------------------------------
 //
-// 6) create perspective projection and custom uniforms
+// 6) create perspective projection and more uniforms
 //
 // ---------------------------------------------------------------------------
 
-const projection = new ProjectionUniform(new Projection({
-  fit: 'contain',
-  width: RANGE[0] / 1.7,
-  height: RANGE[1] / 1.7,
-  perspective: RANGE[2] / 2.0,
-}));
-
-const speed = new ShaderUniformVariable('speed', [0, 0, 0]);
-const offset = new ShaderUniformVariable('offset', [0, 0, 0]);
-const range = new ShaderUniformVariable('range', RANGE);
+const uniforms = new ShaderUniformGroup({
+  projection: new Projection({
+    fit: 'contain',
+    width: RANGE[0] / 1.7,
+    height: RANGE[1] / 1.7,
+    perspective: RANGE[2] / 2.0,
+  }),
+  speed: [0, 0, 0],
+  offset: [0, 0, 0],
+  range: RANGE,
+});
 
 
 // ---------------------------------------------------------------------------
@@ -211,24 +211,21 @@ function animate() {
   renderer.resize();
   renderer.initFrame();
 
-  projection.update(renderer.width, renderer.height);
-  renderer.shaderContext.pushVar(projection);
+  uniforms.projectionUniform.update(renderer.width, renderer.height);
 
-  speed.data = [
+  uniforms.speed = [
     0,
     0,
     -20,
   ];
 
-  offset.data = [
+  uniforms.offset = [
     (Math.sin(renderer.now * 0.2) * RANGE[0] * 0.05) + (Math.sin(renderer.now * 0.5) * RANGE[0] * 0.1),
     Math.cos(renderer.now * 0.4) * RANGE[1] * 0.1,
     Math.sin(renderer.now * 0.2) * RANGE[2] * 0.2,
   ];
 
-  renderer.shaderContext.pushVar(speed);
-  renderer.shaderContext.pushVar(offset);
-  renderer.shaderContext.pushVar(range);
+  uniforms.pushVar(renderer.shaderContext);
 
   renderer.universalContext.push('blend', BlendMode.make('additive'));
 
