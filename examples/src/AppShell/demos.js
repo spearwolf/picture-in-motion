@@ -20,11 +20,11 @@ export default [{
     url: '/Starscape/',
     sourceUrl: 'https://github.com/spearwolf/picimo-next/tree/master/examples/src/Starscape/index.js',
   }],
-}, {
-  section: 'react',
-  demos: [{
-    title: '<ClearBackground/>',
-    url: '/ClearBackground/',
-    sourceUrl: 'https://github.com/spearwolf/picimo-next/tree/master/examples/src/ClearBackground',
-  }],
+// }, {
+  // section: 'react',
+  // demos: [{
+  // title: '<ClearBackground/>',
+  // url: '/ClearBackground/',
+  // sourceUrl: 'https://github.com/spearwolf/picimo-next/tree/master/examples/src/ClearBackground',
+  // }],
 }];

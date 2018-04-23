@@ -4,7 +4,7 @@ module.exports = {
   mode: 'development',
   entry: {
     main: './src/main.js',
-    'ClearBackground/app': './src/ClearBackground/index.js',
+    // 'ClearBackground/app': './src/ClearBackground/index.js',
     'HelloWorld/bundle': './src/HelloWorld/index.js',
     'SpriteGroup/bundle': './src/SpriteGroup/index.js',
     'TexturedSpriteGroup/bundle': './src/TexturedSpriteGroup/index.js',
