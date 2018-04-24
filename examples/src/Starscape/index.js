@@ -166,7 +166,7 @@ sprites.loadTextureAtlas('tex', '/assets/starscape.json').then((atlas) => {
       Math.random() * RANGE[1],
       Math.random() * RANGE[2],
     ];
-    sprites.createSprite(atlas.frame('glowing-star'), 4).moveTo(x, y, z);
+    sprites.createSprite(atlas.frame('glowing-star'), 6).moveTo(x, y, z);
   }
 
   sprites.touchVertexBuffers(); // inform the renderer that our vertices have been changed and need to be uploaded to gpu memory

@@ -1,5 +1,5 @@
 export default [{
-  section: 'basics',
+  section: 'Basics',
   demos: [{
     title: 'VOPool / quads',
     url: '/HelloWorld/',
@@ -14,7 +14,7 @@ export default [{
     sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/TexturedSpriteGroup/index.js',
   }],
 }, {
-  section: 'demo or die',
+  section: 'Demo or Die',
   demos: [{
     title: 'Starscape',
     url: '/Starscape/',

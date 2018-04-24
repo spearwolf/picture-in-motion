@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
-// import BevelledEdges from './BevelledEdges';
-
 import DEMOS from './demos';
+
+const FONT_FAMILY_HEADLINE = 'Open Sans';
+const FONT_FAMILY_TEXT = 'Cantarell';
 
 const MainLayout = styled.div`
   display: flex;
@@ -13,15 +14,25 @@ const MainLayout = styled.div`
 `;
 
 const Header = styled.div`
-  text-align: center;
+  display: flex;
+  align-items: flex-end;
+  margin: 10px 20px 0 12px;
 `;
 
 const Logo = styled.img`
   display: inline-block;
-  margin: 6px 14px 0;
+  margin: 0;
   padding: 0;
   border: 0;
-  height: 95px;
+  height: 60px;
+`;
+
+const Title = styled.div`
+  display: inline-block;
+  font-family: '${FONT_FAMILY_HEADLINE}', Georgia, sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1;
 `;
 
 const SideNav = styled.div`
@@ -47,13 +58,12 @@ const DemoView = styled.div`
 `;
 
 const Headline = styled.h2`
-  font-family: 'Poor Story', Georgia, sans-serif;
+  font-family: '${FONT_FAMILY_HEADLINE}', Georgia, sans-serif;
   font-weight: 400;
-  font-size: 28px;
+  font-size: 18px;
   line-height: 1;
   margin-top: 1.5em;
   margin-bottom: 0.75em;
-  text-transform: uppercase;
 `;
 
 const GitHubLink = styled.a`
@@ -62,7 +72,7 @@ const GitHubLink = styled.a`
   right: 0;
   width: 100px;
   height: 100px;
-  background-image: url(/images/github-361.png);
+  background-image: url(/images/github-361-dark.png);
   background-repeat: no-repeat;
   background-position: top right;
   background-size: contain;
@@ -73,16 +83,15 @@ const GitHubLink = styled.a`
 
 const DemoLink = styled.a`
   display: block;
-  font-family: 'Special Elite', Courier, monospace;
+  font-family: '${FONT_FAMILY_TEXT}', Courier, monospace;
   font-weight: 400;
   font-size: 14px;
   text-decoration: none;
-  color: ${props => (props.active ? '#FFFEA3' : '#28C')};
-  background-color: ${props => (props.active ? '#79BD8F' : 'transparent')};
-  text-shadow: 1px 1px 1px ${props => (props.active ? '#499C60' : '#FFF')};
-  padding: 10px 14px 5px;
+  color: ${props => (props.active ? '#FF3060' : '#28C')};
+  background-color: ${props => (props.active ? '#F2F2F2' : 'transparent')};
+  padding: 5px 14px 3px;
   border-radius: 16px;
-  margin-left: -7px;
+  margin-left: -13px;
   cursor: pointer;
 
   &:hover {
@@ -117,6 +126,7 @@ class AppShell extends React.Component {
         <SideNav>
           <Header>
             <Logo src="/images/picimo-logo-original.png" alt="picimo" />
+            <Title>/ examples</Title>
           </Header>
           <SideNavContent>
             { DEMOS.map(({ section, demos }) => (
