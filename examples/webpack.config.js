@@ -9,6 +9,7 @@ module.exports = {
     'SpriteGroup/bundle': './src/SpriteGroup/index.js',
     'TexturedSpriteGroup/bundle': './src/TexturedSpriteGroup/index.js',
     'Starscape/bundle': './src/Starscape/index.js',
+    'HelloInstancedWorld/bundle': './src/HelloInstancedWorld/index.js',
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),

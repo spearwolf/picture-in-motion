@@ -12,6 +12,10 @@ export default [{
     title: 'TexturedSpriteGroup / quads',
     url: '/TexturedSpriteGroup/',
     sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/TexturedSpriteGroup/index.js',
+  }, {
+    title: 'instancing / quads',
+    url: '/HelloInstancedWorld/',
+    sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/HelloInstancedWorld/index.js',
   }],
 }, {
   section: 'Demo or Die',
