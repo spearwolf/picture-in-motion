@@ -17,7 +17,7 @@ export default class ShaderUniformGroup extends ShaderVariableGroup {
   /**
    * @param {string} name
    * @param {number|Object} value
-   * @param {Object [hints]
+   * @param {Object} [hints]
    */
   addUniform(name, value, hints) {
     const isProjection = value instanceof Projection;
