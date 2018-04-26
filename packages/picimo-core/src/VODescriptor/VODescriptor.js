@@ -66,6 +66,7 @@ export default class VODescriptor {
     aliases,
     proto,
   }) {
+    /** Number of _vertices_ per _vertex object_ */
     this.vertexCount = parseInt(vertexCount, 10);
 
     createAttributes(this, attributes);
@@ -91,8 +92,8 @@ export default class VODescriptor {
    * Create a *vertex object*.
    *
    * @param {VOArray} [voArray]
-   * @param {function|object} [voInit] - Initialize our *vertex object*
-   * @returns {Object} the *vertex object*
+   * @param {function|object} [voInit] - *vertex object* initializer
+   * @returns {Object} the initialized *vertex object*
    */
   createVO(voArray, voInit) {
     const vo = createVO(Object.create(this.voPrototype), this, voArray);

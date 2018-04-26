@@ -7,7 +7,7 @@ export default class ShaderUniformVariable extends ShaderVariable {
   /**
    * @param {string} name
    * @param {number|Object} value
-   * @param {Object [hints]
+   * @param {Object} [hints]
    */
   constructor(name, value, hints) {
     super(name, ShaderVariable.UNIFORM, value, hints);

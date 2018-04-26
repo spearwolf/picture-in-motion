@@ -496,7 +496,7 @@ describe('VODescriptor', () => {
   });
 });
 
-describe('VODescriptor with mixed element types', () => {
+describe('VODescriptor with mixed element types (using the attribute object notation)', () => {
   const descriptor = new VODescriptor({
 
     // vertex elements layout
@@ -508,33 +508,22 @@ describe('VODescriptor with mixed element types', () => {
     //
     vertexCount: 3,
 
-    attributes: [
-      {
-        name: 'position',
-        type: 'float32',
-        size: 3,
-        scalars: ['x', 'y', 'z'],
-      },
-      {
-        name: 'color',
-        type: 'uint8',
-        size: 4,
+    attributes: {
+      position: ['x', 'y', 'z'],
+      color: {
         scalars: ['r', 'g', 'b', 'a'],
-      },
-      {
-        name: 'translate',
-        type: 'uint16',
-        size: 2,
-        scalars: ['tx', 'ty'],
-        uniform: true,
-      },
-      {
-        name: 'b',
         type: 'uint8',
-        size: 1,
+      },
+      translate: {
+        scalars: ['tx', 'ty'],
+        type: 'uint16',
         uniform: true,
       },
-    ],
+      b: {
+        type: 'uint8',
+        uniform: true,
+      },
+    },
   });
 
   it('vertexCount', () => {
