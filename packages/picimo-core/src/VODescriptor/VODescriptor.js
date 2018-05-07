@@ -12,7 +12,7 @@ import createVO from './createVO';
  * @class VODescriptor
  *
  * @param {Object} options
- * @param {number} options.vertexCount - number of vertices
+ * @param {number} [options.vertexCount=1] - number of vertices
  * @param {Object[]} options.attributes - list of vertex attribute descriptions (see example)
  * @param {Object} [options.aliases] - *optional* list of attribute aliases
  * @param {Object} [options.proto]
@@ -62,12 +62,19 @@ import createVO from './createVO';
 export default class VODescriptor {
   constructor({
     vertexCount,
+    instanceOf,
     attributes,
     aliases,
     proto,
   }) {
     /** Number of _vertices_ per _vertex object_ */
-    this.vertexCount = parseInt(vertexCount, 10);
+    this.vertexCount = parseInt(vertexCount, 10) || 1;
+
+    /** Returns `true` if this vertex object is *instanced* */
+    this.isInstanced = instanceOf != null;
+
+    /** @type VODescriptor */
+    this.voBase = instanceOf;
 
     createAttributes(this, attributes);
     createAliases(this, aliases);

@@ -38,6 +38,9 @@ export default class WebGlAttribute {
     const attr = descriptor.attr[this.name];
     const type = glType(gl, attr.type);
     gl.vertexAttribPointer(this.location, attr.size, type, false, descriptor.bytesPerVertex, attr.byteOffset);
+    if (descriptor.isInstanced) {
+      this.glx.vertexAttribDivisor(this.location, 1); // TODO add support for custom divisor value?
+    }
   }
 }
 

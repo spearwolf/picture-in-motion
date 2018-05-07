@@ -314,6 +314,28 @@ export default class WebGlRenderer {
   }
 
   /**
+   * @param {string} primitive
+   * @param {ElementIndexArray} elementIndexArray
+   * @param {number} count
+   * @param {number} offset=0
+   * @param {number} instanceCount
+   */
+  drawIndexedInstanced(primitive, elementIndexArray, count, offset, instanceCount) {
+    applyBlendMode(this);
+    this.syncBuffer(elementIndexArray).bindBuffer();
+
+    const { glx } = this;
+    const { gl } = glx;
+    glx.drawElementsInstanced(
+      gl[primitive],
+      count || elementIndexArray.length,
+      gl.UNSIGNED_SHORT,
+      offset * elementIndexArray.array.BYTES_PER_ELEMENT,
+      instanceCount,
+    );
+  }
+
+  /**
    * @param {IndexedPrimitive} indexedPrimitive
    * @param {number} [primCount]
    * @param {number} [primOffset=0]
