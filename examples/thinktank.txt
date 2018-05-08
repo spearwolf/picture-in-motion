@@ -1,0 +1,44 @@
+DX = 150
+DY = 150
+
+sprite MyBaseQuad {
+  @vertexCount(4)
+  @primitive(TriQuads)
+
+  position: float32 {
+    x [ -DX, DX, DX, -DX ]
+    y [ DY, DY, -DY, -DY ]
+    z
+  }
+}
+
+primitive TriQuads {
+  @type(TRIANLGES)
+  @usage(static)
+
+  indices [
+    0, 1, 2,
+    0, 2, 3,
+  ]
+  stride 4
+  offset 0
+}
+
+sprite MyQuads instantiates MyBaseQuad {
+  translate {
+    tx
+    ty
+    tz
+  }
+  color {
+    r
+    g
+    b
+    a
+  }
+  scale: uint8
+  texCoords(size: 2): float32
+  foo @uniform
+  r(size: 1, offset: 3): float32 @alias
+  uv @alias(texCoords)
+}

@@ -170,7 +170,7 @@ const quadIndices = ElementIndexArray.Generate(1000, [0, 1, 2, 0, 2, 3], 4);
 //
 // ---------------------------------------------------------------------------
 
-const renderer = new WebGlRenderer(document.getElementById('picimo'), { alpha: true, disableWebGL2: false });
+const renderer = new WebGlRenderer(document.getElementById('picimo'), { alpha: true });
 
 
 // ---------------------------------------------------------------------------
