@@ -1,5 +1,6 @@
 import ShaderProgram from './ShaderProgram';
 import ShaderVariableBufferGroup from './ShaderVariableBufferGroup';
+import ElementIndexedArray from './ElementIndexArray';
 import VOPool from './VOPool';
 import pick from './pick';
 
@@ -27,9 +28,9 @@ const createSpriteSizeHook = (setSize = 'size') => {
 
 /**
  * @param {VODescriptor} descriptor - The `VODescriptor` (*vertex object description*)
- * @param {function} primitiveFactory - The primitive factory is a function that takes one argument (capacity) and returns an IndexedPrimitive instance
  * @param {Object} options - Options
  * @param {number} [options.capacity] - Maximum number of *sprites*
+ * @param {ElementIndexedArray|function} primitive - The *primitive factory function* is a function that takes one argument (capacity) and returns an IndexedPrimitive instance
  * @param {VOArray} [options.voArray] - The internal *vertex object array*
  * @param {Object|function} [options.voZero] - *vertex object* prototype
  * @param {Object|function} [options.voNew] - *vertex object* prototype
@@ -44,7 +45,7 @@ const createSpriteSizeHook = (setSize = 'size') => {
  * @param {string} [options.autotouch] - auto touch vertex buffers hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
  */
 export default class SpriteGroup {
-  constructor(descriptor, primitiveFactory, options = {}) {
+  constructor(descriptor, options = {}) {
     this.descriptor = descriptor;
 
     let {
@@ -71,7 +72,12 @@ export default class SpriteGroup {
 
     this.voPoolShaderAttribs = new ShaderVariableBufferGroup(this.voPool);
 
-    this.primitive = primitiveFactory(this.capacity);
+    const { primitive } = options;
+    if (typeof primitive === 'function') {
+      this.primitive = primitive(this.capacity);
+    } else if (primitive instanceof ElementIndexedArray) {
+      this.primitive = primitive;
+    }
 
     this.shaderProgram = options.shaderProgram;
     if (!this.shaderProgram && options.vertexShader && options.fragmentShader) {

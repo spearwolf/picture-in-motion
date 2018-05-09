@@ -102,7 +102,10 @@ const fragmentShader = ShaderSource.fragmentShader()`
 //
 // ---------------------------------------------------------------------------
 
-const sprites = new SpriteGroup(descriptor, IndexedPrimitive.createQuads, {
+const primitive = IndexedPrimitive.createQuads;
+
+const sprites = new SpriteGroup(descriptor, {
+  primitive,
   vertexShader,
   fragmentShader,
 

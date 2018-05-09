@@ -134,7 +134,10 @@ const fragmentShader = ShaderSource.fragmentShader()`
 
 const STARS = 16000;
 
-const sprites = new TexturedSpriteGroup(descriptor, IndexedPrimitive.createQuads, {
+const primitive = IndexedPrimitive.createQuads;
+
+const sprites = new TexturedSpriteGroup(descriptor, {
+  primitive,
   vertexShader,
   fragmentShader,
 

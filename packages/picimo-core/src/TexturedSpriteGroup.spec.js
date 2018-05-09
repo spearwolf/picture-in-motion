@@ -4,10 +4,7 @@ import assert from 'assert';
 
 import TexturedSpriteGroup from './TexturedSpriteGroup';
 
-import {
-  VODescriptor,
-  IndexedPrimitive,
-} from '.';
+import { VODescriptor } from '.';
 
 describe('TexturedSpriteGroup', () => {
   const voDescriptor = new VODescriptor({
@@ -39,7 +36,7 @@ describe('TexturedSpriteGroup', () => {
   });
 
   it('should be instancable without options', () => {
-    const sg = new TexturedSpriteGroup(voDescriptor, IndexedPrimitive.createQuads);
+    const sg = new TexturedSpriteGroup(voDescriptor);
     assert.strictEqual(sg.descriptor, voDescriptor, 'descriptor should be set as property');
     assert.ok(sg.textureLibrary, 'should have a .textureLibrary');
     assert.ok(sg.capacity > 0, 'capacity should be greater than 0');
@@ -49,7 +46,7 @@ describe('TexturedSpriteGroup', () => {
 
   describe('loadTextureAtlas', () => {
     it('createSprite() should set size and texCoords', async () => {
-      const sg = new TexturedSpriteGroup(voDescriptor, IndexedPrimitive.createQuads, { capacity: 10 });
+      const sg = new TexturedSpriteGroup(voDescriptor, { capacity: 10 });
       const atlas = await sg.loadTextureAtlas('tex', '/assets/nobinger.json');
       const sprite = sg.createSprite(atlas.frame('nobinger-rot.png'));
       assert.ok(sprite);

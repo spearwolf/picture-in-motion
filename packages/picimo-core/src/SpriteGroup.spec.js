@@ -27,16 +27,22 @@ describe('SpriteGroup', () => {
   });
 
   it('should be instancable without options', () => {
-    const sg = new SpriteGroup(voDescriptor, IndexedPrimitive.createQuads);
+    const sg = new SpriteGroup(voDescriptor);
     assert.strictEqual(sg.descriptor, voDescriptor, 'descriptor should be set as property');
     assert.ok(sg.capacity > 0, 'capacity should be greater than 0');
     assert.strictEqual(sg.usedCount, 0, 'usedCount should be 0 after initialization');
     assert.strictEqual(sg.availableCount, sg.capacity, 'availableCount should be equal to capacity');
   });
 
+  it('should call primitive factory function', () => {
+    const sg = new SpriteGroup(voDescriptor, { primitive: IndexedPrimitive.createQuads });
+    assert.ok(sg.primitive, 'primitive should exists');
+    assert.ok(sg.primitive instanceof IndexedPrimitive, 'primitive should be an IndexedPrimitive');
+  });
+
   describe('voNew and voZero initialize', () => {
     it('init with an object', () => {
-      const sg = new SpriteGroup(voDescriptor, IndexedPrimitive.createQuads, {
+      const sg = new SpriteGroup(voDescriptor, {
         capacity: 10,
         voNew: {
           x0: 16,
@@ -50,7 +56,7 @@ describe('SpriteGroup', () => {
     });
 
     it('init with a function', () => {
-      const sg = new SpriteGroup(voDescriptor, IndexedPrimitive.createQuads, {
+      const sg = new SpriteGroup(voDescriptor, {
         capacity: 10,
         voNew: (vo) => {
           vo.x1 = 17;
@@ -66,7 +72,7 @@ describe('SpriteGroup', () => {
 
   describe('setSize', () => {
     it('attribute name', () => {
-      const sg = new SpriteGroup(voDescriptor, IndexedPrimitive.createQuads, {
+      const sg = new SpriteGroup(voDescriptor, {
         capacity: 10,
         setSize: 'size',
       });
@@ -76,7 +82,7 @@ describe('SpriteGroup', () => {
     });
 
     it('function', () => {
-      const sg = new SpriteGroup(voDescriptor, IndexedPrimitive.createQuads, {
+      const sg = new SpriteGroup(voDescriptor, {
         capacity: 10,
         setSize: (sprite, w, h) => sprite.setSize(w + 1, h + 2),
       });

@@ -4,8 +4,8 @@ import TextureLibrary from './TextureLibrary';
 import readOption from './readOption';
 
 export default class TexturedSpriteGroup extends SpriteGroup {
-  constructor(descriptor, primitiveFactory, options = {}) {
-    super(descriptor, primitiveFactory, options);
+  constructor(descriptor, options = {}) {
+    super(descriptor, options);
 
     this.textureLibrary = readOption(options, 'textureLibrary', () => new TextureLibrary());
 
