@@ -6,8 +6,10 @@
  * A very simple component factory.
  */
 export default class ComponentFactory {
-  static registerComponent(componentClass, registry) {
-    return registry.registerComponent(componentClass.componentName(), new ComponentFactory(componentClass));
+  static registerComponent(registry, ...components) {
+    components.forEach((componentClass) => {
+      registry.registerComponent(componentClass.componentName(), new ComponentFactory(componentClass));
+    });
   }
 
   constructor(componentClass) {

@@ -16,8 +16,7 @@ describe('RenderableComponent', () => {
   const ecs = new ECS();
 
   before(() => {
-    ComponentFactory.registerComponent(ChildrenComponent, ecs);
-    ComponentFactory.registerComponent(RenderableComponent, ecs);
+    ComponentFactory.registerComponent(ecs, ChildrenComponent, RenderableComponent);
   });
 
   it('createEntity()', () => {
