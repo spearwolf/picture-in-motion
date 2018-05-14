@@ -1,9 +1,8 @@
 DX = 150
 DY = 150
 
-sprite MyBaseQuad {
+vod MyBaseQuad {
   @vertexCount(4)
-  @primitive(TriQuads)
 
   position: float32 {
     x [ -DX, DX, DX, -DX ]
@@ -23,7 +22,7 @@ primitive TriQuads {
   offset 0
 }
 
-sprite MyQuads instantiates MyBaseQuad {
+vod MyQuads instantiates MyBaseQuad {
   translate {
     tx
     ty
@@ -41,3 +40,24 @@ sprite MyQuads instantiates MyBaseQuad {
   r(size: 1, offset: 3): float32 @alias
   uv @alias(texCoords)
 }
+
+sprites MySprites {
+  @vod(MyQuads)
+  @primitive(TriQuads)
+  @dynamic
+
+  MyBaseQuads {
+    @textured
+
+    capacity 100
+
+    texture {
+      tex "/foo.png"
+    }
+  }
+
+  MyQuads {
+    @doublebuffer
+  }
+}
+
