@@ -1,7 +1,7 @@
 DX = 150
 DY = 150
 
-vod MyBaseQuad {
+VertexObject MyBaseQuad {
   @vertexCount(4)
 
   position: float32 {
@@ -11,7 +11,7 @@ vod MyBaseQuad {
   }
 }
 
-primitive TriQuads {
+Primitive TriQuads {
   @type(TRIANLGES)
 
   indices [
@@ -22,7 +22,7 @@ primitive TriQuads {
   offset 0
 }
 
-vod MyQuads instantiates MyBaseQuad {
+VertexObject MyQuads instantiates MyBaseQuad {
   translate {
     tx
     ty
@@ -41,8 +41,8 @@ vod MyQuads instantiates MyBaseQuad {
   uv @alias(texCoords)
 }
 
-sprites MySprites {
-  @vod(MyQuads)
+SpriteGroup MySprites {
+  @vertexObject(MyQuads)
   @primitive(TriQuads)
   @dynamic
 
@@ -60,4 +60,3 @@ sprites MySprites {
     @doublebuffer
   }
 }
-
