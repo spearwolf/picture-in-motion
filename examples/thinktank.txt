@@ -11,19 +11,6 @@ VertexObject MyBaseQuad {
   }
 }
 
-Primitive TriQuads {
-  @type(TRIANLGES)
-  @generate
-
-  stride 4
-  offset 0
-  
-  indices [
-    0, 1, 2,
-    0, 2, 3,
-  ]
-}
-
 VertexObject MyQuads instantiates MyBaseQuad {
   translate {
     tx
@@ -41,6 +28,19 @@ VertexObject MyQuads instantiates MyBaseQuad {
   foo @uniform
   r(size: 1, offset: 3): float32 @alias
   uv @alias(texCoords)
+}
+
+Primitive TriQuads {
+  @type(TRIANLGES)
+  @generate
+
+  stride 4
+  offset 0
+  
+  indices [
+    0, 1, 2,
+    0, 2, 3,
+  ]
 }
 
 SpriteGroup MySprites {
