@@ -1,3 +1,5 @@
+a javascript webgl sprite library
+
 *WORK IN PROGRESS*
 
-see [examples/]() &mdash; contributions are welcome :smiley:
+see [./examples/](./examples/) &mdash; contributions are welcome :smiley:
