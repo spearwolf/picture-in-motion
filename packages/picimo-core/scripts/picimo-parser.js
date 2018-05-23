@@ -1,15 +1,18 @@
 const { parse } = require('../src/picimoParser');
 
 const res = parse(`
+DX = 150
+DY = 120
 
 foo 34 + (99.5 - 9) * 2
+doubleDx DX * 3
 
 bar 666
 plah "lala"
 
 @plah
 @foo(bla)
-@blub(true, "sdk jhsdkj hsdfkj")
+@blub(true, "sdk jhsdkj hsdfkj", DY / 2.5)
 
 `);
 

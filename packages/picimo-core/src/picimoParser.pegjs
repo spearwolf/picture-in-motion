@@ -1,18 +1,41 @@
+{
+  function compact (arr) {
+    return arr.filter(function (element) {
+      return Boolean(element);
+    });
+  }
+
+  var constants = {};
+}
+
 start
-  = ws statements:statement* ws { return statements; }
+  = ws statements:statement* ws
+  {
+    return compact(statements);
+  }
 
 
 // ----- Statements -----
 
 statement
   = statement:(
-      data_statement
+      const_statement
+      / data_statement
       / property_statement
     )
     nl ws
     {
       return statement;
     }
+
+
+// ----- Constants -----
+
+const_statement
+  = key:name _ "=" _ value:value_expression
+  {
+    constants[key] = value;
+  }
 
 
 // ----- Property Calls -----
@@ -97,6 +120,7 @@ number_term
 number_factor
   = "(" _ expr:value_expression _ ")" { return expr; }
   / number
+  / name:name { return constants[name]; }
 
 
 // ----- Numbers -----
