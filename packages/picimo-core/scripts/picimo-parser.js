@@ -7,7 +7,7 @@ DY = 120
 foo 34 + (99.5 - 9) * 2
 doubleDx DX * 3
 
-bar 666
+bar: uint16 666
 plah "lala"
 
 @plah

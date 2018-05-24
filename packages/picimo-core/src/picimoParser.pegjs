@@ -6,6 +6,10 @@
   }
 
   var constants = {};
+
+  function readConstant(name) {
+    return name in constants ? constants[name] : name;
+  }
 }
 
 start
@@ -32,20 +36,20 @@ statement
 // ----- Constants -----
 
 const_statement
-  = key:name _ "=" _ value:value_expression
+  = name:name _ "=" _ value:value_expression
   {
-    constants[key] = value;
+    constants[name] = value;
   }
 
 
 // ----- Property Calls -----
 
 property_statement
-  = "@" key:name _ args:property_arguments_list?
+  = "@" name:name _ args:property_arguments_list?
   {
     var props = {
-      type: "property",
-      key: key
+      type: "propertyCall",
+      name: name
     }
     if (args) props.args = args;
     return props;
@@ -61,7 +65,7 @@ property_arguments_list
   }
 
 property_argument
-  = value:(value / name) {
+  = _ value:(value / name) _ {
     return value;
   }
 
@@ -69,12 +73,29 @@ property_argument
 // ----- Data -----
 
 data_statement
-  = key:name _ value:value {
-    return {
-      type: "data",
-      key: key,
+  = name:name _ type:data_value_type? _ value:value
+  {
+    var data = {
+      type: "dataValue",
+      name: name,
       value: value
     }
+    if (type) data.valueType = type;
+    return data;
+  }
+
+data_value_type
+  = ":" _ type:(
+    "float32"
+    / "int32"
+    / "int16"
+    / "int8"
+    / "uint32"
+    / "uint16"
+    / "uint8"
+  )
+  {
+    return type;
   }
 
 
@@ -120,7 +141,7 @@ number_term
 number_factor
   = "(" _ expr:value_expression _ ")" { return expr; }
   / number
-  / name:name { return constants[name]; }
+  / name:name { return readConstant(name); }
 
 
 // ----- Numbers -----
