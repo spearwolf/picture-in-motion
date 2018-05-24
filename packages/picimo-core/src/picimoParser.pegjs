@@ -23,7 +23,8 @@ start "picimo-lang"
 
 statement "statement"
   = statement:(
-      const_statement
+      data_block
+      / const_statement
       / data_statement
       / property_statement
     )
@@ -31,6 +32,26 @@ statement "statement"
     {
       return statement;
     }
+
+
+// ----- Blocks -----
+
+data_block
+  = name:name _ type:data_value_type? begin_block
+    statements:statement*
+    end_block
+    {
+      var block = {
+        type: "dataBlock",
+        name: name,
+        data: compact(statements)
+      };
+      if (type) block.dataType = type;
+      return block;
+    }
+
+begin_block = _ "{" ws
+end_block   = ws "}" _
 
 
 // ----- Constants -----
@@ -76,7 +97,7 @@ data_statement "data statement"
   = name:name _ type:data_value_type? _ value:value?
   {
     var data = {
-      type: "dataValue",
+      type: "data",
       name: name
     }
     if (value) data.value = value;

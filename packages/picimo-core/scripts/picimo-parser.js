@@ -21,6 +21,19 @@ w 1
 c [ 10, 12, 999, 128736 ]
 a [ -DX, DX, DX, -DX ]
 r
+b: uint8
+
+translate {
+  tx
+  ty
+  tz
+}
+
+position: float32 {
+  x [ -DX, DX, DX, -DX ]
+  y [ DY, DY, -DY, -DY ]
+  z
+}
 
 @plah
 @foo(bla)
