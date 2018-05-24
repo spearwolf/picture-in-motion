@@ -97,7 +97,7 @@ end_block   = ws "}" _
 // ----- Constants -----
 
 const_statement "constant statement"
-  = name:name _ "=" _ value:value_expression
+  = name:name _ "=" _ value:value
   {
     constants[name] = value;
   }
@@ -163,19 +163,32 @@ data_value_type "data value type"
 // ----- Values -----
 
 value
-  = value_array
-  / false
-  / true
-  / null
-  / value_expression
-  / string
+  = _ val:(
+    null
+    / false
+    / true
+    / value_array
+    / value_expression
+    / string
+  ) _
+  {
+    return val;
+  }
 
-false = "false"i / "no"i / "off"i { return false; }
-true  = "true"i / "yes"i / "on"i { return true;  }
-null  = "null" { return null;  }
+false
+  = "false" { return false; }
+  / "no" { return false; }
+  / "off" { return false; }
+
+true
+  = "true" { return true; }
+  / "on" { return true; }
+  / "yes" { return true; }
+
+null = "null" { return null;  }
 
 value_expression
-  = _ expr:number_expression _ {
+  = expr:number_expression {
     return expr;
   }
 
