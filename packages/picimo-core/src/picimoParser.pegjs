@@ -13,7 +13,7 @@
 }
 
 start "picimo-lang"
-  = ws statements:statement* ws
+  = ws statements:top_level_statement* ws
   {
     return compact(statements);
   }
@@ -21,10 +21,19 @@ start "picimo-lang"
 
 // ----- Statements -----
 
+top_level_statement "top-level statement"
+  = statement:(
+      const_statement
+      / declaration
+    )
+    nl ws
+    {
+      return statement;
+    }
+
 statement "statement"
   = statement:(
-      data_block
-      / const_statement
+      named_data_block
       / data_statement
       / property_statement
     )
@@ -34,16 +43,47 @@ statement "statement"
     }
 
 
+// ----- Declaration -----
+
+declaration
+  = type:declaration_type
+    _ name:name
+    _ extension:(verb:declaration_verb _ subject:name { return { verb: verb, subject: subject }; })?
+    _ block:data_block
+  {
+    block.type = "declaration",
+    block.name = name;
+    block.declarationType = type;
+    if (extension) {
+      block.verb = extension.verb;
+      block.subject = extension.subject;
+    }
+    return block;
+  }
+
+declaration_type
+  = type:( "VertexObject"i / "Primitive"i / "SpriteGroup"i ) { return type.toLowerCase(); }
+
+declaration_verb
+  = verb:( "instantiates"i ) { return verb.toLowerCase(); }
+
+
 // ----- Blocks -----
 
+named_data_block
+  = name:name _ block:data_block
+  {
+    block.name = name;
+    return block;
+  }
+
 data_block
-  = name:name _ type:data_value_type? begin_block
+  = type:data_value_type? begin_block
     statements:statement*
     end_block
     {
       var block = {
         type: "dataBlock",
-        name: name,
         data: compact(statements)
       };
       if (type) block.dataType = type;
@@ -130,9 +170,9 @@ value
   / value_expression
   / string
 
-false = "false" { return false; }
-null  = "null"  { return null;  }
-true  = "true"  { return true;  }
+false = "false"i / "no"i / "off"i { return false; }
+true  = "true"i / "yes"i / "on"i { return true;  }
+null  = "null" { return null;  }
 
 value_expression
   = _ expr:number_expression _ {
@@ -151,7 +191,7 @@ value_array "value array"
     end_array { return values || []; }
 
 begin_array             = _ "[" ws
-end_array               = ws "]" _
+end_array               = ws ","? ws "]" _
 array_value_separator   = ws "," ws
 
 
