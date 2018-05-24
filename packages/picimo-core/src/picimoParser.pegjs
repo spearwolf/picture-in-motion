@@ -12,7 +12,7 @@
   }
 }
 
-start
+start "picimo-lang"
   = ws statements:statement* ws
   {
     return compact(statements);
@@ -21,7 +21,7 @@ start
 
 // ----- Statements -----
 
-statement
+statement "statement"
   = statement:(
       const_statement
       / data_statement
@@ -35,7 +35,7 @@ statement
 
 // ----- Constants -----
 
-const_statement
+const_statement "constant statement"
   = name:name _ "=" _ value:value_expression
   {
     constants[name] = value;
@@ -44,7 +44,7 @@ const_statement
 
 // ----- Property Calls -----
 
-property_statement
+property_statement "property-call statement"
   = "@" name:name _ args:property_arguments_list?
   {
     var props = {
@@ -55,7 +55,7 @@ property_statement
     return props;
   }
 
-property_arguments_list
+property_arguments_list "property call arguments list"
   = "("
     head:property_argument
     tail:("," _ a:property_argument { return a; })*
@@ -64,7 +64,7 @@ property_arguments_list
     return [head].concat(tail);
   }
 
-property_argument
+property_argument "property call argument"
   = _ value:(value / name) _ {
     return value;
   }
@@ -72,19 +72,19 @@ property_argument
 
 // ----- Data -----
 
-data_statement
-  = name:name _ type:data_value_type? _ value:value
+data_statement "data statement"
+  = name:name _ type:data_value_type? _ value:value?
   {
     var data = {
       type: "dataValue",
-      name: name,
-      value: value
+      name: name
     }
+    if (value) data.value = value;
     if (type) data.valueType = type;
     return data;
   }
 
-data_value_type
+data_value_type "data value type"
   = ":" _ type:(
     "float32"
     / "int32"
@@ -102,7 +102,8 @@ data_value_type
 // ----- Values -----
 
 value
-  = false
+  = value_array
+  / false
   / true
   / null
   / value_expression
@@ -116,6 +117,22 @@ value_expression
   = _ expr:number_expression _ {
     return expr;
   }
+
+value_array "value array"
+  = begin_array
+    values:(
+      head:value
+      tail:(array_value_separator v:value { return v; })*
+      {
+         return [head].concat(tail);
+      }
+    )?
+    end_array { return values || []; }
+
+begin_array             = _ "[" ws
+end_array               = ws "]" _
+array_value_separator   = ws "," ws
+
 
 // Simple Arithmetics Grammar
 // ==========================
@@ -141,7 +158,11 @@ number_term
 number_factor
   = "(" _ expr:value_expression _ ")" { return expr; }
   / number
-  / name:name { return readConstant(name); }
+  / minus:minus? name:name
+  {
+    var val = readConstant(name);
+     return minus ? -val : val;
+  }
 
 
 // ----- Numbers -----
@@ -210,7 +231,7 @@ unescaped
   = [^\0-\x1F\x22\x5C]
 
 name
-  = firstChar:[a-z]i chars:name_char+ { return firstChar + chars.join(""); }
+  = firstChar:[a-z]i chars:name_char* { return firstChar + ((chars && chars.join("")) || ''); }
 
 name_char
   = [_a-z0-9-]i
