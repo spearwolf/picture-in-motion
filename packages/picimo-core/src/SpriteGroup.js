@@ -21,8 +21,14 @@ const createSpriteSizeHook = (setSize = 'size') => {
       return (sprite, w, h, descriptor) => descriptor.attr[setSize].setValue(sprite, [w, h]);
     case 'function':
       return setSize;
-    default:
-      throw new Error(`SpriteGroup: invalid sprite size setter! (is ${typeof setSize} but should be a function or string)`);
+
+    case 'object':
+    case 'boolean':
+      if (!setSize) {
+        return null;
+      }
+    default: // eslint-disable-line
+      throw new Error(`SpriteGroup: invalid sprite size setter! (is ${typeof setSize} but should be a function, string, null or false)`);
   }
 };
 
@@ -103,8 +109,9 @@ export default class SpriteGroup {
    */
   createSprite(width, height) {
     const sprite = this.voPool.alloc(1);
-    if (width !== undefined) {
-      this.spriteHook.setSize(sprite, width, height !== undefined ? height : width, this.descriptor);
+    const { setSize } = this.spriteHook;
+    if (setSize && width !== undefined) {
+      setSize(sprite, width, height !== undefined ? height : width, this.descriptor);
     }
     return sprite;
   }

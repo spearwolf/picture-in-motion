@@ -17,7 +17,7 @@ VertexObject MyQuads instantiates MyBaseQuad {
     ty
     tz
   }
-  color {
+  color: uint8 {
     r
     g
     b
@@ -36,7 +36,7 @@ Primitive TriQuads {
 
   stride 4
   offset 0
-  
+
   indices [
     0, 1, 2,
     0, 2, 3,
@@ -62,3 +62,4 @@ SpriteGroup MySprites {
     @doublebuffer
   }
 }
+
