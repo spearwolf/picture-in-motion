@@ -1,6 +1,7 @@
 /* eslint-env browser */
 /* eslint no-param-reassign: 0 */
-import { isPowerOf2, findNextPowerOf2 } from '.';
+import isPowerOf2 from './isPowerOf2';
+import findNextPowerOf2 from './findNextPowerOf2';
 
 /** @private */
 function convertToPowerOf2(image) {
