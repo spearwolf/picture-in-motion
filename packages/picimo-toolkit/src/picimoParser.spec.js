@@ -699,4 +699,43 @@ describe('parse()', () => {
       declarationType: 'vertexobject',
     },
   ]);
+
+  itParse('name can include dots', `
+
+    VertexObject my.vertices {
+      @fo.uo
+      bar.foo 23
+
+      vertex.position {
+        x.yZ.uvw
+      }
+    }
+  `, [
+    {
+      type: 'declaration',
+      data: [
+        {
+          type: 'propertyCall',
+          name: 'fo.uo',
+        },
+        {
+          type: 'data',
+          name: 'bar.foo',
+          value: 23,
+        },
+        {
+          type: 'dataBlock',
+          data: [
+            {
+              type: 'data',
+              name: 'x.yZ.uvw',
+            },
+          ],
+          name: 'vertex.position',
+        },
+      ],
+      name: 'my.vertices',
+      declarationType: 'vertexobject',
+    },
+  ]);
 });

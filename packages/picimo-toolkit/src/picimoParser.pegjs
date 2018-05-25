@@ -11,6 +11,12 @@
     });
   }
 
+  function flatten (values) {
+    return compact(values).reduce(function (acc, val) {
+      return acc + (Array.isArray(val) ? flatten(val) : val);
+    }, '');
+  }
+
   function copyAsAnnotation(target, propertyCall) {
     if (!target.annotations) target.annotations = [];
     target.annotations.push(propertyCall);
@@ -313,7 +319,7 @@ unescaped
   = [^\0-\x1F\x22\x5C]
 
 name
-  = firstChar:[a-z]i chars:name_char* { return firstChar + ((chars && chars.join("")) || ''); }
+  = firstChar:[a-z]i chars:("."? name_char ("." name_char+ { return text(); })?)* { return firstChar + ((chars && flatten(chars)) || ''); }
 
 name_char
   = [_a-z0-9-]i
