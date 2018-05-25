@@ -8,7 +8,7 @@ module.exports = {
     watchContentBase: true,
     compress: true,
     host: '0.0.0.0',
-    port: 8080,
+    port: 8082,
   },
   resolve: {
     alias: {

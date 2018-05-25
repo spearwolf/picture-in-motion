@@ -22,7 +22,7 @@ module.exports = {
     alias: {
       '@picimo/core': path.resolve(__dirname, '../packages/picimo-core'),
       '@picimo/ecs': path.resolve(__dirname, '../packages/picimo-ecs'),
-      '@picimo/react': path.resolve(__dirname, '../packages/picimo-react'),
+      // '@picimo/react': path.resolve(__dirname, '../packages/picimo-react'),
       '@picimo/renderer': path.resolve(__dirname, '../packages/picimo-renderer'),
     },
   },
