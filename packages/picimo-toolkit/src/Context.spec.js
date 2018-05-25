@@ -1,0 +1,45 @@
+/* eslint-env browser */
+/* eslint-env mocha */
+/* eslint no-console: 0 */
+import { expect } from 'chai';
+import { get } from 'lodash';
+
+import { compile, Context } from '.';
+
+describe('Context', () => {
+  describe('compile()', () => {
+    let ctx;
+
+    before(() => {
+      ctx = compile(`
+        FOO = 42
+        bar.plah = 23
+
+        VertexObject myVertices {
+            position: uint32 {
+              x
+              y
+            }
+            rotate: uint16
+        }
+      `);
+      console.log('Context', ctx);
+    });
+
+    it('returns an instance of Context', () => {
+      expect(ctx).to.be.an.instanceOf(Context);
+    });
+
+    it('should have "FOO" option', () => {
+      expect(ctx.readOption('FOO')).to.equal(42);
+    });
+
+    it('should have "bar.plah" option', () => {
+      expect(ctx.readOption('bar.plah')).to.equal(23);
+    });
+
+    it('should have "myVertices" declaration', () => {
+      expect(get(ctx.declaration, 'myVertices.declarationType')).to.equal('vertexobject');
+    });
+  });
+});

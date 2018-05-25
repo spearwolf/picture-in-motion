@@ -7,6 +7,7 @@ mocha.setup({
   noHighlighting: true,
 });
 
+require('../src/Context.spec');
 require('../src/picimoParser.spec');
 
 mocha.checkLeaks();

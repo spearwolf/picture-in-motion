@@ -1,8 +1,14 @@
 {
-  var constants = {};
+  var ctx = options.ctx;
 
   function readConstant(name) {
-    return name in constants ? constants[name] : name;
+    return ctx.hasOption(name) ? ctx.readOption(name) : name;
+  }
+
+  function writeConstant(name, value) {
+    if (!ctx.hasOption(name)) { // do not overwrite existing constants!
+      ctx.writeOption(name, value);
+    }
   }
 
   function compact (arr) {
@@ -109,10 +115,7 @@ end_block   = ws "}" _
 // ----- Constants -----
 
 const_statement "constant statement"
-  = name:name _ "=" _ value:value
-  {
-    constants[name] = value;
-  }
+  = name:name _ "=" _ value:value { writeConstant(name, value); }
 
 
 // ----- Property Calls -----

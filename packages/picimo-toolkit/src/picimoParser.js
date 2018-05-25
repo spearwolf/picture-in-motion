@@ -192,9 +192,7 @@ function peg$parse(input, options) {
       peg$c24 = peg$otherExpectation("constant statement"),
       peg$c25 = "=",
       peg$c26 = peg$literalExpectation("=", false),
-      peg$c27 = function(name, value) {
-          constants[name] = value;
-        },
+      peg$c27 = function(name, value) { writeConstant(name, value); },
       peg$c28 = peg$otherExpectation("property-call statement"),
       peg$c29 = "@",
       peg$c30 = peg$literalExpectation("@", false),
@@ -2991,10 +2989,16 @@ function peg$parse(input, options) {
   }
 
 
-    var constants = {};
+    var ctx = options.ctx;
 
     function readConstant(name) {
-      return name in constants ? constants[name] : name;
+      return ctx.hasOption(name) ? ctx.readOption(name) : name;
+    }
+
+    function writeConstant(name, value) {
+      if (!ctx.hasOption(name)) { // do not overwrite existing constants!
+        ctx.writeOption(name, value);
+      }
     }
 
     function compact (arr) {

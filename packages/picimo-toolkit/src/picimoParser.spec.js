@@ -3,13 +3,14 @@
 /* eslint no-console: 0 */
 import { expect } from 'chai';
 
+import Context from './Context';
 import { parse } from './picimoParser';
 
-const itParse = (title, picimoDsl, expectedResult) => {
+const itParse = (title, picimoDsl, options, expectedResult) => {
   it(title, () => {
     console.groupCollapsed(title);
     console.log(picimoDsl);
-    const out = parse(picimoDsl);
+    const out = parse(picimoDsl, { ctx: new Context(options) });
     console.dir(out);
     console.log(JSON.stringify(out, null, 2));
     console.groupEnd();
@@ -19,7 +20,7 @@ const itParse = (title, picimoDsl, expectedResult) => {
 
 describe('parse()', () => {
   itParse('substitute constants', `
-    DX = 150
+    DX = 240
     DY = 666
 
     VertexObject myVertices {
@@ -30,7 +31,9 @@ describe('parse()', () => {
         x [-DX, DX, DX, -DX]
       }
     }
-  `, [
+  `, {
+    DX: 150,
+  }, [
     {
       type: 'declaration',
       declarationType: 'vertexobject',
@@ -125,7 +128,7 @@ describe('parse()', () => {
         @doublebuffer
       }
     }
-  `, [
+  `, null, [
     {
       type: 'declaration',
       data: [
@@ -369,7 +372,7 @@ describe('parse()', () => {
         @blub(true, "sdk jhsdkj hsdfkj", DY / 2.5)
 
     }
-  `, [
+  `, null, [
     {
       type: 'declaration',
       data: [
@@ -555,7 +558,7 @@ describe('parse()', () => {
       falsy [ 0, false, no, off ]
       truthy [ 1, true, yes, on ]
     }
-  `, [
+  `, null, [
     {
       type: 'declaration',
       data: [
@@ -614,7 +617,7 @@ describe('parse()', () => {
     },
   ]);
 
-  itParse('empty source', '', []);
+  itParse('empty source', '', null, []);
 
   itParse('data annotations', `
     X1 = 666
@@ -626,7 +629,7 @@ describe('parse()', () => {
         x: uint8 255 @foo @bar(X1, yes) @plah
       }
     }
-  `, [
+  `, null, [
     {
       type: 'declaration',
       data: [
@@ -710,7 +713,7 @@ describe('parse()', () => {
         x.yZ.uvw
       }
     }
-  `, [
+  `, null, [
     {
       type: 'declaration',
       data: [

@@ -1,4 +1,4 @@
-const picimo = require('picimo'); // eslint-disable-line
+const picimo = require('picture-in-motion'); // eslint-disable-line
 
 const ctx = picimo.toolkit.compile(`
   WIDTH = 460
@@ -51,13 +51,12 @@ const ctx = picimo.toolkit.compile(`
 
 });
 
-const quads = ctx.create('myQuads', { capacity: 5000 });
+const sprites = ctx.create('myQuads', { capacity: 5000 });
 
-const mySprite = quads.createSprite();
+const mySprite = sprites.myQuads.createSprite();
 
 mySprite.translate(150, 90);
 
 const scene = ctx.create('Scene');
 
-scene.on('renderFrame', renderer => renderer.render(quads));
-
+scene.on('renderFrame', sprites); // renderer => renderer.render(sprites));
