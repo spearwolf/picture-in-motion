@@ -16,11 +16,13 @@ describe('Context', () => {
         bar.plah = 23
 
         VertexObject myVertices {
-            position: uint32 {
-              x
-              y
-            }
-            rotate: uint16
+          @vertexCount(4)
+
+          position: uint32 {
+            x
+            y
+          }
+          rotate: uint16
         }
       `);
       console.log('Context', ctx);

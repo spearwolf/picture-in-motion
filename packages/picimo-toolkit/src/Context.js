@@ -1,8 +1,24 @@
 import has from 'lodash/has';
 import get from 'lodash/get';
 import set from 'lodash/set';
+import pick from 'lodash/pick';
 
 import { parse } from './picimoParser';
+import { VertexObject } from './factories';
+
+import { DECLARATION } from './constants';
+
+/** @private */
+const transformDeclaration = (item) => {
+  switch (item.declarationType) {
+    case 'vertexobject':
+      return VertexObject.transform(item);
+
+    default:
+      return item;
+  }
+};
+
 
 class Context {
   constructor(config) {
@@ -33,8 +49,12 @@ class Context {
     }
     const parsedTree = parse(source, { ctx: this });
     parsedTree.forEach((item) => {
-      if (item.type === 'declaration') {
-        set(this.declaration, item.name, item);
+      if (item.type === DECLARATION) {
+        set(this.declaration, item.name, Object.assign(transformDeclaration(item), pick(item, [
+          'declarationType',
+          'verb',
+          'subject',
+        ])));
       }
     });
     return this;
