@@ -615,4 +615,88 @@ describe('parse()', () => {
   ]);
 
   itParse('empty source', '', []);
+
+  itParse('data annotations', `
+    X1 = 666
+
+    VertexObject MyVertices {
+      position: float32 @xyz {
+        x @usage(dynamic) [ -X1, X1 ]
+        z @foo
+        x: uint8 255 @foo @bar(X1, yes) @plah
+      }
+    }
+  `, [
+    {
+      type: 'declaration',
+      data: [
+        {
+          type: 'dataBlock',
+          data: [
+            {
+              type: 'data',
+              name: 'x',
+              value: [
+                -666,
+                666,
+              ],
+              annotations: [
+                {
+                  type: 'propertyCall',
+                  name: 'usage',
+                  args: [
+                    'dynamic',
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'data',
+              name: 'z',
+              annotations: [
+                {
+                  type: 'propertyCall',
+                  name: 'foo',
+                },
+              ],
+            },
+            {
+              type: 'data',
+              name: 'x',
+              value: 255,
+              valueType: 'uint8',
+              annotations: [
+                {
+                  type: 'propertyCall',
+                  name: 'foo',
+                },
+                {
+                  type: 'propertyCall',
+                  name: 'bar',
+                  args: [
+                    666,
+                    true,
+                  ],
+                },
+                {
+                  type: 'propertyCall',
+                  name: 'plah',
+                },
+              ],
+            },
+          ],
+          dataType: 'float32',
+          annotations: [
+            {
+              type: 'propertyCall',
+              name: 'xyz',
+            },
+          ],
+          name: 'position',
+        },
+      ],
+      name: 'MyVertices',
+      declarationType: 'vertexobject',
+    },
+  ]);
 });

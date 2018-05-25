@@ -1,14 +1,19 @@
 {
+  var constants = {};
+
+  function readConstant(name) {
+    return name in constants ? constants[name] : name;
+  }
+
   function compact (arr) {
     return arr.filter(function (element) {
       return Boolean(element);
     });
   }
 
-  var constants = {};
-
-  function readConstant(name) {
-    return name in constants ? constants[name] : name;
+  function copyAsAnnotation(target, propertyCall) {
+    if (!target.annotations) target.annotations = [];
+    target.annotations.push(propertyCall);
   }
 }
 
@@ -78,7 +83,7 @@ named_data_block
   }
 
 data_block
-  = type:data_value_type? begin_block
+  = type:data_value_type? anno:(_ a:property_statement { return a; })* begin_block
     statements:statement*
     end_block
     {
@@ -87,6 +92,7 @@ data_block
         data: compact(statements)
       };
       if (type) block.dataType = type;
+      if (anno.length) anno.forEach(copyAsAnnotation.bind(null, block));
       return block;
     }
 
@@ -134,7 +140,7 @@ property_argument "property call argument"
 // ----- Data -----
 
 data_statement "data statement"
-  = name:name _ type:data_value_type? _ value:value?
+  = name:name _ type:data_value_type? anno0:(_ a0:property_statement { return a0; })* _ value:value? anno1:(_ a1:property_statement { return a1; })*
   {
     var data = {
       type: "data",
@@ -142,6 +148,8 @@ data_statement "data statement"
     }
     if (value) data.value = value;
     if (type) data.valueType = type;
+    if (anno0.length) anno0.forEach(copyAsAnnotation.bind(null, data));
+    if (anno1.length) anno1.forEach(copyAsAnnotation.bind(null, data));
     return data;
   }
 
