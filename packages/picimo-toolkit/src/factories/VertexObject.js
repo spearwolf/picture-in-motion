@@ -1,6 +1,8 @@
 import get from 'lodash/get';
 import compact from 'lodash/compact';
 
+import { VODescriptor } from '@picimo/core';
+
 import findPropertyCall from './findPropertyCall';
 
 import {
@@ -10,6 +12,14 @@ import {
 
 /** @private */
 const DEFAULT_ATTR_TYPE = 'float32';
+
+
+/** @private */
+const create = ({ declaration, options }) => {
+  const vod = new VODescriptor(Object.assign({}, declaration.voDescriptor, options));
+  return vod;
+};
+
 
 /** @private */
 const transform = (parsedTree) => {
@@ -68,4 +78,7 @@ const transform = (parsedTree) => {
   return out;
 };
 
-export { transform };
+export {
+  create,
+  transform,
+};

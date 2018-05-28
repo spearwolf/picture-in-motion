@@ -8,6 +8,7 @@ import { VertexObject } from './factories';
 
 import { DECLARATION } from './constants';
 
+
 /** @private */
 const transformDeclaration = (item) => {
   switch (item.declarationType) {
@@ -16,6 +17,28 @@ const transformDeclaration = (item) => {
 
     default:
       return item;
+  }
+};
+
+
+/** @private */
+const createInstanceFromDeclaration = (ctx, name, options) => {
+  const declaration = get(ctx.declaration, name);
+  if (!declaration) return;
+
+  switch (declaration.declarationType) {
+    case 'vertexobject':
+      return VertexObject.create({
+        ctx,
+        declaration,
+        options: {
+          proto: get(ctx.config, name),
+        },
+      });
+
+    default:
+      console.log(`TODO createInstanceFromDeclaration(${declaration.declarationType}, ${name}, ${JSON.stringify(options)}), config=`, ctx.config); // eslint-disable-line
+      return null;
   }
 };
 
@@ -61,7 +84,7 @@ class Context {
   }
 
   create(name, options) {
-    console.log(`TODO Context.create(${name}, ${JSON.stringify(options)}), config=`, this.config); // eslint-disable-line
+    return createInstanceFromDeclaration(this, name, options);
   }
 }
 

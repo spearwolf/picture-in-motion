@@ -131,10 +131,10 @@ export default class VODescriptor {
    * Check if *descriptor* has an attribute with a specific size.
    *
    * @param {string} name
-   * @param {number} size - attribute items count
+   * @param {number} [size=1] - attribute items count
    * @returns {boolean}
    */
-  hasAttribute(name, size) {
+  hasAttribute(name, size = 1) {
     const attr = this.attr[name];
     return attr && attr.size === size;
   }

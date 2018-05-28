@@ -4,6 +4,8 @@
 import { expect } from 'chai';
 import { get } from 'lodash';
 
+import { VODescriptor } from '@picimo/core'; // eslint-disable-line
+
 import { compile, Context } from '.';
 
 describe('Context', () => {
@@ -26,7 +28,7 @@ describe('Context', () => {
           foo @alias(rotate)
         }
       `);
-      console.log('Context', ctx);
+      console.log('Context:compile', ctx);
     });
 
     it('returns an instance of Context', () => {
@@ -77,6 +79,54 @@ describe('Context', () => {
         x1: 42,
         x2: 666,
         x3: 23,
+      });
+    });
+  });
+
+  describe('create()', () => {
+    describe('VertexObject', () => {
+      let ctx;
+      let vod;
+
+      before(() => {
+        ctx = compile(`
+
+          VertexObject MyVertices {
+            @vertexCount(3)
+
+            position {
+              x
+              y
+            }
+            rotate: uint16 @uniform
+          }
+        `, {
+
+          MyVertices: {
+            fooBar() {
+              return this.x0 + 1234;
+            },
+          },
+        });
+
+        console.log('Context:create(VertexObject)', ctx);
+        
+        vod = ctx.create('MyVertices');
+      });
+
+      it('create an instance of VODescriptor', () => {
+        expect(vod).to.be.an.instanceOf(VODescriptor);
+        expect(vod.vertexCount).to.equal(3);
+        expect(vod.hasAttribute('position', 2)).to.equal(true);
+        expect(vod.hasAttribute('rotate', 1)).to.equal(true);
+      });
+
+      it('VODescriptor should get "proto" from Context.config', () => {
+        const vo = vod.createVO();
+        expect(vo.fooBar).to.be.a('function');
+
+        vo.x0 = 1000;
+        expect(vo.fooBar()).to.equal(2234);
       });
     });
   });
