@@ -44,5 +44,30 @@ describe('Context', () => {
     it('should have "myVertices" declaration', () => {
       expect(get(ctx.declaration, 'myVertices.declarationType')).to.equal('vertexobject');
     });
+
+    it('shoud have myVertices.voDescriptor section', () => {
+      expect(get(ctx.declaration, 'myVertices.voDescriptor')).to.deep.equal({
+        vertexCount: 4,
+        attributes: [
+          {
+            name: 'position',
+            type: 'uint32',
+            scalars: [
+              'x',
+              'y',
+            ],
+            size: 2,
+          },
+          {
+            name: 'rotate',
+            type: 'uint16',
+            uniform: true,
+          },
+        ],
+        aliases: {
+          foo: 'rotate',
+        },
+      });
+    });
   });
 });
