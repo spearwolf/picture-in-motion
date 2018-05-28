@@ -19,10 +19,10 @@ describe('Context', () => {
           @vertexCount(4)
 
           position: uint32 {
-            x
+            x [-FOO, FOO, 666, bar.plah ]
             y
           }
-          rotate: uint16 @uniform
+          rotate: uint16 @uniform 90.5
           foo @alias(rotate)
         }
       `);
@@ -45,7 +45,7 @@ describe('Context', () => {
       expect(get(ctx.declaration, 'myVertices.declarationType')).to.equal('vertexobject');
     });
 
-    it('shoud have myVertices.voDescriptor section', () => {
+    it('shoud have "myVertices.voDescriptor" section', () => {
       expect(get(ctx.declaration, 'myVertices.voDescriptor')).to.deep.equal({
         vertexCount: 4,
         attributes: [
@@ -67,6 +67,16 @@ describe('Context', () => {
         aliases: {
           foo: 'rotate',
         },
+      });
+    });
+
+    it('shoud have "myVertices.voNew" section', () => {
+      expect(get(ctx.declaration, 'myVertices.voNew')).to.deep.equal({
+        rotate: 90.5,
+        x0: -42,
+        x1: 42,
+        x2: 666,
+        x3: 23,
       });
     });
   });

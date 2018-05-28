@@ -14,10 +14,22 @@ const DEFAULT_ATTR_TYPE = 'float32';
 /** @private */
 const transform = (parsedTree) => {
   const voNew = {};
+
+  const parseVoNewDefaults = (name, value) => {
+    if (value !== undefined) {
+      if (Array.isArray(value)) {
+        value.forEach((val, idx) => {
+          voNew[`${name}${idx}`] = val;
+        });
+      } else {
+        voNew[name] = value;
+      }
+    }
+  };
+
   const aliases = {};
   const out = {
-    parsedTree,
-    voNew,
+    _parsedTree: parsedTree,
     voDescriptor: {
       vertexCount: get(findPropertyCall(parsedTree.data, 'vertexCount'), 'args[0]'),
       attributes: compact(parsedTree.data.filter(({ type }) => type === DATA || type === DATA_BLOCK).map((statement) => {
@@ -33,18 +45,25 @@ const transform = (parsedTree) => {
           attr.type = statement.valueType || DEFAULT_ATTR_TYPE;
         } else if (statement.type === DATA_BLOCK) {
           attr.type = statement.dataType || DEFAULT_ATTR_TYPE;
-          attr.scalars = statement.data.filter(({ type }) => type === DATA).map(data => data.name);
+          attr.scalars = statement.data.filter(({ type }) => type === DATA).map(({ name, value }) => {
+            parseVoNewDefaults(name, value);
+            return name;
+          });
           attr.size = attr.scalars.length;
         }
         if (findPropertyCall(statement.annotations, 'uniform')) {
           attr.uniform = true;
         }
+        parseVoNewDefaults(statement.name, statement.value);
         return attr;
       })),
     },
   };
   if (Object.keys(aliases).length) {
     out.voDescriptor.aliases = aliases;
+  }
+  if (Object.keys(voNew).length) {
+    out.voNew = voNew;
   }
   return out;
 };
