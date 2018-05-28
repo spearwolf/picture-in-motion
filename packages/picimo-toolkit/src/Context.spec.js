@@ -22,7 +22,8 @@ describe('Context', () => {
             x
             y
           }
-          rotate: uint16
+          rotate: uint16 @uniform
+          foo @alias(rotate)
         }
       `);
       console.log('Context', ctx);
