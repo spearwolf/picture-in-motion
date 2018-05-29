@@ -146,6 +146,26 @@ property_argument "property call argument"
   }
 
 
+// ----- Property Calls -----
+
+named_arguments_list "named arguments list"
+  = "("
+    head:named_argument
+    tail:("," _ a:named_argument { return a; })*
+  ")"
+  {
+    return [head].concat(tail);
+  }
+
+named_argument "named argument"
+  = _ name:name _ ":" _ value:value _ {
+    return {
+      name: name,
+      value: value
+    };
+  }
+
+
 // ----- Data -----
 
 data_statement "data statement"
