@@ -1,9 +1,10 @@
 import get from 'lodash/get';
 import compact from 'lodash/compact';
 
-import { VODescriptor } from '@picimo/core';
+import { VODescriptor } from '@picimo/core'; // eslint-disable-line
 
 import findPropertyCall from './findPropertyCall';
+import findNamedArgument from './findNamedArgument';
 
 import {
   DATA,
@@ -44,7 +45,7 @@ const transform = (parsedTree) => {
       vertexCount: get(findPropertyCall(parsedTree.data, 'vertexCount'), 'args[0]'),
       attributes: compact(parsedTree.data.filter(({ type }) => type === DATA || type === DATA_BLOCK).map((statement) => {
         const aliasAnnotation = findPropertyCall(statement.annotations, 'alias');
-        if (aliasAnnotation && typeof aliasAnnotation.args[0] === 'string') {
+        if (aliasAnnotation && aliasAnnotation.args && typeof aliasAnnotation.args[0] === 'string') {
           aliases[statement.name] = aliasAnnotation.args[0];  // eslint-disable-line
           return null;
         }
@@ -53,6 +54,9 @@ const transform = (parsedTree) => {
         };
         if (statement.type === DATA) {
           attr.type = statement.valueType || DEFAULT_ATTR_TYPE;
+          findNamedArgument(statement.args, 'size', (size) => {
+            attr.size = size;
+          });
         } else if (statement.type === DATA_BLOCK) {
           attr.type = statement.dataType || DEFAULT_ATTR_TYPE;
           attr.scalars = statement.data.filter(({ type }) => type === DATA).map(({ name, value }) => {
@@ -65,6 +69,13 @@ const transform = (parsedTree) => {
           attr.uniform = true;
         }
         parseVoNewDefaults(statement.name, statement.value);
+        if (aliasAnnotation) {
+          findNamedArgument(statement.args, 'offset', (offset) => {
+            attr.offset = offset;
+          });
+          aliases[statement.name] = attr;  // eslint-disable-line
+          return null;
+        }
         return attr;
       })),
     },

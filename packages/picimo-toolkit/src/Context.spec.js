@@ -26,6 +26,7 @@ describe('Context', () => {
           }
           rotate: uint16 @uniform 90.5
           foo @alias(rotate)
+          bar(offset: 2, size: 8): uint8 @alias
         }
       `);
       console.log('Context:compile', ctx);
@@ -68,6 +69,12 @@ describe('Context', () => {
         ],
         aliases: {
           foo: 'rotate',
+          bar: {
+            name: 'bar',
+            size: 8,
+            offset: 2,
+            type: 'uint8',
+          },
         },
       });
     });
