@@ -4,12 +4,13 @@ module.exports = {
   mode: 'development',
   entry: {
     main: './src/main.js',
-    // 'ClearBackground/app': './src/ClearBackground/index.js',
-    'HelloWorld/bundle': './src/HelloWorld/index.js',
+    'basics/HelloWorld/bundle': './src/basics/HelloWorld/index.js',
+    'advanced/HelloWorld/bundle': './src/advanced/HelloWorld/index.js',
     'SpriteGroup/bundle': './src/SpriteGroup/index.js',
     'TexturedSpriteGroup/bundle': './src/TexturedSpriteGroup/index.js',
     'Starscape/bundle': './src/Starscape/index.js',
     'HelloInstancedWorld/bundle': './src/HelloInstancedWorld/index.js',
+    // 'ClearBackground/app': './src/ClearBackground/index.js',
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),
@@ -22,8 +23,8 @@ module.exports = {
     alias: {
       '@picimo/core': path.resolve(__dirname, '../packages/picimo-core'),
       '@picimo/ecs': path.resolve(__dirname, '../packages/picimo-ecs'),
-      // '@picimo/react': path.resolve(__dirname, '../packages/picimo-react'),
       '@picimo/renderer': path.resolve(__dirname, '../packages/picimo-renderer'),
+      '@picimo/toolkit': path.resolve(__dirname, '../packages/picimo-toolkit'),
     },
   },
   module: {

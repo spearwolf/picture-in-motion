@@ -1,9 +1,9 @@
 export default [{
-  section: 'Basics',
+  section: 'Basics (toolkit API)',
   demos: [{
-    title: 'VOPool / quads',
-    url: '/HelloWorld/',
-    sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/HelloWorld/index.js',
+    title: 'quads',
+    url: '/basics/HelloWorld/',
+    sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/basics/HelloWorld/index.js',
   }, {
     title: 'SpriteGroup / quads',
     url: '/SpriteGroup/',
@@ -16,6 +16,13 @@ export default [{
     title: 'instancing / quads',
     url: '/HelloInstancedWorld/',
     sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/HelloInstancedWorld/index.js',
+  }],
+}, {
+  section: 'Advanced (direct API usage)',
+  demos: [{
+    title: 'VOPool / quads',
+    url: '/advanced/HelloWorld/',
+    sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/advanced/HelloWorld/index.js',
   }],
 }, {
   section: 'Demo or Die',
