@@ -88,9 +88,12 @@ declaration_verb
 // ----- Blocks -----
 
 named_data_block
-  = name:name _ block:data_block
+  = name:name _ args:named_arguments_list? _ block:data_block
   {
     block.name = name;
+    if (args) {
+      block.args = args;
+    }
     return block;
   }
 
@@ -169,12 +172,13 @@ named_argument "named argument"
 // ----- Data -----
 
 data_statement "data statement"
-  = name:name _ type:data_value_type? anno0:(_ a0:property_statement { return a0; })* _ value:value? anno1:(_ a1:property_statement { return a1; })*
+  = name:name _ args:named_arguments_list? _ type:data_value_type? anno0:(_ a0:property_statement { return a0; })* _ value:value? anno1:(_ a1:property_statement { return a1; })*
   {
     var data = {
       type: "data",
       name: name
     }
+    if (args) data.args = args;
     if (value) data.value = value;
     if (type) data.valueType = type;
     if (anno0.length) anno0.forEach(copyAsAnnotation.bind(null, data));

@@ -110,7 +110,7 @@ describe('Context', () => {
         });
 
         console.log('Context:create(VertexObject)', ctx);
-        
+
         vod = ctx.create('MyVertices');
       });
 

@@ -741,4 +741,87 @@ describe('parse()', () => {
       declarationType: 'vertexobject',
     },
   ]);
+
+  itParse('data values and blocks can have named arguments', `
+    X = 789
+
+    VertexObject my.vertices {
+      bar.foo(offset: 2) 23
+      plah(offset: 2, limit: yes, count: "COUNT", plah: bla, vec3: [1,2,3]) 32
+
+      vertex.position(real: yes, offset: X) {
+        x.yZ.uvw
+      }
+    }
+  `, null, [
+    {
+      type: 'declaration',
+      data: [
+        {
+          type: 'data',
+          name: 'bar.foo',
+          args: [
+            {
+              name: 'offset',
+              value: 2,
+            },
+          ],
+          value: 23,
+        },
+        {
+          type: 'data',
+          name: 'plah',
+          args: [
+            {
+              name: 'offset',
+              value: 2,
+            },
+            {
+              name: 'limit',
+              value: true,
+            },
+            {
+              name: 'count',
+              value: 'COUNT',
+            },
+            {
+              name: 'plah',
+              value: 'bla',
+            },
+            {
+              name: 'vec3',
+              value: [
+                1,
+                2,
+                3,
+              ],
+            },
+          ],
+          value: 32,
+        },
+        {
+          type: 'dataBlock',
+          data: [
+            {
+              type: 'data',
+              name: 'x.yZ.uvw',
+            },
+          ],
+          name: 'vertex.position',
+          args: [
+            {
+              name: 'real',
+              value: true,
+            },
+            {
+              name: 'offset',
+              value: 789,
+            },
+          ],
+        },
+      ],
+      name: 'my.vertices',
+      declarationType: 'vertexobject',
+    },
+  ]);
 });
