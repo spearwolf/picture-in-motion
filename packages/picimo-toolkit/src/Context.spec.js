@@ -2,7 +2,7 @@
 /* eslint-env mocha */
 /* eslint no-console: 0 */
 import { expect } from 'chai';
-import { get } from 'lodash';
+import { get, omit } from 'lodash';
 
 import { VODescriptor } from '@picimo/core'; // eslint-disable-line
 
@@ -27,6 +27,19 @@ describe('Context', () => {
           rotate: uint16 @uniform 90.5
           foo @alias(rotate)
           bar(offset: 2, size: 8): uint8 @alias
+        }
+
+        Primitive TriQuads {
+          @type(TRIANLGES)
+          @generate
+
+          stride 4
+          offset 0
+
+          indices [
+            0, 1, 2,
+            0, 2, 3,
+          ]
         }
       `);
       console.log('Context:compile', ctx);
@@ -86,6 +99,24 @@ describe('Context', () => {
         x1: 42,
         x2: 666,
         x3: 23,
+      });
+    });
+
+    it('shoud have "TriQuads" declaration', () => {
+      expect(omit(get(ctx.declaration, 'TriQuads'), ['_parsedTree'])).to.deep.equal({
+        declarationType: 'primitive',
+        primitiveType: 'TRIANLGES',
+        generate: true,
+        stride: 4,
+        offset: 0,
+        indices: [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+        ],
       });
     });
   });

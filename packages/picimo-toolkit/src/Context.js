@@ -4,16 +4,21 @@ import set from 'lodash/set';
 import pick from 'lodash/pick';
 
 import { parse } from './picimoParser';
-import { VertexObject } from './factories';
+import { VertexObject, Primitive } from './factories';
 
 import { DECLARATION } from './constants';
 
+const VERTEX_OBJECT = 'vertexobject';
+const PRIMITIVE = 'primitive';
 
 /** @private */
 const transformDeclaration = (item) => {
   switch (item.declarationType) {
-    case 'vertexobject':
+    case VERTEX_OBJECT:
       return VertexObject.transform(item);
+
+    case PRIMITIVE:
+      return Primitive.transform(item);
 
     default:
       return item;
@@ -27,13 +32,19 @@ const createInstanceFromDeclaration = (ctx, name, options) => {
   if (!declaration) return;
 
   switch (declaration.declarationType) {
-    case 'vertexobject':
+    case VERTEX_OBJECT:
       return VertexObject.create({
         ctx,
         declaration,
         options: {
           proto: get(ctx.config, name),
         },
+      });
+
+    case PRIMITIVE:
+      return Primitive.create({
+        ctx,
+        declaration,
       });
 
     default:

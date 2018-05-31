@@ -241,7 +241,7 @@ function peg$parse(input, options) {
             name: name
           }
           if (args) data.args = args;
-          if (value) data.value = value;
+          if (value != null) data.value = value;
           if (type) data.valueType = type;
           if (anno0.length) anno0.forEach(copyAsAnnotation.bind(null, data));
           if (anno1.length) anno1.forEach(copyAsAnnotation.bind(null, data));

@@ -246,6 +246,7 @@ describe('parse()', () => {
         {
           type: 'data',
           name: 'offset',
+          value: 0,
         },
         {
           type: 'data',

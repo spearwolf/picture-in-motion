@@ -1,10 +1,13 @@
-import get from 'lodash/get';
 import compact from 'lodash/compact';
 
 import { VODescriptor } from '@picimo/core'; // eslint-disable-line
 
-import findPropertyCall from './findPropertyCall';
-import findNamedArgument from './findNamedArgument';
+import {
+  findPropertyCall,
+  firstPropertyCallArg,
+  hasPropertyCall,
+  findNamedArgument,
+} from './utils';
 
 import {
   DATA,
@@ -42,7 +45,7 @@ const transform = (parsedTree) => {
   const out = {
     _parsedTree: parsedTree,
     voDescriptor: {
-      vertexCount: get(findPropertyCall(parsedTree.data, 'vertexCount'), 'args[0]'),
+      vertexCount: firstPropertyCallArg(parsedTree.data, 'vertexCount'),
       attributes: compact(parsedTree.data.filter(({ type }) => type === DATA || type === DATA_BLOCK).map((statement) => {
         const aliasAnnotation = findPropertyCall(statement.annotations, 'alias');
         if (aliasAnnotation && aliasAnnotation.args && typeof aliasAnnotation.args[0] === 'string') {
@@ -65,7 +68,7 @@ const transform = (parsedTree) => {
           });
           attr.size = attr.scalars.length;
         }
-        if (findPropertyCall(statement.annotations, 'uniform')) {
+        if (hasPropertyCall(statement.annotations, 'uniform')) {
           attr.uniform = true;
         }
         parseVoNewDefaults(statement.name, statement.value);
