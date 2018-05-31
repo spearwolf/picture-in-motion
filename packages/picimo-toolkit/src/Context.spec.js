@@ -4,7 +4,11 @@
 import { expect } from 'chai';
 import { get, omit } from 'lodash';
 
-import { VODescriptor } from '@picimo/core'; // eslint-disable-line
+import {
+  VODescriptor,
+  IndexedPrimitive,
+  ElementIndexArray,
+} from '@picimo/core'; // eslint-disable-line
 
 import { compile, Context } from '.';
 
@@ -138,6 +142,7 @@ describe('Context', () => {
             }
             rotate: uint16 @uniform
           }
+
         `, {
 
           MyVertices: {
@@ -165,6 +170,41 @@ describe('Context', () => {
 
         vo.x0 = 1000;
         expect(vo.fooBar()).to.equal(2234);
+      });
+    });
+
+    describe('Primitive', () => {
+      let ctx;
+      let primitive;
+
+      before(() => {
+        ctx = compile(`
+
+          Primitive TriQuads {
+            @type(TRIANGLES)
+            @generate
+
+            stride 4
+            offset 0
+
+            indices [
+              0, 1, 2,
+              0, 2, 3,
+            ]
+          }
+
+        `);
+
+        console.log('Context:create(TriQuads)', ctx);
+
+        primitive = ctx.create('TriQuads', { capacity: 10 });
+      });
+
+      it('create a primitive from factory', () => {
+        expect(primitive).to.be.an.instanceOf(IndexedPrimitive);
+        expect(primitive.primitiveType).to.equal('TRIANGLES');
+        expect(primitive.elementIndexArray).to.be.an.instanceOf(ElementIndexArray);
+        expect(primitive.elementIndexArray.objectCount).to.equal(10);
       });
     });
   });

@@ -45,6 +45,7 @@ const createInstanceFromDeclaration = (ctx, name, options) => {
       return Primitive.create({
         ctx,
         declaration,
+        options,
       });
 
     default:

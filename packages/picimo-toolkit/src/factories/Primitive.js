@@ -1,4 +1,9 @@
 import {
+  IndexedPrimitive,
+  ElementIndexArray,
+} from '@picimo/core'; // eslint-disable-line
+
+import {
   attachDataValues,
   firstPropertyCallArg,
   hasPropertyCall,
@@ -6,7 +11,18 @@ import {
 
 /** @private */
 const create = ({ declaration, options }) => {
-  // TODO
+  if (declaration.generate) {
+    return new IndexedPrimitive(
+      declaration.primitiveType,
+      ElementIndexArray.Generate(
+        options.capacity,
+        declaration.indices,
+        declaration.stride,
+        declaration.offset,
+      ),
+    );
+  }
+  console.warn('TODO implementation: Primitive with(out) @generate(no)'); // eslint-disable-line
 };
 
 /** @private */

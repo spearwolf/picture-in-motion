@@ -340,7 +340,7 @@ export default class WebGlRenderer {
    * @param {number} [primCount]
    * @param {number} [primOffset=0]
    */
-  drawIndexedPrimitive({ primitiveType, elementIndexArray }, primCount, primOffset) {
+  drawPrimitive({ primitiveType, elementIndexArray }, primCount, primOffset) {
     const { itemCount } = elementIndexArray;
     this.drawIndexed(primitiveType, elementIndexArray, primCount * itemCount, primOffset * itemCount);
   }
@@ -355,13 +355,13 @@ export default class WebGlRenderer {
         this.shaderContext.pushVar(texUniforms);
         this.shaderContext.pushVar(spriteGroup.voPoolShaderAttribs);
         this.useShaderProgram(spriteGroup.shaderProgram);
-        this.drawIndexedPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
+        this.drawPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
       });
     } else {
       this.syncBuffer(spriteGroup.voPool.voArray);
       this.shaderContext.pushVar(spriteGroup.voPoolShaderAttribs);
       this.useShaderProgram(spriteGroup.shaderProgram);
-      this.drawIndexedPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
+      this.drawPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
     }
   }
 }

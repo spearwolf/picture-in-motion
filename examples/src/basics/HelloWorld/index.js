@@ -10,7 +10,6 @@ import {
   ShaderProgram,
   ShaderVariableBufferGroup,
   VOPool,
-  ElementIndexArray,
 } from '@picimo/core'; // eslint-disable-line
 
 import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
@@ -22,7 +21,7 @@ import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 //
 // ---------------------------------------------------------------------------
 
-const vod = compile(`
+const ctx = compile(`
 
   VertexObject Quads {
     @vertexCount(4)
@@ -41,7 +40,22 @@ const vod = compile(`
     }
   }
 
-`).create('Quads');
+  Primitive TriQuads {
+    @type(TRIANGLES)
+    @generate
+
+    stride 4
+    offset 0
+
+    indices [
+      0, 1, 2,
+      0, 2, 3,
+    ]
+  }
+
+`);
+
+const vod = ctx.create('Quads');
 
 
 // ---------------------------------------------------------------------------
@@ -141,11 +155,11 @@ console.log('quad vertices', quad.toArray(['position']), 'colors', quad.toArray(
 
 // ---------------------------------------------------------------------------
 //
-// 7) create vertex indices
+// 7) create primitive
 //
 // ---------------------------------------------------------------------------
 
-const quadIndices = ElementIndexArray.Generate(1000, [0, 1, 2, 0, 2, 3], 4);
+const primitive = ctx.create('TriQuads', { capacity: 1 });
 
 
 // ---------------------------------------------------------------------------
@@ -171,7 +185,7 @@ function animate() {
   //
   renderer.shaderContext.pushVar(voPoolShaderVars);
   renderer.useShaderProgram(shaderProgram);
-  renderer.drawIndexed('TRIANGLES', quadIndices, 6);
+  renderer.drawPrimitive(primitive, 1);
 
   window.requestAnimationFrame(animate);
 }
