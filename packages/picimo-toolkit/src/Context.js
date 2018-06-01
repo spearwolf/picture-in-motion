@@ -4,12 +4,13 @@ import set from 'lodash/set';
 import pick from 'lodash/pick';
 
 import { parse } from './picimoParser';
-import { VertexObject, Primitive } from './factories';
+import { VertexObject, Primitive, SpriteGroup } from './factories';
 
 import { DECLARATION } from './constants';
 
 const VERTEX_OBJECT = 'vertexobject';
 const PRIMITIVE = 'primitive';
+const SPRITE_GROUP = 'spritegroup';
 
 /** @private */
 const transformDeclaration = (item) => {
@@ -19,6 +20,9 @@ const transformDeclaration = (item) => {
 
     case PRIMITIVE:
       return Primitive.transform(item);
+
+    case SPRITE_GROUP:
+      return SpriteGroup.transform(item);
 
     default:
       return item;
@@ -43,6 +47,13 @@ const createInstanceFromDeclaration = (ctx, name, options) => {
 
     case PRIMITIVE:
       return Primitive.create({
+        ctx,
+        declaration,
+        options,
+      });
+
+    case SPRITE_GROUP:
+      return SpriteGroup.create({
         ctx,
         declaration,
         options,

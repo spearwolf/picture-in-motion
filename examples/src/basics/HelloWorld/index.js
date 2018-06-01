@@ -3,6 +3,7 @@
 import '@babel/polyfill';
 
 import { compile } from '@picimo/toolkit'; // eslint-disable-line
+import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 
 import {
   ShaderSource,
@@ -11,8 +12,6 @@ import {
   ShaderVariableBufferGroup,
   VOPool,
 } from '@picimo/core'; // eslint-disable-line
-
-import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 
 
 // ---------------------------------------------------------------------------
@@ -53,7 +52,21 @@ const ctx = compile(`
     ]
   }
 
-`);
+`, {
+  Quads: {
+    setSize(w, h) {
+      const w2 = w / 2;
+      const h2 = h / 2;
+
+      this.setPosition(
+        -w2, h2, 0,
+        w2, h2, 0,
+        w2, -h2, 0,
+        -w2, -h2, 0,
+      );
+    },
+  },
+});
 
 const vod = ctx.create('Quads');
 

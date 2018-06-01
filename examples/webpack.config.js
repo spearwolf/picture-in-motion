@@ -6,7 +6,7 @@ module.exports = {
     main: './src/main.js',
     'basics/HelloWorld/bundle': './src/basics/HelloWorld/index.js',
     'advanced/HelloWorld/bundle': './src/advanced/HelloWorld/index.js',
-    'SpriteGroup/bundle': './src/SpriteGroup/index.js',
+    'advanced/SpriteGroup/bundle': './src/advanced/SpriteGroup/index.js',
     'TexturedSpriteGroup/bundle': './src/TexturedSpriteGroup/index.js',
     'Starscape/bundle': './src/Starscape/index.js',
     'HelloInstancedWorld/bundle': './src/HelloInstancedWorld/index.js',

@@ -5,10 +5,6 @@ export default [{
     url: '/basics/HelloWorld/',
     sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/basics/HelloWorld/index.js',
   }, {
-    title: 'SpriteGroup / quads',
-    url: '/SpriteGroup/',
-    sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/SpriteGroup/index.js',
-  }, {
     title: 'TexturedSpriteGroup / quads',
     url: '/TexturedSpriteGroup/',
     sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/TexturedSpriteGroup/index.js',
@@ -20,6 +16,10 @@ export default [{
 }, {
   section: 'Advanced (direct API usage)',
   demos: [{
+    title: 'SpriteGroup / quads',
+    url: '/advanced/SpriteGroup/',
+    sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/advanced/SpriteGroup/index.js',
+  }, {
     title: 'VOPool / quads',
     url: '/advanced/HelloWorld/',
     sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/advanced/HelloWorld/index.js',
