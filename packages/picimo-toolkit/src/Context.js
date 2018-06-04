@@ -39,15 +39,15 @@ const createInstanceFromDeclaration = (ctx, name, options) => {
     case VERTEX_OBJECT:
       return VertexObject.create({
         ctx,
+        name,
         declaration,
-        options: {
-          proto: get(ctx.config, name),
-        },
+        options,
       });
 
     case PRIMITIVE:
       return Primitive.create({
         ctx,
+        name,
         declaration,
         options,
       });
@@ -55,6 +55,7 @@ const createInstanceFromDeclaration = (ctx, name, options) => {
     case SPRITE_GROUP:
       return SpriteGroup.create({
         ctx,
+        name,
         declaration,
         options,
       });

@@ -45,6 +45,34 @@ describe('Context', () => {
             0, 2, 3,
           ]
         }
+
+        SpriteGroup Sprites {
+          @vertexObject(myVertices)
+          @primitive(TriQuads)
+
+          @vertexShader(VS)
+          @fragmentShader(FS)
+
+          @autotouch(off)
+          @dynamic
+
+          maxAllocVOSize 100
+
+          textures {
+            tex(nearest: no, repeatable: no) "foo.png"
+            bar(flipY: yes) @atlas "plah.jpg"
+          }
+
+          myVertices {
+            @doubleBuffer(off)
+            @textured
+
+            @setSize(fooBar)
+
+            capacity 1000
+          }
+        }
+
       `);
       console.log('Context:compile', ctx);
     });
@@ -121,6 +149,42 @@ describe('Context', () => {
           2,
           3,
         ],
+      });
+    });
+
+    it('shoud have "Sprites" declaration', () => {
+      expect(omit(get(ctx.declaration, 'Sprites'), ['_parsedTree'])).to.deep.equal({
+        voDescriptor: 'myVertices',
+        vertexShader: 'VS',
+        fragmentShader: 'FS',
+        primitive: 'TriQuads',
+        usage: 'dynamic',
+        autotouch: false,
+        maxAllocVOSize: 100,
+        textureMap: {
+          tex: {
+            hints: {
+              repeatable: false,
+              nearest: false,
+            },
+            src: 'foo.png',
+            type: 'texture',
+          },
+          bar: {
+            hints: {
+              flipY: true,
+            },
+            src: 'plah.jpg',
+            type: 'atlas',
+          },
+        },
+        myVertices: {
+          doubleBuffer: false,
+          textured: true,
+          setSize: 'fooBar',
+          capacity: 1000,
+        },
+        declarationType: 'spritegroup',
       });
     });
   });

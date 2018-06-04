@@ -1,4 +1,5 @@
 import compact from 'lodash/compact';
+import get from 'lodash/get';
 
 import { VODescriptor } from '@picimo/core'; // eslint-disable-line
 
@@ -14,15 +15,15 @@ import {
   DATA_BLOCK,
 } from '../constants';
 
+
 /** @private */
 const DEFAULT_ATTR_TYPE = 'float32';
 
 
 /** @private */
-const create = ({ declaration, options }) => {
-  const vod = new VODescriptor(Object.assign({}, declaration.voDescriptor, options));
-  return vod;
-};
+const create = ({ declaration, ctx, name }) => new VODescriptor(Object.assign({}, declaration.voDescriptor, {
+  proto: get(ctx.config, name),
+}));
 
 
 /** @private */
@@ -43,7 +44,7 @@ const transform = (parsedTree) => {
 
   const aliases = {};
   const out = {
-    _parsedTree: parsedTree,
+    // _parsedTree: parsedTree,
     voDescriptor: {
       vertexCount: firstPropertyCallArg(parsedTree.data, 'vertexCount'),
       attributes: compact(parsedTree.data.filter(({ type }) => type === DATA || type === DATA_BLOCK).map((statement) => {

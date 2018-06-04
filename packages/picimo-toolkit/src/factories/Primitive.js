@@ -29,7 +29,7 @@ const create = ({ declaration, options }) => {
 const transform = (parsedTree) => {
   const { data } = parsedTree;
   const out = {
-    _parsedTree: parsedTree,
+    // _parsedTree: parsedTree,
     primitiveType: firstPropertyCallArg(data, 'type'),
   };
   if (hasPropertyCall(data, 'generate')) {

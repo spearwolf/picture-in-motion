@@ -43,12 +43,12 @@ const createSpriteSizeHook = (setSize = 'size') => {
  * @param {function|string} [options.setSize='size'] - A function that takes three arguments (sprite, width, height) and sets the size of sprite (called by `.createSprite(w, h)`). Or you can specify the *name* of the size attribute (should be a 2d vector unform).
  * @param {number} [options.maxAllocVOSize] - Never allocate more than `maxAllocVOSize` *sprites* at once
  * @param {string} [options.usage='dynamic'] - Buffer usage hint, choose between `dynamic` or `static`
- * @param {ShaderProgram} [options.shader] - The `ShaderProgram`. As alternative you can use the `vertexShader` option together with `fragmentShader`
+ * @param {ShaderProgram} [options.shaderProgram] - The `ShaderProgram`. As alternative you can use the `vertexShader` option together with `fragmentShader`
  * @param {string|ShaderSource} [options.vertexShader] - The *vertex shader*
  * @param {string|ShaderSource} [options.fragmentShader] - The *fragment shader*
  * @param {Object} [options.textures] - The *shader variable name* to *texture* mapping
- * @param {string} [options.doubleBuffer] - buffer `doubleBuffer` hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`
- * @param {string} [options.autotouch] - auto touch vertex buffers hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
+ * @param {boolean} [options.doubleBuffer] - buffer `doubleBuffer` hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`
+ * @param {boolean} [options.autotouch] - auto touch vertex buffers hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
  */
 export default class SpriteGroup {
   constructor(descriptor, options = {}) {
