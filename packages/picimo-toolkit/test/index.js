@@ -8,6 +8,7 @@ mocha.setup({
 });
 
 require('../src/Context.spec');
+require('../src/Context.SpriteGroup.spec');
 require('../src/picimoParser.spec');
 
 mocha.checkLeaks();

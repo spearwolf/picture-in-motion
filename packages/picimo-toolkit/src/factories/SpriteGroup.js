@@ -1,7 +1,4 @@
-// import {
-//   IndexedPrimitive,
-//   ElementIndexArray,
-// } from '@picimo/core'; // eslint-disable-line
+import { SpriteGroup } from '@picimo/core'; // eslint-disable-line
 
 import {
   attachDataValue,
@@ -19,8 +16,28 @@ import { DATA_BLOCK } from '../constants';
 
 
 /** @private */
-const create = ({ declaration, options }) => {
-  console.warn('TODO implementation: create SpriteGroup'); // eslint-disable-line
+const readOption = (...options) => (key, defVal = undefined) => options.reduce((curVal, opt) => (opt && key in opt ? opt[key] : curVal), defVal);
+
+/** @private */
+const VO_POOL_OPTIONS = [
+  'autotouch',
+  'capacity',
+  'doubleBuffer',
+  'maxAllocVOSize',
+  'usage',
+];
+
+/** @private */
+const create = ({ ctx, declaration, options }) => {
+  const vod = ctx.create(declaration.voDescriptor);
+
+  const readVoPoolOption = readOption(declaration, declaration[declaration.voDescriptor], options, options[declaration.voDescriptor]);
+  const sgOpts = {};
+  VO_POOL_OPTIONS.forEach((key) => {
+    sgOpts[key] = readVoPoolOption(key);
+  });
+
+  return new SpriteGroup(vod, sgOpts);
 };
 
 
