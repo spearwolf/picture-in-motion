@@ -81,19 +81,19 @@ describe('Context', () => {
       expect(ctx).to.be.an.instanceOf(Context);
     });
 
-    it('should have "FOO" option', () => {
+    it('"FOO" option', () => {
       expect(ctx.readOption('FOO')).to.equal(42);
     });
 
-    it('should have "bar.plah" option', () => {
+    it('"bar.plah" option', () => {
       expect(ctx.readOption('bar.plah')).to.equal(23);
     });
 
-    it('should have "myVertices" declaration', () => {
+    it('"myVertices" declaration', () => {
       expect(get(ctx.declaration, 'myVertices.declarationType')).to.equal('vertexobject');
     });
 
-    it('shoud have "myVertices.voDescriptor" section', () => {
+    it('"myVertices.voDescriptor" section', () => {
       expect(get(ctx.declaration, 'myVertices.voDescriptor')).to.deep.equal({
         vertexCount: 4,
         attributes: [
@@ -124,7 +124,7 @@ describe('Context', () => {
       });
     });
 
-    it('shoud have "myVertices.voNew" section', () => {
+    it('"myVertices.voNew" section', () => {
       expect(get(ctx.declaration, 'myVertices.voNew')).to.deep.equal({
         rotate: 90.5,
         x0: -42,
@@ -134,7 +134,7 @@ describe('Context', () => {
       });
     });
 
-    it('shoud have "TriQuads" declaration', () => {
+    it('"TriQuads" declaration', () => {
       expect(omit(get(ctx.declaration, 'TriQuads'), ['_parsedTree'])).to.deep.equal({
         declarationType: 'primitive',
         primitiveType: 'TRIANLGES',
@@ -152,7 +152,7 @@ describe('Context', () => {
       });
     });
 
-    it('shoud have "Sprites" declaration', () => {
+    it('"Sprites" declaration', () => {
       expect(omit(get(ctx.declaration, 'Sprites'), ['_parsedTree'])).to.deep.equal({
         voDescriptor: 'myVertices',
         vertexShader: 'VS',
