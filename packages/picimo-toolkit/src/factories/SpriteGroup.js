@@ -45,7 +45,13 @@ const readVoPoolOptions = (data) => {
   findData(data, 'textures', (textures) => {
     if (textures && textures.type === DATA_BLOCK) {
       const tex = {};
-      textures.data.forEach(({ name, value, annotations, args }) => {
+      out.textureMap = tex;
+      textures.data.forEach(({
+        name,
+        value,
+        annotations,
+        args,
+      }) => {
         const hints = {};
         tex[name] = {
           hints,
@@ -65,7 +71,6 @@ const readVoPoolOptions = (data) => {
           hints.nearest = flag;
         });
       });
-      out.textureMap = tex;
     }
   });
 
