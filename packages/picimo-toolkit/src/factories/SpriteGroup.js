@@ -28,13 +28,38 @@ const VO_POOL_OPTIONS = [
 ];
 
 /** @private */
-const create = ({ ctx, declaration, options }) => {
-  const vod = ctx.create(declaration.voDescriptor);
+const VO_POOL_CONFIGS = [
+  'setSize',
+  'setTexCoordsByTexture',
+];
 
-  const readVoPoolOption = readOption(declaration, declaration[declaration.voDescriptor], options, options[declaration.voDescriptor]);
+/** @private */
+const create = ({ ctx, declaration, options = {} }) => {
+  const { voDescriptor: vodKey } = declaration;
+  const vod = ctx.create(vodKey);
+
+  const vodOptions = options && options[vodKey];
+  const readVoPoolOption = readOption(declaration, declaration[vodKey], options, vodOptions);
+
   const sgOpts = {};
   VO_POOL_OPTIONS.forEach((key) => {
-    sgOpts[key] = readVoPoolOption(key);
+    const val = readVoPoolOption(key);
+    if (val !== undefined) {
+      sgOpts[key] = val;
+    }
+  });
+
+  const readVoPoolDeclOption = readOption(declaration, declaration[vodKey]);
+  const readVoPoolConfig = readOption(ctx.config, options, vodOptions);
+
+  VO_POOL_CONFIGS.forEach((key) => {
+    let val = readVoPoolDeclOption(key);
+    if (typeof val === 'string') {
+      val = readVoPoolConfig(val);
+    }
+    if (val !== undefined) {
+      sgOpts[key] = val;
+    }
   });
 
   return new SpriteGroup(vod, sgOpts);

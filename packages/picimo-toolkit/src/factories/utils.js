@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: 0 */
 import get from 'lodash/get';
 
 import { PROPERTY_CALL } from '../constants';
@@ -70,3 +71,16 @@ export const attachDataValue = (to, from, name) => findData(from, name, ({ value
 
 /** @private */
 export const attachDataValues = (to, from, names) => names.forEach(attachDataValue.bind(null, to, from));
+
+/** @private */
+export const parseVoDefaultValues = target => (name, value) => {
+  if (value !== undefined) {
+    if (Array.isArray(value)) {
+      value.forEach((val, idx) => {
+        target[`${name}${idx}`] = val;
+      });
+    } else {
+      target[name] = value;
+    }
+  }
+};

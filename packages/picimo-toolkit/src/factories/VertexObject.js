@@ -8,6 +8,7 @@ import {
   firstPropertyCallArg,
   hasPropertyCall,
   findNamedArgument,
+  parseVoDefaultValues,
 } from './utils';
 
 import {
@@ -29,20 +30,8 @@ const create = ({ declaration, ctx, name }) => new VODescriptor(Object.assign({}
 /** @private */
 const transform = (parsedTree) => {
   const voNew = {};
-
-  const parseVoNewDefaults = (name, value) => {
-    if (value !== undefined) {
-      if (Array.isArray(value)) {
-        value.forEach((val, idx) => {
-          voNew[`${name}${idx}`] = val;
-        });
-      } else {
-        voNew[name] = value;
-      }
-    }
-  };
-
   const aliases = {};
+  const parseVoNewDefaults = parseVoDefaultValues(voNew);
   const out = {
     // _parsedTree: parsedTree,
     voDescriptor: {

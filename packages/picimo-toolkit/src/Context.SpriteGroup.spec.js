@@ -49,5 +49,26 @@ describe('Context::SpriteGroup', () => {
 
       console.log('SpriteGroup', sg);
     });
+
+    it('@setSize', () => {
+      const fooBar = () => 0;
+      const sg = ctx.compile(`
+
+        SpriteGroup sprites1 {
+          @vertexObject(MyVertices)
+
+          capacity 10
+
+          @setSize(fooBar)
+        }
+
+      `, {
+        fooBar,
+      }).create('sprites1');
+
+      console.log('SpriteGroup(@setSize)', sg);
+
+      expect(sg.spriteHook.setSize).to.equal(fooBar);
+    });
   });
 });
