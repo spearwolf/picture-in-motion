@@ -2,6 +2,7 @@ import has from 'lodash/has';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import pick from 'lodash/pick';
+import { getLogger } from 'loglevel';
 
 import { parse } from './picimoParser';
 import { VertexObject, Primitive, SpriteGroup } from './factories';
@@ -13,20 +14,32 @@ const PRIMITIVE = 'primitive';
 const SPRITE_GROUP = 'spritegroup';
 
 /** @private */
-const transformDeclaration = (item) => {
-  switch (item.declarationType) {
-    case VERTEX_OBJECT:
-      return VertexObject.transform(item);
+const FACTORIES = {
+  [VERTEX_OBJECT]: VertexObject,
+  [PRIMITIVE]: Primitive,
+  [SPRITE_GROUP]: SpriteGroup,
+};
 
-    case PRIMITIVE:
-      return Primitive.transform(item);
+/** @private */
+const log = getLogger('picimo.toolkit.Context');
 
-    case SPRITE_GROUP:
-      return SpriteGroup.transform(item);
-
-    default:
-      return item;
+/** @private */
+const getFactory = (type) => {
+  const factory = FACTORIES[type];
+  if (!type) {
+    log.error('Context: unknown declaration type:', type);
   }
+  return factory;
+};
+
+
+/** @private */
+const transformDeclaration = (item) => {
+  const factory = getFactory(item.declarationType);
+  if (factory) {
+    return factory.transform(item);
+  }
+  return item;
 };
 
 
@@ -35,35 +48,17 @@ const createInstanceFromDeclaration = (ctx, name, options) => {
   const declaration = get(ctx.declaration, name);
   if (!declaration) return;
 
-  switch (declaration.declarationType) {
-    case VERTEX_OBJECT:
-      return VertexObject.create({
-        ctx,
-        name,
-        declaration,
-        options,
-      });
-
-    case PRIMITIVE:
-      return Primitive.create({
-        ctx,
-        name,
-        declaration,
-        options,
-      });
-
-    case SPRITE_GROUP:
-      return SpriteGroup.create({
-        ctx,
-        name,
-        declaration,
-        options,
-      });
-
-    default:
-      console.log(`TODO createInstanceFromDeclaration(${declaration.declarationType}, ${name}, ${JSON.stringify(options)}), config=`, ctx.config); // eslint-disable-line
-      return null;
+  const factory = getFactory(declaration.declarationType);
+  if (factory) {
+    return factory.create({
+      ctx,
+      name,
+      declaration,
+      options,
+    });
   }
+
+  return null;
 };
 
 
