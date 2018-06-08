@@ -56,6 +56,11 @@ export const findNamedArgument = (args, withName, callback) => args && args.find
 });
 
 /** @private */
+export const setByNamedArgument = (args, target, name) => findNamedArgument(args, name, (value) => {
+  target[name] = value;
+});
+
+/** @private */
 export const findData = (args, withName, callback) => args && args.find((data) => {
   const found = data.name === withName;
 

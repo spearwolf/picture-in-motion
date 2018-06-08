@@ -1,14 +1,15 @@
+/* eslint no-param-reassign: 0 */
 import { SpriteGroup } from '@picimo/core'; // eslint-disable-line
 
 import {
   attachDataValue,
   findData,
-  findNamedArgument,
   findPropertyCall,
   firstPropertyCallArg,
   hasPropertyCall,
   readFlag,
   setByFirstPropertyCallArg,
+  setByNamedArgument,
   setFlagByPropertyCall,
 } from './utils';
 
@@ -65,7 +66,6 @@ const create = ({ ctx, declaration, options = {} }) => {
   return new SpriteGroup(vod, sgOpts);
 };
 
-
 /** @private */
 const readVoPoolOptions = (data) => {
   const out = {};
@@ -100,18 +100,10 @@ const readVoPoolOptions = (data) => {
           src: value,
           type: (hasPropertyCall(annotations, 'atlas') ? 'atlas' : 'texture'),
         };
-        findNamedArgument(args, 'flipY', (flag) => {
-          hints.flipY = flag;
-        });
-        findNamedArgument(args, 'repeatable', (flag) => {
-          hints.repeatable = flag;
-        });
-        findNamedArgument(args, 'premultiplyAlpha', (flag) => {
-          hints.premultiplyAlpha = flag;
-        });
-        findNamedArgument(args, 'nearest', (flag) => {
-          hints.nearest = flag;
-        });
+        setByNamedArgument(args, hints, 'flipY');
+        setByNamedArgument(args, hints, 'repeatable');
+        setByNamedArgument(args, hints, 'premultiplyAlpha');
+        setByNamedArgument(args, hints, 'nearest');
       });
     }
   });
