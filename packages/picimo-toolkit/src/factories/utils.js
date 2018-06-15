@@ -17,7 +17,6 @@ export const findPropertyCall = (statements, withName, callback) => {
 /** @private */
 export const hasPropertyCall = (statements, withName) => Boolean(findPropertyCall(statements, withName));
 
-
 /** @private */
 export const firstPropertyCallArg = (statements, name) => get(findPropertyCall(statements, name), 'args[0]');
 
