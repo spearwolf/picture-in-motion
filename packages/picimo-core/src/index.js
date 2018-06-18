@@ -40,3 +40,5 @@ export { default as maxOf } from './maxOf';
 export { default as pick } from './pick';
 export { default as readOption } from './readOption';
 export { default as sample } from './sample';
+export { default as hexCol2rgb } from './hexCol2rgb';
+export { default as hexCol2rgba } from './hexCol2rgba';

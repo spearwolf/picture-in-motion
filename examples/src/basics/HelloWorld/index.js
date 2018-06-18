@@ -6,6 +6,7 @@ import { compile } from '@picimo/toolkit'; // eslint-disable-line
 import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 
 import {
+  hexCol2rgba,
   ShaderSource,
   ShaderTool,
 } from '@picimo/core'; // eslint-disable-line
@@ -13,7 +14,7 @@ import {
 
 // ---------------------------------------------------------------------------
 //
-// create vertex object description
+// I. Define vertex object, sprite group and webgl shaders
 //
 // ---------------------------------------------------------------------------
 
@@ -21,7 +22,6 @@ const ctx = compile(`
 
   VertexObject Quads {
     @vertexCount(4)
-    @prototype(QuadsProto)
 
     position {
       x
@@ -37,30 +37,29 @@ const ctx = compile(`
     }
   }
 
+  Primitive TriQuads {
+    @type(TRIANGLES)
+    @generate
+
+    stride 4
+    offset 0
+
+    indices [
+      0, 1, 2,
+      0, 2, 3,
+    ]
+  }
+
+  SpriteGroup Sprites {
+    @vertexObject(Quads)
+    @primitive(TriQuads)
+    @vertexShader(vs)
+    @fragmentShader(fs)
+
+    maxAllocVOSize 100
+  }
+
 `, {
-  QuadsProto: {
-    setSize(w, h) {
-      const w2 = w / 2;
-      const h2 = h / 2;
-
-      this.setPosition(
-        -w2, h2, 0,
-        w2, h2, 0,
-        w2, -h2, 0,
-        -w2, -h2, 0,
-      );
-    },
-  },
-});
-
-
-// ---------------------------------------------------------------------------
-//
-// define webgl shaders
-//
-// ---------------------------------------------------------------------------
-
-ctx.configure({
   vs: ShaderSource.vertexShader()`
 
     attribute vec3 position;
@@ -97,79 +96,61 @@ ctx.configure({
 
 // ---------------------------------------------------------------------------
 //
-// 3) define sprite group
+// II. Create a sprite group and a sprite
 //
 // ---------------------------------------------------------------------------
 
-ctx.compile(`
+const sprites = ctx.create('Sprites', {
+  capacity: 1,
 
-  SpriteGroup Sprites {
-    @vertexObject(Quads)
-    @primitive(TriQuads)
-    @vertexShader(vs)
-    @fragmentShader(fs)
+  Quads: {
+    stretch(w, h) {
+      const w2 = w / 2;
+      const h2 = h / 2;
 
-    maxAllocVOSize 100
-  }
+      this.setPosition(
+        -w2, h2, 0,
+        w2, h2, 0,
+        w2, -h2, 0,
+        -w2, -h2, 0,
+      );
+    },
 
-  Primitive TriQuads {
-    @type(TRIANGLES)
-    @generate
+    setColorHex(a, b, c, d) {
+      this.setColor(
+        ...hexCol2rgba(a),
+        ...hexCol2rgba(b),
+        ...hexCol2rgba(c),
+        ...hexCol2rgba(d),
+      );
+    }
+  },
+});
 
-    stride 4
-    offset 0
-
-    indices [
-      0, 1, 2,
-      0, 2, 3,
-    ]
-  }
-
-`);
-
-
-// ---------------------------------------------------------------------------
-//
-// 4) create a sprite
-//
-// ---------------------------------------------------------------------------
-
-const sprites = ctx.create('Sprites', { capacity: 1 });
 const quad = sprites.createSprite();
 
-quad.setPosition(
-  -150, 150, 0,
-  150, 150, 0,
-  150, -150, 0,
-  -150, -150, 0,
-);
-
-quad.setColor(
-  0, 1, 0, 1,
-  0, 1, 1, 1,
-  1, 0, 1, 1,
-  0, 0, 1, 1,
+quad.setColorHex(
+  'f9ed69',
+  'f08a5d',
+  'b83b5e',
+  '6a2c70',
 );
 
 
 // ---------------------------------------------------------------------------
 //
-// 5) create picimo renderer
+// III. Create renderer and start main loop
 //
 // ---------------------------------------------------------------------------
 
 const renderer = new WebGlRenderer(document.getElementById('picimo'), { alpha: true });
 
-
-// ---------------------------------------------------------------------------
-//
-// 6) start main loop
-//
-// ---------------------------------------------------------------------------
-
 function animate() {
   renderer.resize();
   renderer.initFrame();
+
+  const { now } = renderer;
+  quad.stretch(230 + (Math.sin(now * 1.25) * 200), 230 + (Math.cos(now) * 200));
 
   renderer.drawSpriteGroup(sprites);
 
