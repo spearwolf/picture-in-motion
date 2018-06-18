@@ -64,7 +64,7 @@ describe('Context::SpriteGroup', () => {
       expect(sg.capacity).to.equal(9);
       expect(sg.voPool.maxAllocVOSize).to.equal(5);
 
-      console.log('SpriteGroup', sg);
+      // console.log('SpriteGroup', sg);
     });
 
     it('@setSize', () => {
@@ -83,7 +83,7 @@ describe('Context::SpriteGroup', () => {
         fooBar,
       }).create('sprites1');
 
-      console.log('SpriteGroup(@setSize)', sg);
+      // console.log('SpriteGroup(@setSize)', sg);
 
       expect(sg.spriteHook.setSize).to.equal(fooBar);
     });
@@ -100,11 +100,77 @@ describe('Context::SpriteGroup', () => {
 
       `).create('MySpriteGroup', { capacity: 2 });
 
-      console.log('SpriteGroup(@primitive)', sg);
+      // console.log('SpriteGroup(@primitive)', sg);
 
       expect(sg).to.be.an.instanceOf(SpriteGroup);
       expect(sg.descriptor).to.be.an.instanceOf(VODescriptor);
       expect(sg.primitive).to.be.an.instanceOf(IndexedPrimitive);
+    });
+
+    it('SpriteGroup->MyVertices->@prototype', () => {
+      const sg = ctx.compile(`
+
+        SpriteGroup MySpriteGroup {
+          @vertexObject(MyVertices)
+          @primitive(TriQuads)
+
+          maxAllocVOSize 5
+
+          MyVertices {
+            @prototype(SpriteProto)
+          }
+        }
+
+      `, {
+        SpriteProto: {
+          fooBar() {
+            return this.x0 + 1024;
+          },
+        },
+      }).create('MySpriteGroup', { capacity: 1 });
+
+      expect(sg).to.be.an.instanceOf(SpriteGroup);
+      expect(sg.descriptor).to.be.an.instanceOf(VODescriptor);
+
+      const vo = sg.createSprite();
+      // console.log('SpriteGroup(VertexObject->@prototype)', sg, 'sprite=', vo);
+
+      expect(vo.fooBar).to.be.a('function');
+
+      vo.x0 = 1000;
+      expect(vo.fooBar()).to.equal(2024);
+    });
+
+    it('SpriteGroup->MyVertices->@prototype as option', () => {
+      const sg = ctx.compile(`
+
+        SpriteGroup MySpriteGroup {
+          @vertexObject(MyVertices)
+          @primitive(TriQuads)
+
+          maxAllocVOSize 5
+        }
+
+      `).create('MySpriteGroup', {
+        capacity: 1,
+
+        MyVertices: {
+          fooBar() {
+            return this.x0 + 2048;
+          },
+        },
+      });
+
+      expect(sg).to.be.an.instanceOf(SpriteGroup);
+      expect(sg.descriptor).to.be.an.instanceOf(VODescriptor);
+
+      const vo = sg.createSprite();
+      // console.log('SpriteGroup->MyVertices->@prototype as option', sg, 'sprite=', vo);
+
+      expect(vo.fooBar).to.be.a('function');
+
+      vo.x0 = 1000;
+      expect(vo.fooBar()).to.equal(3048);
     });
   });
 });

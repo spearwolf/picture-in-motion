@@ -1,4 +1,6 @@
 /* eslint no-param-reassign: 0 */
+import get from 'lodash/get';
+
 import { SpriteGroup } from '@picimo/core'; // eslint-disable-line
 
 import {
@@ -55,11 +57,7 @@ const createPrimitive = (ctx, primitive, capacity) => {
 const create = ({ ctx, declaration, options = {} }) => {
   const { voDescriptor: vodKey } = declaration;
 
-  // I. create VoDescriptor
-  // ----------------------------------------------------
-  const vod = ctx.create(vodKey, options[vodKey]);
-
-  // II. parse and merge options
+  // parse and merge options
   // ----------------------------------------------------
   const vodOptions = options[vodKey];
   const readVoPoolOption = readOption(declaration, declaration[vodKey], options, vodOptions);
@@ -85,7 +83,7 @@ const create = ({ ctx, declaration, options = {} }) => {
     }
   });
 
-  // III. create Primitive
+  // create Primitive
   // ----------------------------------------------------
   sgOpts.primitive = createPrimitive(ctx, declaration.primitive, sgOpts.capacity);
 
@@ -101,6 +99,10 @@ const create = ({ ctx, declaration, options = {} }) => {
       sgOpts[key] = val;
     }
   });
+
+  // create VoDescriptor
+  // ----------------------------------------------------
+  const vod = ctx.create(vodKey, options[vodKey] || get(declaration, `${vodKey}.prototype`));
 
   return new SpriteGroup(vod, sgOpts);
 };
@@ -119,6 +121,7 @@ const readVoPoolOptions = (data) => {
 
   setByFirstPropertyCallArg(out, 'setSize', data);
   setByFirstPropertyCallArg(out, 'setTexCoordsByTexture', data);
+  setByFirstPropertyCallArg(out, 'prototype', data);
 
   attachDataValue(out, data, 'capacity');
   attachDataValue(out, data, 'maxAllocVOSize');

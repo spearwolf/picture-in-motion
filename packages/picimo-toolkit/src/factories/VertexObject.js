@@ -1,5 +1,4 @@
 import compact from 'lodash/compact';
-import get from 'lodash/get';
 
 import { VODescriptor } from '@picimo/core'; // eslint-disable-line
 
