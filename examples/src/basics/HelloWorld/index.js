@@ -123,7 +123,7 @@ const sprites = ctx.create('Sprites', {
         ...hexCol2rgba(c),
         ...hexCol2rgba(d),
       );
-    }
+    },
   },
 });
 
