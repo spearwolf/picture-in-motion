@@ -4,10 +4,10 @@ import get from 'lodash/get';
 import { VODescriptor } from '@picimo/core'; // eslint-disable-line
 
 import {
+  findNamedArgument,
   findPropertyCall,
   firstPropertyCallArg,
   hasPropertyCall,
-  findNamedArgument,
   parseVoDefaultValues,
 } from './utils';
 
@@ -22,9 +22,14 @@ const DEFAULT_ATTR_TYPE = 'float32';
 
 
 /** @private */
-const create = ({ declaration, ctx, name }) => new VODescriptor(Object.assign({}, declaration.voDescriptor, {
-  proto: get(ctx.config, name),
-}));
+const create = ({ declaration, ctx, options }) => {
+  const { voDescriptor } = declaration;
+  const proto = options || voDescriptor.proto;
+  return new VODescriptor({
+    ...voDescriptor,
+    proto: typeof proto === 'string' ? ctx.readOption(proto) : proto,
+  });
+};
 
 
 /** @private */
@@ -79,6 +84,9 @@ const transform = (parsedTree) => {
   if (Object.keys(voNew).length) {
     out.voNew = voNew;
   }
+  findPropertyCall(parsedTree.data, 'prototype', ({ args }) => {
+    out.voDescriptor.proto = args[0]; // eslint-disable-line
+  });
   return out;
 };
 

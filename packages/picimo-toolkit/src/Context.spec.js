@@ -199,6 +199,7 @@ describe('Context', () => {
 
           VertexObject MyVertices {
             @vertexCount(3)
+            @prototype(MyVerticesProto)
 
             position {
               x
@@ -209,7 +210,7 @@ describe('Context', () => {
 
         `, {
 
-          MyVertices: {
+          MyVerticesProto: {
             fooBar() {
               return this.x0 + 1234;
             },
@@ -228,12 +229,24 @@ describe('Context', () => {
         expect(vod.hasAttribute('rotate', 1)).to.equal(true);
       });
 
-      it('VODescriptor should get "proto" from Context.config', () => {
+      it('VODescriptor should get "proto" from Context', () => {
         const vo = vod.createVO();
         expect(vo.fooBar).to.be.a('function');
 
         vo.x0 = 1000;
         expect(vo.fooBar()).to.equal(2234);
+      });
+
+      it('VODescriptor should get "proto" from options (override Context)', () => {
+        const vo = ctx.create('MyVertices', {
+          fooBar() {
+            return this.x0 + 2235;
+          },
+        }).createVO();
+        expect(vo.fooBar).to.be.a('function');
+
+        vo.x0 = 1000;
+        expect(vo.fooBar()).to.equal(3235);
       });
     });
 

@@ -3,7 +3,11 @@
 /* eslint no-console: 0 */
 import { expect } from 'chai';
 
-import { SpriteGroup, VODescriptor } from '@picimo/core'; // eslint-disable-line
+import {
+  IndexedPrimitive,
+  SpriteGroup,
+  VODescriptor,
+} from '@picimo/core'; // eslint-disable-line
 
 import { compile } from '.';
 
@@ -25,6 +29,19 @@ describe('Context::SpriteGroup', () => {
             w
             h
           }
+        }
+
+        Primitive TriQuads {
+          @type(TRIANGLES)
+          @generate
+
+          stride 4
+          offset 0
+
+          indices [
+            0, 1, 2,
+            0, 2, 3,
+          ]
         }
 
       `);
@@ -69,6 +86,25 @@ describe('Context::SpriteGroup', () => {
       console.log('SpriteGroup(@setSize)', sg);
 
       expect(sg.spriteHook.setSize).to.equal(fooBar);
+    });
+
+    it('primitive', () => {
+      const sg = ctx.compile(`
+
+        SpriteGroup MySpriteGroup {
+          @vertexObject(MyVertices)
+          @primitive(TriQuads)
+
+          maxAllocVOSize 5
+        }
+
+      `).create('MySpriteGroup', { capacity: 2 });
+
+      console.log('SpriteGroup(@primitive)', sg);
+
+      expect(sg).to.be.an.instanceOf(SpriteGroup);
+      expect(sg.descriptor).to.be.an.instanceOf(VODescriptor);
+      expect(sg.primitive).to.be.an.instanceOf(IndexedPrimitive);
     });
   });
 });

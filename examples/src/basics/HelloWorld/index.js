@@ -8,15 +8,12 @@ import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 import {
   ShaderSource,
   ShaderTool,
-  ShaderProgram,
-  ShaderVariableBufferGroup,
-  VOPool,
 } from '@picimo/core'; // eslint-disable-line
 
 
 // ---------------------------------------------------------------------------
 //
-// 1) create vertex object definition
+// create vertex object description
 //
 // ---------------------------------------------------------------------------
 
@@ -24,6 +21,7 @@ const ctx = compile(`
 
   VertexObject Quads {
     @vertexCount(4)
+    @prototype(QuadsProto)
 
     position {
       x
@@ -39,21 +37,8 @@ const ctx = compile(`
     }
   }
 
-  Primitive TriQuads {
-    @type(TRIANGLES)
-    @generate
-
-    stride 4
-    offset 0
-
-    indices [
-      0, 1, 2,
-      0, 2, 3,
-    ]
-  }
-
 `, {
-  Quads: {
+  QuadsProto: {
     setSize(w, h) {
       const w2 = w / 2;
       const h2 = h / 2;
@@ -68,86 +53,89 @@ const ctx = compile(`
   },
 });
 
-const vod = ctx.create('Quads');
-
 
 // ---------------------------------------------------------------------------
 //
-// 2) create vertex shader
+// define webgl shaders
 //
 // ---------------------------------------------------------------------------
 
-const vs = ShaderSource.vertexShader()`
+ctx.configure({
+  vs: ShaderSource.vertexShader()`
 
-  attribute vec3 position;
-  attribute vec4 color;
+    attribute vec3 position;
+    attribute vec4 color;
 
-  uniform float time;
-  uniform mat4 projection;
+    uniform float time;
+    uniform mat4 projection;
 
-  varying vec4 vColor;
+    varying vec4 vColor;
 
-  ${ShaderTool.rotate('rotateZ', 0.0, 0.0, 1.0)}
+    ${ShaderTool.rotate('rotateZ', 0.0, 0.0, 1.0)}
 
-  void main(void)
-  {
-    mat4 rotation = rotateZ(time);
-    gl_Position = projection * rotation * vec4(position.xyz, 1.0);
-    vColor = color;
-  }
+    void main(void)
+    {
+      mat4 rotation = rotateZ(time);
+      gl_Position = projection * rotation * vec4(position.xyz, 1.0);
+      vColor = color;
+    }
 
-`;
+  `,
+  fs: ShaderSource.fragmentShader()`
 
+    precision mediump float;
 
-// ---------------------------------------------------------------------------
-//
-// 3) create fragment shader
-//
-// ---------------------------------------------------------------------------
+    varying vec4 vColor;
 
-const fs = ShaderSource.fragmentShader()`
+    void main(void) {
+      gl_FragColor = vColor;
+    }
 
-  precision mediump float;
-
-  varying vec4 vColor;
-
-  void main(void) {
-    gl_FragColor = vColor;
-  }
-
-`;
-
-
-// ---------------------------------------------------------------------------
-//
-// 4) create shader program
-//
-// ---------------------------------------------------------------------------
-
-const shaderProgram = new ShaderProgram(vs, fs);
-
-
-// ---------------------------------------------------------------------------
-//
-// 5) create a vertex object pool
-//
-// ---------------------------------------------------------------------------
-
-const voPool = new VOPool(vod, {
-  capacity: 1000,
-  maxAllocVOSize: 100,
+  `,
 });
 
-const voPoolShaderVars = new ShaderVariableBufferGroup(voPool);
+
+// ---------------------------------------------------------------------------
+//
+// 3) define sprite group
+//
+// ---------------------------------------------------------------------------
+
+ctx.compile(`
+
+  SpriteGroup Sprites {
+    @vertexObject(Quads)
+    @primitive(TriQuads)
+    @vertexShader(vs)
+    @fragmentShader(fs)
+
+    maxAllocVOSize 100
+  }
+
+  Primitive TriQuads {
+    @type(TRIANGLES)
+    @generate
+
+    stride 4
+    offset 0
+
+    indices [
+      0, 1, 2,
+      0, 2, 3,
+    ]
+  }
+
+`);
 
 
 // ---------------------------------------------------------------------------
 //
-// 6) create a quad
+// 4) create a sprite
 //
 // ---------------------------------------------------------------------------
 
-const quad = voPool.alloc();
+const sprites = ctx.create('Sprites', { capacity: 1 });
+const quad = sprites.createSprite();
 
 quad.setPosition(
   -150, 150, 0,
@@ -163,21 +151,10 @@ quad.setColor(
   0, 0, 1, 1,
 );
 
-console.log('quad vertices', quad.toArray(['position']), 'colors', quad.toArray(['color']));
-
 
 // ---------------------------------------------------------------------------
 //
-// 7) create primitive
-//
-// ---------------------------------------------------------------------------
-
-const primitive = ctx.create('TriQuads', { capacity: 1 });
-
-
-// ---------------------------------------------------------------------------
-//
-// 8) create picimo renderer
+// 5) create picimo renderer
 //
 // ---------------------------------------------------------------------------
 
@@ -186,7 +163,7 @@ const renderer = new WebGlRenderer(document.getElementById('picimo'), { alpha: t
 
 // ---------------------------------------------------------------------------
 //
-// 9) start main loop
+// 6) start main loop
 //
 // ---------------------------------------------------------------------------
 
@@ -194,15 +171,9 @@ function animate() {
   renderer.resize();
   renderer.initFrame();
 
-  // render our vertex object pool
-  //
-  renderer.shaderContext.pushVar(voPoolShaderVars);
-  renderer.useShaderProgram(shaderProgram);
-  renderer.drawPrimitive(primitive, 1);
+  renderer.drawSpriteGroup(sprites);
 
   window.requestAnimationFrame(animate);
 }
 
 animate();
-
-console.log('hello world');

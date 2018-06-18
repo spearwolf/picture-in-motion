@@ -35,11 +35,33 @@ const VO_POOL_CONFIGS = [
 ];
 
 /** @private */
+const SHADER_OPTIONS = [
+  'vertexShader',
+  'fragmentShader',
+  'shaderProgram',
+];
+
+/** @private */
+const createPrimitive = (ctx, primitive, capacity) => {
+  switch (typeof primitive) {
+    case 'string':
+      return ctx.create(primitive, { capacity });
+    default:
+      return primitive;
+  }
+};
+
+/** @private */
 const create = ({ ctx, declaration, options = {} }) => {
   const { voDescriptor: vodKey } = declaration;
-  const vod = ctx.create(vodKey);
 
-  const vodOptions = options && options[vodKey];
+  // I. create VoDescriptor
+  // ----------------------------------------------------
+  const vod = ctx.create(vodKey, options[vodKey]);
+
+  // II. parse and merge options
+  // ----------------------------------------------------
+  const vodOptions = options[vodKey];
   const readVoPoolOption = readOption(declaration, declaration[vodKey], options, vodOptions);
 
   const sgOpts = {};
@@ -57,6 +79,23 @@ const create = ({ ctx, declaration, options = {} }) => {
     let val = readVoPoolDeclOption(key);
     if (typeof val === 'string') {
       val = readVoPoolConfig(val);
+    }
+    if (val !== undefined) {
+      sgOpts[key] = val;
+    }
+  });
+
+  // III. create Primitive
+  // ----------------------------------------------------
+  sgOpts.primitive = createPrimitive(ctx, declaration.primitive, sgOpts.capacity);
+
+  // IV. create SpriteGroup
+  // ----------------------------------------------------
+  const readSpriteGroupConfig = readOption(declaration, options);
+  SHADER_OPTIONS.forEach((key) => {
+    let val = readSpriteGroupConfig(key);
+    if (typeof val === 'string') {
+      val = ctx.readOption(val);
     }
     if (val !== undefined) {
       sgOpts[key] = val;
@@ -119,10 +158,11 @@ const transform = (parsedTree) => {
   const out = {
     voDescriptor,
     // _parsedTree: parsedTree,
-    vertexShader: firstPropertyCallArg(data, 'vertexShader'),
-    fragmentShader: firstPropertyCallArg(data, 'fragmentShader'),
     primitive: firstPropertyCallArg(data, 'primitive'),
   };
+  setByFirstPropertyCallArg(out, 'vertexShader', data);
+  setByFirstPropertyCallArg(out, 'fragmentShader', data);
+  setByFirstPropertyCallArg(out, 'shaderProgram', data);
   Object.assign(out, readVoPoolOptions(data));
   if (voDescriptor) {
     findData(data, voDescriptor, (dataBlock) => {

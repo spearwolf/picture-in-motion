@@ -1,6 +1,5 @@
 import ShaderProgram from './ShaderProgram';
 import ShaderVariableBufferGroup from './ShaderVariableBufferGroup';
-import ElementIndexedArray from './ElementIndexArray';
 import VOPool from './VOPool';
 import pick from './pick';
 
@@ -36,7 +35,7 @@ const createSpriteSizeHook = (setSize = 'size') => {
  * @param {VODescriptor} descriptor - The `VODescriptor` (*vertex object description*)
  * @param {Object} options - Options
  * @param {number} [options.capacity] - Maximum number of *sprites*
- * @param {ElementIndexedArray|function} primitive - The *primitive factory function* is a function that takes one argument (capacity) and returns an IndexedPrimitive instance
+ * @param {IndexedPrimitive|ElementIndexArray|function} primitive - The *primitive factory function* is a function that takes one argument (capacity) and returns an IndexedPrimitive instance
  * @param {VOArray} [options.voArray] - The internal *vertex object array*
  * @param {Object|function} [options.voZero] - *vertex object* prototype
  * @param {Object|function} [options.voNew] - *vertex object* prototype
@@ -81,7 +80,7 @@ export default class SpriteGroup {
     const { primitive } = options;
     if (typeof primitive === 'function') {
       this.primitive = primitive(this.capacity);
-    } else if (primitive instanceof ElementIndexedArray) {
+    } else {
       this.primitive = primitive;
     }
 
