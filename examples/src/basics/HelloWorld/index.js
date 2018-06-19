@@ -57,6 +57,10 @@ const ctx = compile(`
     @fragmentShader(fs)
 
     maxAllocVOSize 100
+
+    Quads {
+      @prototype(QuadsProto)
+    }
   }
 
 `, {
@@ -103,7 +107,7 @@ const ctx = compile(`
 const sprites = ctx.create('Sprites', {
   capacity: 1,
 
-  Quads: {
+  QuadsProto: {
     stretch(w, h) {
       const w2 = w / 2;
       const h2 = h / 2;

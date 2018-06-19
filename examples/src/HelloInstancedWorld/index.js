@@ -6,10 +6,12 @@ import {
   ShaderSource,
   ShaderTool,
   ShaderProgram,
-  ShaderVariableBufferGroup,
+  // ShaderVariableBufferGroup,
+  SpriteGroup,
   VODescriptor,
-  VOPool,
-  ElementIndexArray,
+  // VOPool,
+  IndexedPrimitive,
+  // ElementIndexArray,
 } from '@picimo/core'; // eslint-disable-line
 
 import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
@@ -100,19 +102,19 @@ const shaderProgram = new ShaderProgram(vs, fs);
 //
 // ---------------------------------------------------------------------------
 
-const voBasePool = new VOPool(vodBase, {
+const sprites = new SpriteGroup(vod, {
+  shaderProgram,
+
+  base: new SpriteGroup(vodBase, {
+    primitive: IndexedPrimitive.createQuads,
+    capacity: 1000,
+    maxAllocVOSize: 100,
+    usage: 'static',
+  }),
+
   capacity: 1000,
   maxAllocVOSize: 100,
-  usage: 'static',
 });
-
-const voPool = new VOPool(vod, {
-  capacity: 1000,
-  maxAllocVOSize: 100,
-});
-
-const voBasePoolShaderVars = new ShaderVariableBufferGroup(voBasePool);
-const voPoolShaderVars = new ShaderVariableBufferGroup(voPool);
 
 
 // ---------------------------------------------------------------------------
@@ -124,7 +126,7 @@ const voPoolShaderVars = new ShaderVariableBufferGroup(voPool);
 const DX = 150;
 const DY = 150;
 
-voBasePool.alloc().setPosition(
+sprites.base.createSprite().setPosition(
   -DX, DY, 0,
   DX, DY, 0,
   DX, -DY, 0,
@@ -149,19 +151,10 @@ const len = COLORS.length;
 const x = (len - 1) * DX * -0.5;
 
 for (let i = 0; i < len; i++) {
-  const quad = voPool.alloc();
+  const quad = sprites.createSprite();
   quad.setTranslate(x + (i * DX), 0, 0);
   quad.setColor(...COLORS[i % len]);
 }
-
-
-// ---------------------------------------------------------------------------
-//
-// 8) create vertex indices
-//
-// ---------------------------------------------------------------------------
-
-const quadIndices = ElementIndexArray.Generate(1000, [0, 1, 2, 0, 2, 3], 4);
 
 
 // ---------------------------------------------------------------------------
@@ -183,13 +176,9 @@ function animate() {
   renderer.resize();
   renderer.initFrame();
 
-  // render our vertex object pool
+  // render the instanced sprite group
   //
-  renderer.shaderContext.pushVar(voBasePoolShaderVars);
-  renderer.shaderContext.pushVar(voPoolShaderVars);
-
-  renderer.useShaderProgram(shaderProgram);
-  renderer.drawIndexedInstanced('TRIANGLES', quadIndices, 6, 0, len);
+  renderer.drawSpriteGroup(sprites);
 
   window.requestAnimationFrame(animate);
 }

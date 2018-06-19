@@ -48,10 +48,12 @@ const createSpriteSizeHook = (setSize = 'size') => {
  * @param {Object} [options.textures] - The *shader variable name* to *texture* mapping
  * @param {boolean} [options.doubleBuffer] - buffer `doubleBuffer` hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`
  * @param {boolean} [options.autotouch] - auto touch vertex buffers hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
+ * @param {SpriteGroup} [options.base] - The instance base sprite group
  */
 export default class SpriteGroup {
   constructor(descriptor, options = {}) {
     this.descriptor = descriptor;
+    this.base = options.base;
 
     let {
       voNew,

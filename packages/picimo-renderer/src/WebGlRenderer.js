@@ -346,22 +346,42 @@ export default class WebGlRenderer {
   }
 
   /**
+   * @param {IndexedPrimitive} indexedPrimitive
+   * @param {number} [primCount]
+   * @param {number} [primOffset=0]
+   */
+  drawPrimitiveIndexed({ primitiveType, elementIndexArray }, primCount, primOffset, instanceCount) {
+    const { itemCount } = elementIndexArray;
+    this.drawIndexedInstanced(primitiveType, elementIndexArray, primCount * itemCount, primOffset * itemCount, instanceCount);
+  }
+
+  /**
    * @param {SpriteGroup} spriteGroup
    */
   drawSpriteGroup(spriteGroup) {
-    if (spriteGroup instanceof TexturedSpriteGroup) {
-      spriteGroup.whenTexturesLoaded((texUniforms) => {
-        this.syncBuffer(spriteGroup.voPool.voArray);
-        this.shaderContext.pushVar(texUniforms);
-        this.shaderContext.pushVar(spriteGroup.voPoolShaderAttribs);
-        this.useShaderProgram(spriteGroup.shaderProgram);
-        this.drawPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
-      });
-    } else {
+    const draw = () => {
+      const { base } = spriteGroup;
+      if (base) {
+        this.syncBuffer(base.voPool.voArray);
+        this.shaderContext.pushVar(base.voPoolShaderAttribs);
+      }
       this.syncBuffer(spriteGroup.voPool.voArray);
       this.shaderContext.pushVar(spriteGroup.voPoolShaderAttribs);
       this.useShaderProgram(spriteGroup.shaderProgram);
-      this.drawPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
+      if (base) {
+        this.drawPrimitiveIndexed(base.primitive, base.usedCount, 0, spriteGroup.usedCount);
+      } else {
+        this.drawPrimitive(spriteGroup.primitive, spriteGroup.usedCount, 0);
+      }
+    };
+
+    if (spriteGroup instanceof TexturedSpriteGroup) {
+      spriteGroup.whenTexturesLoaded((texUniforms) => {
+        this.shaderContext.pushVar(texUniforms);
+        draw(this, spriteGroup);
+      });
+    } else {
+      draw(this, spriteGroup);
     }
   }
 }
