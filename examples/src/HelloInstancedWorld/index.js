@@ -3,15 +3,12 @@
 import '@babel/polyfill';
 
 import {
+  IndexedPrimitive,
+  ShaderProgram,
   ShaderSource,
   ShaderTool,
-  ShaderProgram,
-  // ShaderVariableBufferGroup,
   SpriteGroup,
   VODescriptor,
-  // VOPool,
-  IndexedPrimitive,
-  // ElementIndexArray,
 } from '@picimo/core'; // eslint-disable-line
 
 import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
