@@ -4,6 +4,10 @@ export default [{
     title: 'quads',
     url: '/basics/HelloWorld/',
     sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/basics/HelloWorld/index.js',
+  }, {
+    title: 'quads / instanced rendering',
+    url: '/basics/InstancedQuads/',
+    sourceUrl: 'https://github.com/spearwolf/picimo-next/blob/master/examples/src/basics/InstancedQuads/main.js',
   }],
 }, {
   section: 'Advanced (core API)',
