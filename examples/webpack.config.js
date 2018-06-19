@@ -7,10 +7,9 @@ module.exports = {
     'basics/HelloWorld/bundle': './src/basics/HelloWorld/index.js',
     'advanced/HelloWorld/bundle': './src/advanced/HelloWorld/index.js',
     'advanced/SpriteGroup/bundle': './src/advanced/SpriteGroup/index.js',
-    'TexturedSpriteGroup/bundle': './src/TexturedSpriteGroup/index.js',
-    'Starscape/bundle': './src/Starscape/index.js',
-    'HelloInstancedWorld/bundle': './src/HelloInstancedWorld/index.js',
-    // 'ClearBackground/app': './src/ClearBackground/index.js',
+    'advanced/HelloInstancedWorld/bundle': './src/advanced/HelloInstancedWorld/index.js',
+    'advanced/TexturedSpriteGroup/bundle': './src/advanced/TexturedSpriteGroup/index.js',
+    'demo/Starscape/bundle': './src/demo/Starscape/index.js',
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),
