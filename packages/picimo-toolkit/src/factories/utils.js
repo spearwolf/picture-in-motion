@@ -88,3 +88,27 @@ export const parseVoDefaultValues = target => (name, value) => {
     }
   }
 };
+
+
+/** @private */
+export const readOption = (...options) => (key, defVal = undefined) => options.reduce((curVal, opt) => {
+  if (typeof opt === 'function') {
+    const val = opt(key);
+    return val !== undefined ? val : curVal;
+  }
+  return opt && key in opt ? opt[key] : curVal;
+}, defVal);
+
+/** @private */
+export const assignOptions = (to, options, read, substitute) => {
+  options.forEach((key) => {
+    let val = read(key);
+    if (substitute && typeof val === 'string') {
+      val = substitute(val);
+    }
+    if (val !== undefined) {
+      to[key] = val;
+    }
+  });
+  return to;
+};

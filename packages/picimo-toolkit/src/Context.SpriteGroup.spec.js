@@ -63,8 +63,6 @@ describe('Context::SpriteGroup', () => {
       expect(sg.descriptor).to.be.an.instanceOf(VODescriptor);
       expect(sg.capacity).to.equal(9);
       expect(sg.voPool.maxAllocVOSize).to.equal(5);
-
-      // console.log('SpriteGroup', sg);
     });
 
     it('@setSize', () => {
@@ -83,8 +81,6 @@ describe('Context::SpriteGroup', () => {
         fooBar,
       }).create('sprites1');
 
-      // console.log('SpriteGroup(@setSize)', sg);
-
       expect(sg.spriteHook.setSize).to.equal(fooBar);
     });
 
@@ -99,8 +95,6 @@ describe('Context::SpriteGroup', () => {
         }
 
       `).create('MySpriteGroup', { capacity: 2 });
-
-      // console.log('SpriteGroup(@primitive)', sg);
 
       expect(sg).to.be.an.instanceOf(SpriteGroup);
       expect(sg.descriptor).to.be.an.instanceOf(VODescriptor);
@@ -133,7 +127,6 @@ describe('Context::SpriteGroup', () => {
       expect(sg.descriptor).to.be.an.instanceOf(VODescriptor);
 
       const vo = sg.createSprite();
-      // console.log('SpriteGroup(VertexObject->@prototype)', sg, 'sprite=', vo);
 
       expect(vo.fooBar).to.be.a('function');
 
@@ -155,8 +148,10 @@ describe('Context::SpriteGroup', () => {
         capacity: 1,
 
         MyVertices: {
-          fooBar() {
-            return this.x0 + 2048;
+          prototype: {
+            fooBar() {
+              return this.x0 + 2048;
+            },
           },
         },
       });
@@ -165,7 +160,6 @@ describe('Context::SpriteGroup', () => {
       expect(sg.descriptor).to.be.an.instanceOf(VODescriptor);
 
       const vo = sg.createSprite();
-      // console.log('SpriteGroup->MyVertices->@prototype as option', sg, 'sprite=', vo);
 
       expect(vo.fooBar).to.be.a('function');
 

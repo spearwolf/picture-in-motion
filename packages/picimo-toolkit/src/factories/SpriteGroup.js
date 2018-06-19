@@ -1,47 +1,21 @@
 /* eslint no-param-reassign: 0 */
-import get from 'lodash/get';
-
 import { SpriteGroup } from '@picimo/core'; // eslint-disable-line
 
 import {
+  assignOptions,
   attachDataValue,
   findData,
   findPropertyCall,
   firstPropertyCallArg,
   hasPropertyCall,
   readFlag,
+  readOption,
   setByFirstPropertyCallArg,
   setByNamedArgument,
   setFlagByPropertyCall,
 } from './utils';
 
 import { DATA_BLOCK } from '../constants';
-
-
-/** @private */
-const readOption = (...options) => (key, defVal = undefined) => options.reduce((curVal, opt) => (opt && key in opt ? opt[key] : curVal), defVal);
-
-/** @private */
-const VO_POOL_OPTIONS = [
-  'autotouch',
-  'capacity',
-  'doubleBuffer',
-  'maxAllocVOSize',
-  'usage',
-];
-
-/** @private */
-const VO_POOL_CONFIGS = [
-  'setSize',
-  'setTexCoordsByTexture',
-];
-
-/** @private */
-const SHADER_OPTIONS = [
-  'vertexShader',
-  'fragmentShader',
-  'shaderProgram',
-];
 
 /** @private */
 const createPrimitive = (ctx, primitive, capacity) => {
@@ -60,51 +34,61 @@ const create = ({ ctx, declaration, options = {} }) => {
   // parse and merge options
   // ----------------------------------------------------
   const vodOptions = options[vodKey];
-  const readVoPoolOption = readOption(declaration, declaration[vodKey], options, vodOptions);
+  const vodDeclaration = declaration[vodKey];
+  const ctxReadOption = ctx.readOption.bind(ctx);
 
-  const sgOpts = {};
-  VO_POOL_OPTIONS.forEach((key) => {
-    const val = readVoPoolOption(key);
-    if (val !== undefined) {
-      sgOpts[key] = val;
-    }
-  });
+  const spriteGroupOptions = assignOptions(
+    {}, [
+      'autotouch',
+      'capacity',
+      'doubleBuffer',
+      'maxAllocVOSize',
+      'usage',
+    ],
+    readOption(declaration, vodDeclaration, options, vodOptions),
+  );
 
-  const readVoPoolDeclOption = readOption(declaration, declaration[vodKey]);
-  const readVoPoolConfig = readOption(ctx.config, options, vodOptions);
-
-  VO_POOL_CONFIGS.forEach((key) => {
-    let val = readVoPoolDeclOption(key);
-    if (typeof val === 'string') {
-      val = readVoPoolConfig(val);
-    }
-    if (val !== undefined) {
-      sgOpts[key] = val;
-    }
-  });
+  assignOptions(
+    spriteGroupOptions, [
+      'setSize',
+      'setTexCoordsByTexture',
+    ],
+    readOption(declaration, vodDeclaration),
+    readOption(ctxReadOption, options, vodOptions),
+  );
 
   // create Primitive
   // ----------------------------------------------------
-  sgOpts.primitive = createPrimitive(ctx, declaration.primitive, sgOpts.capacity);
+  spriteGroupOptions.primitive = createPrimitive(ctx, declaration.primitive, spriteGroupOptions.capacity);
 
   // IV. create SpriteGroup
   // ----------------------------------------------------
-  const readSpriteGroupConfig = readOption(declaration, options);
-  SHADER_OPTIONS.forEach((key) => {
-    let val = readSpriteGroupConfig(key);
-    if (typeof val === 'string') {
-      val = ctx.readOption(val);
-    }
-    if (val !== undefined) {
-      sgOpts[key] = val;
-    }
-  });
 
-  // create VoDescriptor
+  assignOptions(
+    spriteGroupOptions, [
+      'vertexShader',
+      'fragmentShader',
+      'shaderProgram',
+    ],
+    readOption(declaration, options),
+    readOption(ctxReadOption),
+  );
+
+  // create VODescriptor
   // ----------------------------------------------------
-  const vod = ctx.create(vodKey, options[vodKey] || get(declaration, `${vodKey}.prototype`));
+  const { prototype } = assignOptions(
+    {}, [
+      'prototype',
+    ],
+    readOption(vodDeclaration, vodOptions),
+    readOption(ctxReadOption, options),
+  );
 
-  return new SpriteGroup(vod, sgOpts);
+  const vod = ctx.create(vodKey, prototype);
+
+  // create SpriteGroup
+  // ----------------------------------------------------
+  return new SpriteGroup(vod, spriteGroupOptions);
 };
 
 /** @private */
