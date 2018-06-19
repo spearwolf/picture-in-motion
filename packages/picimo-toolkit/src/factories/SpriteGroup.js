@@ -53,7 +53,7 @@ const create = ({ ctx, declaration, options = {} }) => {
       'setSize',
       'setTexCoordsByTexture',
     ],
-    readOption(declaration, vodDeclaration),
+    readOption(declaration, vodDeclaration, options, vodOptions),
     readOption(ctxReadOption, options, vodOptions),
   );
 
