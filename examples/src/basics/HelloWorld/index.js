@@ -9,6 +9,7 @@ import {
   hexCol2rgba,
   ShaderSource,
   ShaderTool,
+  toFloatColors,
 } from '@picimo/core'; // eslint-disable-line
 
 
@@ -122,10 +123,10 @@ const sprites = ctx.create('Sprites', {
 
     setColorHex(a, b, c, d) {
       this.setColor(
-        ...hexCol2rgba(a),
-        ...hexCol2rgba(b),
-        ...hexCol2rgba(c),
-        ...hexCol2rgba(d),
+        ...toFloatColors(hexCol2rgba(a)),
+        ...toFloatColors(hexCol2rgba(b)),
+        ...toFloatColors(hexCol2rgba(c)),
+        ...toFloatColors(hexCol2rgba(d)),
       );
     },
   },

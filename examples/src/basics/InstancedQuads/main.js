@@ -6,6 +6,8 @@ import { compile } from '@picimo/toolkit'; // eslint-disable-line
 
 import {
   hexCol2rgba,
+  circleCoords,
+  sample,
   IndexedPrimitive,
   ShaderProgram,
   ShaderSource,
@@ -13,7 +15,7 @@ import {
   SpriteGroup,
 } from '@picimo/core'; // eslint-disable-line
 
-import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
+import { WebGlRenderer, BlendMode } from '@picimo/renderer'; // eslint-disable-line
 
 
 // ---------------------------------------------------------------------------
@@ -42,7 +44,7 @@ const ctx = compile(`
       tz
     }
 
-    color {
+    color: uint8 {
       r
       g
       b
@@ -79,7 +81,7 @@ const vs = ShaderSource.vertexShader()`
   {
     mat4 rotation = rotateZ(time);
     gl_Position = projection * (vec4(translate, 1.0) + (rotation * vec4(position, 1.0)));
-    vColor = color;
+    vColor = color / 255.0;
   }
 
 `;
@@ -140,8 +142,8 @@ const sprites = new SpriteGroup(vod, {
 //
 // ---------------------------------------------------------------------------
 
-const DX = 150;
-const DY = 150;
+const DX = 10;
+const DY = 110;
 
 sprites.base.createSprite().setPosition(
   -DX, DY, 0,
@@ -158,20 +160,17 @@ sprites.base.createSprite().setPosition(
 // ---------------------------------------------------------------------------
 
 const COLORS = [
-  hexCol2rgba('3ec1d3'),
-  hexCol2rgba('f6f7d7'),
-  hexCol2rgba('ff9a00'),
-  hexCol2rgba('ff165d'),
+  '3ec1d3',
+  'f6f7d7',
+  'ff9a00',
+  'ff165d',
 ];
 
-const len = COLORS.length;
-const x = (len - 1) * DX * -0.5;
-
-for (let i = 0; i < len; i++) {
+circleCoords(100, 1000).forEach(([x, y]) => {
   const quad = sprites.createSprite();
-  quad.setTranslate(x + (i * DX), 0, 0);
-  quad.setColor(...COLORS[i % len]);
-}
+  quad.setTranslate(x, y, 0);
+  quad.setColor(...hexCol2rgba(sample(COLORS), 180));
+});
 
 
 // ---------------------------------------------------------------------------
@@ -192,6 +191,8 @@ const renderer = new WebGlRenderer(document.getElementById('picimo'), { alpha: t
 function animate() {
   renderer.resize();
   renderer.initFrame();
+
+  renderer.universalContext.push('blend', BlendMode.make('additive'));
 
   // render the instanced sprite group
   //
