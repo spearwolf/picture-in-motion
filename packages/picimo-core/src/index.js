@@ -43,4 +43,4 @@ export { default as sample } from './sample';
 export { default as hexCol2rgb } from './hexCol2rgb';
 export { default as hexCol2rgba } from './hexCol2rgba';
 export { default as toFloatColors } from './toFloatColors';
-export { default as circleCoords } from './circleCoords';
+export { default as makeCircleCoords } from './makeCircleCoords';

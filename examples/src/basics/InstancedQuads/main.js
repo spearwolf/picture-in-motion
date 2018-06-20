@@ -6,7 +6,7 @@ import { compile } from '@picimo/toolkit'; // eslint-disable-line
 
 import {
   hexCol2rgba,
-  circleCoords,
+  makeCircleCoords,
   sample,
   IndexedPrimitive,
   ShaderProgram,
@@ -166,7 +166,7 @@ const COLORS = [
   'ff165d',
 ];
 
-circleCoords(100, 1000).forEach(([x, y]) => {
+makeCircleCoords(100, 1000).forEach(([x, y]) => {
   const quad = sprites.createSprite();
   quad.setTranslate(x, y, 0);
   quad.setColor(...hexCol2rgba(sample(COLORS), 180));
