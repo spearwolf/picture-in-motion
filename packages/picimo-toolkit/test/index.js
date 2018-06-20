@@ -7,7 +7,8 @@ mocha.setup({
   noHighlighting: true,
 });
 
-require('../src/Context.spec');
+require('../src/Context.VertexObject.spec');
+require('../src/Context.Primitive.spec');
 require('../src/Context.SpriteGroup.spec');
 require('../src/picimoParser.spec');
 

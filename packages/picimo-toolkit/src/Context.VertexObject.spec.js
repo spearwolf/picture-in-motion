@@ -4,15 +4,14 @@
 import { expect } from 'chai';
 import { get, omit } from 'lodash';
 
-import {
-  VODescriptor,
-  IndexedPrimitive,
-  ElementIndexArray,
-} from '@picimo/core'; // eslint-disable-line
+import { VODescriptor } from '@picimo/core'; // eslint-disable-line
 
 import { compile, Context } from '.';
 
-describe('Context', () => {
+describe('VertexObject', () => {
+  before(() => console.groupCollapsed('VertexObject'));
+  after(() => console.groupEnd());
+
   describe('compile()', () => {
     let ctx;
 
@@ -74,7 +73,7 @@ describe('Context', () => {
         }
 
       `);
-      console.log('Context:compile', ctx);
+      console.log('compile', ctx);
     });
 
     it('returns an instance of Context', () => {
@@ -190,99 +189,62 @@ describe('Context', () => {
   });
 
   describe('create()', () => {
-    describe('VertexObject', () => {
-      let ctx;
-      let vod;
+    let ctx;
+    let vod;
 
-      before(() => {
-        ctx = compile(`
+    before(() => {
+      ctx = compile(`
 
-          VertexObject MyVertices {
-            @vertexCount(3)
-            @prototype(MyVerticesProto)
+        VertexObject MyVertices {
+          @vertexCount(3)
+          @prototype(MyVerticesProto)
 
-            position {
-              x
-              y
-            }
-            rotate: uint16 @uniform
+          position {
+            x
+            y
           }
+          rotate: uint16 @uniform
+        }
 
-        `, {
+      `, {
 
-          MyVerticesProto: {
-            fooBar() {
-              return this.x0 + 1234;
-            },
-          },
-        });
-
-        console.log('Context:create(VertexObject)', ctx);
-
-        vod = ctx.create('MyVertices');
-      });
-
-      it('create an instance of VODescriptor', () => {
-        expect(vod).to.be.an.instanceOf(VODescriptor);
-        expect(vod.vertexCount).to.equal(3);
-        expect(vod.hasAttribute('position', 2)).to.equal(true);
-        expect(vod.hasAttribute('rotate', 1)).to.equal(true);
-      });
-
-      it('VODescriptor should get "proto" from Context', () => {
-        const vo = vod.createVO();
-        expect(vo.fooBar).to.be.a('function');
-
-        vo.x0 = 1000;
-        expect(vo.fooBar()).to.equal(2234);
-      });
-
-      it('VODescriptor should get "proto" from options (override Context)', () => {
-        const vo = ctx.create('MyVertices', {
+        MyVerticesProto: {
           fooBar() {
-            return this.x0 + 2235;
+            return this.x0 + 1234;
           },
-        }).createVO();
-        expect(vo.fooBar).to.be.a('function');
-
-        vo.x0 = 1000;
-        expect(vo.fooBar()).to.equal(3235);
+        },
       });
+
+      console.log('create', ctx);
+
+      vod = ctx.create('MyVertices');
     });
 
-    describe('Primitive', () => {
-      let ctx;
-      let primitive;
+    it('create an instance of VODescriptor', () => {
+      expect(vod).to.be.an.instanceOf(VODescriptor);
+      expect(vod.vertexCount).to.equal(3);
+      expect(vod.hasAttribute('position', 2)).to.equal(true);
+      expect(vod.hasAttribute('rotate', 1)).to.equal(true);
+    });
 
-      before(() => {
-        ctx = compile(`
+    it('VODescriptor should get "proto" from Context', () => {
+      const vo = vod.createVO();
+      expect(vo.fooBar).to.be.a('function');
 
-          Primitive TriQuads {
-            @type(TRIANGLES)
-            @generate
+      vo.x0 = 1000;
+      expect(vo.fooBar()).to.equal(2234);
+    });
 
-            stride 4
-            offset 0
+    it('VODescriptor should get "proto" from options (override Context)', () => {
+      const vo = ctx.create('MyVertices', {
+        fooBar() {
+          return this.x0 + 2235;
+        },
+      }).createVO();
+      expect(vo.fooBar).to.be.a('function');
 
-            indices [
-              0, 1, 2,
-              0, 2, 3,
-            ]
-          }
-
-        `);
-
-        console.log('Context:create(TriQuads)', ctx);
-
-        primitive = ctx.create('TriQuads', { capacity: 10 });
-      });
-
-      it('create a primitive from factory', () => {
-        expect(primitive).to.be.an.instanceOf(IndexedPrimitive);
-        expect(primitive.primitiveType).to.equal('TRIANGLES');
-        expect(primitive.elementIndexArray).to.be.an.instanceOf(ElementIndexArray);
-        expect(primitive.elementIndexArray.objectCount).to.equal(10);
-      });
+      vo.x0 = 1000;
+      expect(vo.fooBar()).to.equal(3235);
     });
   });
 });

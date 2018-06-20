@@ -11,7 +11,10 @@ import {
 
 import { compile } from '.';
 
-describe('Context::SpriteGroup', () => {
+describe('SpriteGroup', () => {
+  before(() => console.groupCollapsed('SpriteGroup'));
+  after(() => console.groupEnd());
+
   describe('create()', () => {
     let ctx;
 
@@ -45,10 +48,10 @@ describe('Context::SpriteGroup', () => {
         }
 
       `);
-      console.log('Context:create(SpriteGroup)', ctx);
+      console.log(ctx);
     });
 
-    it('create an instance of SpriteGroup', () => {
+    it('@vertexObject, maxAllocVOSize', () => {
       const sg = ctx.compile(`
 
         SpriteGroup MySpriteGroup {
@@ -84,7 +87,7 @@ describe('Context::SpriteGroup', () => {
       expect(sg.spriteHook.setSize).to.equal(fooBar);
     });
 
-    it('primitive', () => {
+    it('@primitive', () => {
       const sg = ctx.compile(`
 
         SpriteGroup MySpriteGroup {
@@ -101,7 +104,7 @@ describe('Context::SpriteGroup', () => {
       expect(sg.primitive).to.be.an.instanceOf(IndexedPrimitive);
     });
 
-    it('SpriteGroup->MyVertices->@prototype', () => {
+    it('SpriteGroup > @prototype', () => {
       const sg = ctx.compile(`
 
         SpriteGroup MySpriteGroup {
@@ -134,7 +137,7 @@ describe('Context::SpriteGroup', () => {
       expect(vo.fooBar()).to.equal(2024);
     });
 
-    it('SpriteGroup->MyVertices->@prototype as option', () => {
+    it('@prototype as option: MyVertices > @prototype', () => {
       const sg = ctx.compile(`
 
         SpriteGroup MySpriteGroup {

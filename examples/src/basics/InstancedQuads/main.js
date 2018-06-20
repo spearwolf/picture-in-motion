@@ -2,6 +2,8 @@
 /* eslint no-console: 0 */
 import '@babel/polyfill';
 
+import { compile } from '@picimo/toolkit'; // eslint-disable-line
+
 import {
   hexCol2rgba,
   IndexedPrimitive,
@@ -28,8 +30,41 @@ const vodBase = new VODescriptor({
   },
 });
 
+const ctx = compile(`
+
+  VertexObject voBase {
+    @vertexCount(4)
+
+    position: float32 {
+      x
+      y
+      z
+    }
+  }
+
+  VertexObject vo instantiates voBase {
+
+    translate {
+      tx
+      ty
+      tz
+    }
+
+    color {
+      r
+      g
+      b
+      a
+    }
+
+  }
+
+`);
+
+console.log('ctx=', ctx);
+
 const vod = new VODescriptor({
-  instanceOf: vodBase,
+  instanceOf: ctx.create('voBase'),
   attributes: {
     translate: ['tx', 'ty', 'tz'],
     color: ['r', 'g', 'b', 'a'],

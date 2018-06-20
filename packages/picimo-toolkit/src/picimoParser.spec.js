@@ -19,6 +19,9 @@ const itParse = (title, picimoDsl, options, expectedResult) => {
 };
 
 describe('parse()', () => {
+  before(() => console.groupCollapsed('parse()'));
+  after(() => console.groupEnd());
+
   itParse('substitute constants', `
     DX = 240
     DY = 666

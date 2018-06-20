@@ -37,7 +37,7 @@ const transform = (parsedTree) => {
   const aliases = {};
   const parseVoNewDefaults = parseVoDefaultValues(voNew);
   const out = {
-    // _parsedTree: parsedTree,
+    _parsedTree: parsedTree,
     voDescriptor: {
       vertexCount: firstPropertyCallArg(parsedTree.data, 'vertexCount'),
       attributes: compact(parsedTree.data.filter(({ type }) => type === DATA || type === DATA_BLOCK).map((statement) => {
