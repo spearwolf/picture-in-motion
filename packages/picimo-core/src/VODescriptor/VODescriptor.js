@@ -74,7 +74,7 @@ export default class VODescriptor {
     this.isInstanced = instanceOf != null;
 
     /** @type VODescriptor */
-    this.voBase = instanceOf;
+    this.base = instanceOf;
 
     createAttributes(this, attributes);
     createAliases(this, aliases);

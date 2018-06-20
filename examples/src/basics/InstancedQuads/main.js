@@ -11,7 +11,6 @@ import {
   ShaderSource,
   ShaderTool,
   SpriteGroup,
-  VODescriptor,
 } from '@picimo/core'; // eslint-disable-line
 
 import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
@@ -22,13 +21,6 @@ import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 // 1) create vertex object definition
 //
 // ---------------------------------------------------------------------------
-
-const vodBase = new VODescriptor({
-  vertexCount: 4,
-  attributes: {
-    position: ['x', 'y', 'z'],
-  },
-});
 
 const ctx = compile(`
 
@@ -61,15 +53,7 @@ const ctx = compile(`
 
 `);
 
-console.log('ctx=', ctx);
-
-const vod = new VODescriptor({
-  instanceOf: ctx.create('voBase'),
-  attributes: {
-    translate: ['tx', 'ty', 'tz'],
-    color: ['r', 'g', 'b', 'a'],
-  },
-});
+const vod = ctx.create('vo');
 
 
 // ---------------------------------------------------------------------------
@@ -138,12 +122,12 @@ const shaderProgram = new ShaderProgram(vs, fs);
 const sprites = new SpriteGroup(vod, {
   shaderProgram,
 
-  base: new SpriteGroup(vodBase, {
+  base: {
     primitive: IndexedPrimitive.createQuads,
     capacity: 1000,
     maxAllocVOSize: 100,
     usage: 'static',
-  }),
+  },
 
   capacity: 1000,
   maxAllocVOSize: 100,

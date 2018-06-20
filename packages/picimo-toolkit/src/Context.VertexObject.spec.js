@@ -206,6 +206,30 @@ describe('VertexObject', () => {
           rotate: uint16 @uniform
         }
 
+        VertexObject voBase {
+          @vertexCount(4)
+
+          position: float32 {
+            x
+            y
+            z
+          }
+        }
+
+        VertexObject vo instantiates voBase {
+          translate {
+            tx
+            ty
+            tz
+          }
+          color {
+            r
+            g
+            b
+            a
+          }
+        }
+
       `, {
 
         MyVerticesProto: {
@@ -220,14 +244,14 @@ describe('VertexObject', () => {
       vod = ctx.create('MyVertices');
     });
 
-    it('create an instance of VODescriptor', () => {
+    it('works', () => {
       expect(vod).to.be.an.instanceOf(VODescriptor);
       expect(vod.vertexCount).to.equal(3);
       expect(vod.hasAttribute('position', 2)).to.equal(true);
       expect(vod.hasAttribute('rotate', 1)).to.equal(true);
     });
 
-    it('VODescriptor should get "proto" from Context', () => {
+    it('prototype from Context', () => {
       const vo = vod.createVO();
       expect(vo.fooBar).to.be.a('function');
 
@@ -235,7 +259,7 @@ describe('VertexObject', () => {
       expect(vo.fooBar()).to.equal(2234);
     });
 
-    it('VODescriptor should get "proto" from options (override Context)', () => {
+    it('prototype from options (override Context)', () => {
       const vo = ctx.create('MyVertices', {
         fooBar() {
           return this.x0 + 2235;
@@ -245,6 +269,15 @@ describe('VertexObject', () => {
 
       vo.x0 = 1000;
       expect(vo.fooBar()).to.equal(3235);
+    });
+
+    it('vo instantiates voBase', () => {
+      const vo = ctx.create('vo');
+      expect(vo, 'vo').to.be.an.instanceOf(VODescriptor);
+      expect(vo.isInstanced, 'vo.isInstanced').to.be.true; // eslint-disable-line
+      expect(vo.base, 'vo.base').to.be.an.instanceOf(VODescriptor);
+      expect(vo.vertexCount, 'vo.vertexCount').to.equal(1);
+      expect(vo.base.vertexCount, 'vo.base.vertexCount').to.equal(4);
     });
   });
 });

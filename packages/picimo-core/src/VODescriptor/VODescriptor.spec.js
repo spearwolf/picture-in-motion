@@ -588,7 +588,7 @@ describe('VODescriptor with an instance base', () => {
     assert.equal(vodInstanced.isInstanced, true);
   });
 
-  it('voBase should be set', () => {
-    assert.equal(vodInstanced.voBase, vodBase);
+  it('base should be set', () => {
+    assert.equal(vodInstanced.base, vodBase);
   });
 });

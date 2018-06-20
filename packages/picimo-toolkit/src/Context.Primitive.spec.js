@@ -41,7 +41,7 @@ describe('Primitive', () => {
       primitive = ctx.create('TriQuads', { capacity: 10 });
     });
 
-    it('create a primitive from factory', () => {
+    it('@generate', () => {
       expect(primitive).to.be.an.instanceOf(IndexedPrimitive);
       expect(primitive.primitiveType).to.equal('TRIANGLES');
       expect(primitive.elementIndexArray).to.be.an.instanceOf(ElementIndexArray);

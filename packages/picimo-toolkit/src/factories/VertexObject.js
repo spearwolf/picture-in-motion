@@ -22,10 +22,12 @@ const DEFAULT_ATTR_TYPE = 'float32';
 
 /** @private */
 const create = ({ declaration, ctx, options }) => {
+  const instanceOf = declaration.verb === 'instantiates' ? ctx.create(declaration.subject) : undefined;
   const { voDescriptor } = declaration;
   const proto = options || voDescriptor.proto;
   return new VODescriptor({
     ...voDescriptor,
+    instanceOf,
     proto: typeof proto === 'string' ? ctx.readOption(proto) : proto,
   });
 };
@@ -37,7 +39,7 @@ const transform = (parsedTree) => {
   const aliases = {};
   const parseVoNewDefaults = parseVoDefaultValues(voNew);
   const out = {
-    _parsedTree: parsedTree,
+    // _parsedTree: parsedTree,
     voDescriptor: {
       vertexCount: firstPropertyCallArg(parsedTree.data, 'vertexCount'),
       attributes: compact(parsedTree.data.filter(({ type }) => type === DATA || type === DATA_BLOCK).map((statement) => {
