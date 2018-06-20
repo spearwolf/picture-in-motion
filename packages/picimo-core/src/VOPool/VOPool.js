@@ -1,6 +1,7 @@
 /* eslint no-param-reassign: 0 */
+import { readOption } from '@picimo/utils'; // eslint-disable-line
+
 import generateUuid from '../generateUuid';
-import readOption from '../readOption';
 
 import createVOs from './createVOs';
 

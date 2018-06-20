@@ -25,6 +25,7 @@ module.exports = {
       '@picimo/ecs': path.resolve(__dirname, '../packages/picimo-ecs'),
       '@picimo/renderer': path.resolve(__dirname, '../packages/picimo-renderer'),
       '@picimo/toolkit': path.resolve(__dirname, '../packages/picimo-toolkit'),
+      '@picimo/utils': path.resolve(__dirname, '../packages/picimo-utils'),
     },
   },
   module: {

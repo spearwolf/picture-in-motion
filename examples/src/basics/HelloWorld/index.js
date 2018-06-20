@@ -6,11 +6,14 @@ import { compile } from '@picimo/toolkit'; // eslint-disable-line
 import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
 
 import {
-  hexCol2rgba,
   ShaderSource,
   ShaderTool,
-  toFloatColors,
 } from '@picimo/core'; // eslint-disable-line
+
+import {
+  hexCol2rgba,
+  toFloatColors,
+} from '@picimo/utils'; // eslint-disable-line
 
 
 // ---------------------------------------------------------------------------

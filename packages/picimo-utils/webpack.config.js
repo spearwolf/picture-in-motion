@@ -8,13 +8,7 @@ module.exports = {
     watchContentBase: true,
     compress: true,
     host: '0.0.0.0',
-    port: 8082,
-  },
-  resolve: {
-    alias: {
-      '@picimo/core': path.resolve(__dirname, '../picimo-core'),
-      '@picimo/utils': path.resolve(__dirname, '../picimo-utils'),
-    },
+    port: 8085,
   },
   module: {
     rules: [

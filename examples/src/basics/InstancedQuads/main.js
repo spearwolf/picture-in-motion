@@ -5,15 +5,18 @@ import '@babel/polyfill';
 import { compile } from '@picimo/toolkit'; // eslint-disable-line
 
 import {
-  hexCol2rgba,
-  makeCircleCoords,
-  sample,
   IndexedPrimitive,
   ShaderProgram,
   ShaderSource,
   ShaderTool,
   SpriteGroup,
 } from '@picimo/core'; // eslint-disable-line
+
+import {
+  hexCol2rgba,
+  makeCircleCoords,
+  sample,
+} from '@picimo/utils'; // eslint-disable-line
 
 import { WebGlRenderer, BlendMode } from '@picimo/renderer'; // eslint-disable-line
 

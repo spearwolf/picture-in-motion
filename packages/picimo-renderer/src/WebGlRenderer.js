@@ -5,8 +5,9 @@ import {
   ShaderUniformGroup,
   StackedContext,
   TexturedSpriteGroup,
-  readOption,
 } from '@picimo/core'; // eslint-disable-line
+
+import { readOption } from '@picimo/utils'; // eslint-disable-line
 
 import { createWebGlContext } from './WebGlContext';
 import WebGlResourceLibrary from './WebGlResourceLibrary';

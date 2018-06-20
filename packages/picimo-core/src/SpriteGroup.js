@@ -1,7 +1,8 @@
+import { pick } from '@picimo/utils'; // eslint-disable-line
+
 import ShaderProgram from './ShaderProgram';
 import ShaderVariableBufferGroup from './ShaderVariableBufferGroup';
 import VOPool from './VOPool';
-import pick from './pick';
 
 /** @private */
 const pickVOPoolOpts = pick([

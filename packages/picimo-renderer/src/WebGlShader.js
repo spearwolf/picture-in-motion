@@ -38,4 +38,3 @@ export default class WebGlShader {
     compileShader(this);
   }
 }
-

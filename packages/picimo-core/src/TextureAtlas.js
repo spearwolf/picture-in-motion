@@ -1,9 +1,12 @@
 /* eslint-env browser */
+import {
+  readOption,
+  sample,
+} from '@picimo/utils'; // eslint-disable-line
+
 import Texture from './Texture';
 import TextureAtlasJsonDef from './TextureAtlasJsonDef';
 import PowerOf2Image from './PowerOf2Image';
-import sample from './sample';
-import readOption from './readOption';
 
 /**
   * @example

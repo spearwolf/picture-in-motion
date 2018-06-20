@@ -10,6 +10,11 @@ module.exports = {
     host: '0.0.0.0',
     port: 8081,
   },
+  resolve: {
+    alias: {
+      '@picimo/utils': path.resolve(__dirname, '../picimo-utils'),
+    },
+  },
   module: {
     rules: [
       {

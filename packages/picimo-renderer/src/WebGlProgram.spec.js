@@ -4,7 +4,8 @@
 import { assert } from 'chai';
 
 import {
-  ShaderProgram, ShaderSource,
+  ShaderProgram,
+  ShaderSource,
   ShaderTool,
 } from '@picimo/core'; // eslint-disable-line
 

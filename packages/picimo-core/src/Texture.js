@@ -1,9 +1,10 @@
 /* eslint-env browser */
 /* eslint no-underscore-dangle: 0 */
 /* eslint no-nested-ternary: 0 */
+import { readOption } from '@picimo/utils'; // eslint-disable-line
+
 import DataRef from './DataRef';
 import PowerOf2Image from './PowerOf2Image';
-import readOption from './readOption';
 
 /**
  * Represents texture coordinates and holds a reference to an `<img>` or `<canvas>` element.

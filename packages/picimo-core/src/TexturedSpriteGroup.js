@@ -1,7 +1,8 @@
+import { readOption } from '@picimo/utils'; // eslint-disable-line
+
 import ShaderTextureGroup from './ShaderTextureGroup';
 import SpriteGroup from './SpriteGroup';
 import TextureLibrary from './TextureLibrary';
-import readOption from './readOption';
 
 export default class TexturedSpriteGroup extends SpriteGroup {
   constructor(descriptor, options = {}) {

@@ -13,8 +13,9 @@ module.exports = {
   resolve: {
     alias: {
       '@picimo/core': path.resolve(__dirname, '../picimo-core'),
-      '@picimo/renderer': path.resolve(__dirname, '../picimo-renderer'),
       '@picimo/ecs': path.resolve(__dirname, '../picimo-ecs'),
+      '@picimo/renderer': path.resolve(__dirname, '../picimo-renderer'),
+      '@picimo/utils': path.resolve(__dirname, '../picimo-utils'),
     },
   },
   module: {

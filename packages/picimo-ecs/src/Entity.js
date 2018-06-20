@@ -1,5 +1,6 @@
 import { generateUuid } from '@picimo/core'; // eslint-disable-line
 import eventize from '@spearwolf/eventize';
+
 import getComponentName from './getComponentName';
 
 const hasComponent = entity => name => entity.components.has(getComponentName(name));

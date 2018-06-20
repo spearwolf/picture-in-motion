@@ -1,4 +1,4 @@
-import { readOption } from '@picimo/core'; // eslint-disable-line
+import { readOption } from '@picimo/utils'; // eslint-disable-line
 
 const CHILDREN = 'children';
 

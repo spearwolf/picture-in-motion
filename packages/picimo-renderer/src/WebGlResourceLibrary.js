@@ -1,5 +1,6 @@
 import { getLogger } from 'loglevel';
-import { readOption, DataRef } from '@picimo/core';  // eslint-disable-line
+import { DataRef } from '@picimo/core';  // eslint-disable-line
+import { readOption } from '@picimo/utils';  // eslint-disable-line
 
 import WebGlBuffer from './WebGlBuffer';
 import WebGlShader from './WebGlShader';

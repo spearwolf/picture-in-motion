@@ -13,6 +13,7 @@ module.exports = {
   resolve: {
     alias: {
       '@picimo/core': path.resolve(__dirname, '../picimo-core'),
+      '@picimo/utils': path.resolve(__dirname, '../picimo-utils'),
     },
   },
   module: {
