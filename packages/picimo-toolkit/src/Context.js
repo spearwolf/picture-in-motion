@@ -1,7 +1,6 @@
 import has from 'lodash/has';
-import get from 'lodash/get';
 import set from 'lodash/set';
-import { pick } from '@picimo/utils'; // eslint-disable-line
+import { get, pick } from '@picimo/utils'; // eslint-disable-line
 import { getLogger } from 'loglevel';
 
 import { parse } from './picimoParser';

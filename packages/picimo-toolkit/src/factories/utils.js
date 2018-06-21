@@ -1,5 +1,5 @@
 /* eslint no-param-reassign: 0 */
-import get from 'lodash/get';
+import { get } from '@picimo/utils'; // eslint-disable-line
 
 import { PROPERTY_CALL } from '../constants';
 
