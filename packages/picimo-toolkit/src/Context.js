@@ -61,6 +61,12 @@ const createInstanceFromDeclaration = (ctx, name, options) => {
   return null;
 };
 
+/** @private */
+const pickDeclaration = pick([
+  'declarationType',
+  'verb',
+  'subject',
+]);
 
 class Context {
   constructor(config) {
@@ -90,11 +96,6 @@ class Context {
       this.configure(config);
     }
     const parsedTree = parse(source, { ctx: this });
-    const pickDeclaration = pick([
-      'declarationType',
-      'verb',
-      'subject',
-    ]);
     parsedTree.forEach((item) => {
       if (item.type === DECLARATION) {
         set(this.declaration, item.name, Object.assign(transformDeclaration(item), pickDeclaration(item)));
