@@ -8,16 +8,9 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "clean": "shx rm -fr node_modules packages/*/node_modules examples/node_modules packages/*/yarn-error.log examples/yarn-error.log",
-    "install:picimo:core": "cd packages/picimo-core && yarn install",
-    "install:picimo:renderer": "cd packages/picimo-renderer && yarn install",
-    "install:picimo:ecs": "cd packages/picimo-ecs && yarn install",
-    "install:picimo:toolkit": "cd packages/picimo-toolkit && yarn install",
-    "install:examples": "cd examples && yarn install",
-    "install:all": "run-p install:picimo:* install:examples"
+    "clean": "shx rm -fr node_modules packages/*/node_modules examples/node_modules packages/*/yarn-error.log examples/yarn-error.log"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.3",
-    "shx": "^0.2.2"
+    "shx": "^0.3.0"
   }
 }
