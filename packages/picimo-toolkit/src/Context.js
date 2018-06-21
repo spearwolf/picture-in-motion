@@ -1,7 +1,7 @@
 import has from 'lodash/has';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import pick from 'lodash/pick';
+import { pick } from '@picimo/utils'; // eslint-disable-line
 import { getLogger } from 'loglevel';
 
 import { parse } from './picimoParser';
@@ -90,13 +90,14 @@ class Context {
       this.configure(config);
     }
     const parsedTree = parse(source, { ctx: this });
+    const pickDeclaration = pick([
+      'declarationType',
+      'verb',
+      'subject',
+    ]);
     parsedTree.forEach((item) => {
       if (item.type === DECLARATION) {
-        set(this.declaration, item.name, Object.assign(transformDeclaration(item), pick(item, [
-          'declarationType',
-          'verb',
-          'subject',
-        ])));
+        set(this.declaration, item.name, Object.assign(transformDeclaration(item), pickDeclaration(item)));
       }
     });
     return this;
