@@ -158,9 +158,7 @@ class AppShell extends React.Component {
   }
 
   runDemo(selectedDemo, demoUrl, demoSourceUrl) {
-    this.setState({
-      isSideNavCollapsed: true,
-    });
+    this.toggleSideNav(true);
 
     const switchDemo = () => this.setState({
       selectedDemo,
@@ -208,7 +206,7 @@ class AppShell extends React.Component {
               </Fragment>
             ))}
           </SideNavContent>
-          <StyledHamburger active={!this.state.isSideNavCollapsed} onClick={this.toggleSideNav()} />
+          <StyledHamburger active={!this.state.isSideNavCollapsed} onClick={() => this.toggleSideNav()} />
         </SideNav>
         <DemoView>
           {this.state.demoUrl && (
