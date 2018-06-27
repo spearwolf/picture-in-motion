@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
@@ -160,13 +161,18 @@ class AppShell extends React.Component {
     this.setState({
       isSideNavCollapsed: true,
     });
-    setTimeout(() => {
-      this.setState({
-        selectedDemo,
-        demoUrl,
-        demoSourceUrl,
-      });
-    }, 200);
+
+    const switchDemo = () => this.setState({
+      selectedDemo,
+      demoUrl,
+      demoSourceUrl,
+    });
+
+    if (window.innerWidth < BREAKPOINT_SHOW_HAMBURGER) {
+      setTimeout(switchDemo, 200);
+    } else {
+      switchDemo();
+    }
   }
 
   toggleSideNav(collapse) {
