@@ -177,9 +177,10 @@ class AppShell extends React.Component {
 
   toggleSideNav(collapse) {
     if (typeof collapse === 'boolean') {
-      return () => this.setState({ isSideNavCollapsed: collapse });
+      this.setState({ isSideNavCollapsed: collapse });
+    } else {
+      this.setState(currentState => ({ isSideNavCollapsed: !currentState.isSideNavCollapsed }));
     }
-    return () => this.setState(currentState => ({ isSideNavCollapsed: !currentState.isSideNavCollapsed }));
   }
 
   render() {
