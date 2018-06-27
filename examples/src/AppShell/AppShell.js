@@ -1,10 +1,18 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
+import Hamburger from './Hamburger';
+
 import DEMOS from './demos';
 
 const FONT_FAMILY_HEADLINE = 'Open Sans';
 const FONT_FAMILY_TEXT = 'Cantarell';
+
+const SIDENAV_SIZE = 300;
+const HAMBURER_SIZE = 50;
+
+const BREAKPOINT_SHOW_HAMBURGER = 1000;
+
 
 const MainLayout = styled.div`
   display: flex;
@@ -17,6 +25,7 @@ const Header = styled.div`
   display: flex;
   align-items: flex-end;
   margin: 10px 20px 0 12px;
+  min-height: 56px;
 `;
 
 const Logo = styled.img`
@@ -36,7 +45,23 @@ const Title = styled.div`
 `;
 
 const SideNav = styled.div`
-  flex: 0 0 300px;
+  @media (max-width: ${BREAKPOINT_SHOW_HAMBURGER - 1}px) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: ${SIDENAV_SIZE}px;
+    height: 100vh;
+    z-index: 100;
+
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    transition-property: transform;
+    transform: ${props => `translateX(${props.collapsed ? '-100%' : '0'})`}
+  }
+  @media (min-width: ${BREAKPOINT_SHOW_HAMBURGER}px) {
+    flex: 0 0 ${SIDENAV_SIZE}px;
+  }
+
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -106,6 +131,20 @@ const DemoIFrame = styled.iframe`
   border: 0;
 `;
 
+const StyledHamburger = styled(Hamburger)`
+  position: absolute;
+  top: 0;
+  left: ${SIDENAV_SIZE}px;
+  transform: ${props => (props.active ? 'translateX(-70px)' : 'translateX(0)')};
+  width: ${HAMBURER_SIZE}px;
+  height: ${HAMBURER_SIZE}px;
+  z-index: 200;
+
+  @media (min-width: ${BREAKPOINT_SHOW_HAMBURGER}px) {
+    visibility: hidden;
+  }
+`;
+
 class AppShell extends React.Component {
   constructor(props) {
     super(props);
@@ -113,43 +152,66 @@ class AppShell extends React.Component {
       selectedDemo: null,
       demoUrl: null,
       demoSourceUrl: null,
+      isSideNavCollapsed: true,
     };
   }
 
   runDemo(selectedDemo, demoUrl, demoSourceUrl) {
-    this.setState({ selectedDemo, demoUrl, demoSourceUrl });
+    this.setState({
+      isSideNavCollapsed: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        selectedDemo,
+        demoUrl,
+        demoSourceUrl,
+      });
+    }, 200);
+  }
+
+  toggleSideNav(collapse) {
+    if (typeof collapse === 'boolean') {
+      return () => this.setState({ isSideNavCollapsed: collapse });
+    }
+    return () => this.setState(currentState => ({ isSideNavCollapsed: !currentState.isSideNavCollapsed }));
   }
 
   render() {
     return (
       <MainLayout>
-        <SideNav>
+        <SideNav collapsed={this.state.isSideNavCollapsed}>
           <Header>
             <Logo src="/images/picimo-logo-original.png" alt="picimo" />
             <Title>/ examples</Title>
           </Header>
           <SideNavContent>
-            { DEMOS.map(({ section, demos }) => (
+            {DEMOS.map(({ section, demos }) => (
               <Fragment key={section}>
-                <Headline>{ section }</Headline>
-                { demos.map(({ title, url, sourceUrl }) => (
+                <Headline>{section}</Headline>
+                {demos.map(({ title, url, sourceUrl }) => (
                   <DemoLink
                     key={title}
                     url={url}
                     active={this.state.selectedDemo === title}
                     onClick={() => this.runDemo(title, url, sourceUrl)}
                   >
-                    { title }
+                    {title}
                   </DemoLink>
                 ))}
               </Fragment>
             ))}
           </SideNavContent>
+          <StyledHamburger active={!this.state.isSideNavCollapsed} onClick={this.toggleSideNav()} />
         </SideNav>
         <DemoView>
-          { this.state.demoUrl && (
+          {this.state.demoUrl && (
             <Fragment>
-              <DemoIFrame title={this.state.selectedDemo} src={this.state.demoUrl} scrolling="no" frameborder="0" />
+              <DemoIFrame
+                title={this.state.selectedDemo}
+                src={this.state.demoUrl}
+                scrolling="no"
+                frameborder="0"
+              />
               <GitHubLink href={this.state.demoSourceUrl} target="_blank" />
             </Fragment>
           )}
