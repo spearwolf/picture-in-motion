@@ -69,6 +69,26 @@ const SideNav = styled.div`
   background-color: #f8f8f8;
 `;
 
+const SideNavShadow = styled.div`
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+  transition-property: width;
+
+  @media (max-width: ${BREAKPOINT_SHOW_HAMBURGER - 1}px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: ${props => `${props.show ? '100vw' : 0}`};
+    height: 100vh;
+    z-index: 50;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  @media (min-width: ${BREAKPOINT_SHOW_HAMBURGER}px) {
+    display: none;
+  }
+`;
+
 const SideNavContent = styled.div`
   flex-grow: 1;
   padding: 0 20px;
@@ -105,6 +125,7 @@ const GitHubLink = styled.a`
   padding: 0;
   margin: 0;
   cursor: pointer;
+  z-index: 75;
 `;
 
 const DemoLink = styled.a`
@@ -184,6 +205,7 @@ class AppShell extends React.Component {
   render() {
     return (
       <MainLayout>
+        <SideNavShadow show={!this.state.isSideNavCollapsed} onClick={() => this.toggleSideNav(true)} />
         <SideNav collapsed={this.state.isSideNavCollapsed}>
           <Header>
             <Logo src="/images/picimo-logo-original.png" alt="picimo" />
