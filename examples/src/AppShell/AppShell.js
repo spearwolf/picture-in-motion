@@ -1,171 +1,23 @@
 /* eslint-env browser */
 import React, { Fragment } from 'react';
-import styled from 'styled-components';
 
-import Hamburger from './Hamburger';
+import DemoIFrame from './DemoIFrame';
+import DemoLink from './DemoLink';
+import DemoView from './DemoView';
+import GitHubLink from './GitHubLink';
+import Header from './Header';
+import Headline from './Headline';
+import Logo from './Logo';
+import MainLayout from './MainLayout';
+import SideNav from './SideNav';
+import SideNavContent from './SideNavContent';
+import SideNavHamburger from './SideNavHamburger';
+import SideNavShadow from './SideNavShadow';
+import Title from './Title';
 
 import DEMOS from './demos';
 
-const FONT_FAMILY_HEADLINE = 'Open Sans';
-const FONT_FAMILY_TEXT = 'Cantarell';
-
-const SIDENAV_SIZE = 300;
-const HAMBURER_SIZE = 50;
-
-const BREAKPOINT_SHOW_HAMBURGER = 1000;
-
-
-const MainLayout = styled.div`
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-  height: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: flex-end;
-  margin: 10px 20px 0 12px;
-  min-height: 56px;
-`;
-
-const Logo = styled.img`
-  display: inline-block;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  height: 60px;
-`;
-
-const Title = styled.div`
-  display: inline-block;
-  font-family: '${FONT_FAMILY_HEADLINE}', Georgia, sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 1;
-`;
-
-const SideNav = styled.div`
-  @media (max-width: ${BREAKPOINT_SHOW_HAMBURGER - 1}px) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: ${SIDENAV_SIZE}px;
-    height: 100vh;
-    z-index: 100;
-
-    transition-duration: 0.2s;
-    transition-timing-function: ease;
-    transition-property: transform;
-    transform: ${props => `translateX(${props.collapsed ? '-100%' : '0'})`}
-  }
-  @media (min-width: ${BREAKPOINT_SHOW_HAMBURGER}px) {
-    flex: 0 0 ${SIDENAV_SIZE}px;
-  }
-
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  background-color: #f8f8f8;
-`;
-
-const SideNavShadow = styled.div`
-  transition-duration: 0.15s;
-  transition-timing-function: ease;
-  transition-property: width;
-
-  @media (max-width: ${BREAKPOINT_SHOW_HAMBURGER - 1}px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: ${props => `${props.show ? '100vw' : 0}`};
-    height: 100vh;
-    z-index: 50;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-
-  @media (min-width: ${BREAKPOINT_SHOW_HAMBURGER}px) {
-    display: none;
-  }
-`;
-
-const SideNavContent = styled.div`
-  flex-grow: 1;
-  padding: 0 20px;
-  overflow: hidden;
-  overflow-y: auto;
-  position: relative;
-`;
-
-const DemoView = styled.div`
-  background-color: #e0eaf0;
-  flex-grow: 1;
-  position: relative;
-`;
-
-const Headline = styled.h2`
-  font-family: '${FONT_FAMILY_HEADLINE}', Georgia, sans-serif;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 1;
-  margin-top: 1.5em;
-  margin-bottom: 0.75em;
-`;
-
-const GitHubLink = styled.a`
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100px;
-  height: 100px;
-  background-image: url(/images/github-361-dark.png);
-  background-repeat: no-repeat;
-  background-position: top right;
-  background-size: contain;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  z-index: 75;
-`;
-
-const DemoLink = styled.a`
-  display: block;
-  font-family: '${FONT_FAMILY_TEXT}', Courier, monospace;
-  font-weight: 400;
-  font-size: 14px;
-  text-decoration: none;
-  color: ${props => (props.active ? '#FF3060' : '#28C')};
-  background-color: ${props => (props.active ? '#ffe8e7' : 'transparent')};
-  padding: 5px 14px 3px 35px;
-  border-radius: 16px;
-  margin-left: -33px;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const DemoIFrame = styled.iframe`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border: 0;
-`;
-
-const StyledHamburger = styled(Hamburger)`
-  position: absolute;
-  top: 0;
-  left: ${SIDENAV_SIZE}px;
-  transform: ${props => (props.active ? 'translateX(-70px)' : 'translateX(0)')};
-  width: ${HAMBURER_SIZE}px;
-  height: ${HAMBURER_SIZE}px;
-  z-index: 200;
-
-  @media (min-width: ${BREAKPOINT_SHOW_HAMBURGER}px) {
-    visibility: hidden;
-  }
-`;
+import { BREAKPOINT_SHOW_HAMBURGER } from './constants';
 
 class AppShell extends React.Component {
   constructor(props) {
@@ -228,7 +80,7 @@ class AppShell extends React.Component {
               </Fragment>
             ))}
           </SideNavContent>
-          <StyledHamburger active={!this.state.isSideNavCollapsed} onClick={() => this.toggleSideNav()} />
+          <SideNavHamburger active={!this.state.isSideNavCollapsed} onClick={() => this.toggleSideNav()} />
         </SideNav>
         <DemoView>
           {this.state.demoUrl && (
