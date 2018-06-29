@@ -195,10 +195,7 @@ function animate() {
   renderer.resize();
   renderer.initFrame();
 
-  renderer.universalContext.push('blend', BlendMode.make('additive'));
-
-  // render the instanced sprite group
-  //
+  renderer.pushBlendMode('additive');
   renderer.drawSpriteGroup(sprites);
 
   window.requestAnimationFrame(animate);

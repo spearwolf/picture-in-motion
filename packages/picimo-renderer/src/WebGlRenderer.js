@@ -13,6 +13,8 @@ import { createWebGlContext } from './WebGlContext';
 import WebGlResourceLibrary from './WebGlResourceLibrary';
 import BlendMode from './BlendMode';
 
+const CTX_BLEND_MODE = 'blend';
+
 /** @private */
 const createCanvas = (domElement) => {
   if (domElement.tagName === 'CANVAS') {
@@ -34,7 +36,7 @@ const autotouchResource = (ref, autotouchedResources) => {
 
 /** @private */
 const applyBlendMode = (renderer) => {
-  const blendMode = renderer.universalContext.get('blend');
+  const blendMode = renderer.universalContext.get(CTX_BLEND_MODE);
   if (blendMode) {
     renderer.glx.blend(blendMode);
   }
@@ -125,6 +127,15 @@ export default class WebGlRenderer {
    */
   get pixelRatio() {
     return this._pixelRatio || window.devicePixelRatio || 1;
+  }
+
+  pushBlendMode(blend) {
+    const blendMode = blend instanceof BlendMode ? blend : BlendMode.make(blend);
+    return this.universalContext.push(CTX_BLEND_MODE, blendMode);
+  }
+
+  popBlendMode(idx) {
+    return this.universalContext.pop(CTX_BLEND_MODE, idx);
   }
 
   /**
@@ -228,7 +239,7 @@ export default class WebGlRenderer {
 
     // 3) initialize universal context
     this.universalContext.clear();
-    this.universalContext.push('blend', BlendMode.make('orderDependent'));
+    this.pushBlendMode('orderDependent');
 
     // 4) initialize shader variable context
     this.shaderContext.clear();
