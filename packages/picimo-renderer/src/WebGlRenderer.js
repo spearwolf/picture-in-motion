@@ -27,9 +27,9 @@ const createCanvas = (domElement) => {
 };
 
 /** @private */
-const autotouchResource = (ref, autotouchedResources) => {
-  if (!autotouchedResources.has(ref.id)) {
-    autotouchedResources.add(ref.id);
+const autotouchResource = (ref, touchedWithinFrame) => {
+  if (!touchedWithinFrame.has(ref.id)) {
+    touchedWithinFrame.add(ref.id);
     ref.touch();
   }
 };
@@ -50,7 +50,7 @@ export default class WebGlRenderer {
    * @param {HTMLElement} domElement - The `<canvas>` or the *container* element.
    * @param {Object} [options]
    * @param {number} [options.pixelRatio] - Set `pixelRatio` to a fixed value instead of reading from `window.devicePixelRatio` (default)
-   * @param {number} [options.disableWebGL2] - Set to `true` if you want to force a WebGL1 context instead of an WebGL2 (default if possible)
+   * @param {number} [options.disableWebGL2] - Set to `true` if you want to force a WebGL1 context instead of an WebGL2 (default if available)
    */
   constructor(domElement, options) {
     /**
@@ -108,10 +108,10 @@ export default class WebGlRenderer {
     this._pixelRatio = readOption(options, 'pixelRatio');
 
     /**
-     * Will be cleared on each frame. Holds `id`'s of all autotouch'd resources (within the current frame).
+     * Will be cleared on each frame. Holds `id`'s of all *autotouch* resources (within the current frame).
      * @private
      */
-    this._autotouchedResources = new Set();
+    this._touchedWithinFrame = new Set();
 
     this.shaderGlobals = new ShaderUniformGroup({
       time: 0,
@@ -129,11 +129,20 @@ export default class WebGlRenderer {
     return this._pixelRatio || window.devicePixelRatio || 1;
   }
 
+  /**
+   * Set blend mode.
+   * @param {string|BlendMode} blend mode
+   * @returns {number} index of the blend mode within the blend context stack
+   */
   pushBlendMode(blend) {
     const blendMode = blend instanceof BlendMode ? blend : BlendMode.make(blend);
     return this.universalContext.push(CTX_BLEND_MODE, blendMode);
   }
 
+  /**
+   * Unset the blend mode and restore the previous blend mode.
+   * @param {number} [idx] - Index of the blend mode within *blend context stack*. If not specified the last blend mode will be popped out of the stack.
+   */
   popBlendMode(idx) {
     return this.universalContext.pop(CTX_BLEND_MODE, idx);
   }
@@ -235,7 +244,7 @@ export default class WebGlRenderer {
     this.shaderGlobals.time = this.now;
 
     // -) reset internal frame context
-    this._autotouchedResources.clear();
+    this._touchedWithinFrame.clear();
 
     // 3) initialize universal context
     this.universalContext.clear();
@@ -250,12 +259,12 @@ export default class WebGlRenderer {
   }
 
   /**
-   * @param {VOArray|ElementIndexArray} - The buffer resource
+   * @param {VOArray|ElementIndexArray} buffer resource
    * @return {WebGlBuffer}
    */
   syncBuffer({ ref }) {
     if (ref.hasHint('autotouch', true)) {
-      autotouchResource(ref, this._autotouchedResources);
+      autotouchResource(ref, this._touchedWithinFrame);
     }
 
     const bufferRef = this.resources.loadBuffer(ref);
@@ -349,8 +358,8 @@ export default class WebGlRenderer {
 
   /**
    * @param {IndexedPrimitive} indexedPrimitive
-   * @param {number} [primCount]
-   * @param {number} [primOffset=0]
+   * @param {number} primCount
+   * @param {number} primOffset
    */
   drawPrimitive({ primitiveType, elementIndexArray }, primCount, primOffset) {
     const { itemCount } = elementIndexArray;
@@ -359,8 +368,9 @@ export default class WebGlRenderer {
 
   /**
    * @param {IndexedPrimitive} indexedPrimitive
-   * @param {number} [primCount]
-   * @param {number} [primOffset=0]
+   * @param {number} primCount
+   * @param {number} primOffset
+   * @param {number} instanceCount
    */
   drawPrimitiveIndexed({ primitiveType, elementIndexArray }, primCount, primOffset, instanceCount) {
     const { itemCount } = elementIndexArray;
