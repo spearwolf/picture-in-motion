@@ -111,16 +111,35 @@ export default class SpriteGroup {
   }
 
   /**
+   * Create a sprite.
    * @param {number} [width]
    * @param {number} [height=width]
+   * @returns {Object} sprite
    */
   createSprite(width, height) {
-    const sprite = this.voPool.alloc(1);
+    const sprite = this.voPool.alloc();
     const { setSize } = this.spriteHook;
-    if (setSize && width !== undefined) {
+    if (setSize && (width !== undefined || height !== undefined)) {
       setSize(sprite, width, height !== undefined ? height : width, this.descriptor);
     }
     return sprite;
+  }
+
+  /**
+   * Create multiple sprites at once.
+   * @param {number} count - number of sprites to create
+   * @param {number} [width]
+   * @param {number} [height=width]
+   * @returns {Array<Object>} sprites
+   */
+  createSprites(count, width, height) {
+    const sprites = this.voPool.multiAlloc(count);
+    const { setSize } = this.spriteHook;
+    if (setSize && (width !== undefined || height !== undefined)) {
+      const h = height !== undefined ? height : width;
+      sprites.forEach(sprite => setSize(sprite, width, h, this.descriptor));
+    }
+    return sprites;
   }
 
   /**
