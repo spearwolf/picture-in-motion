@@ -1,11 +1,13 @@
 
 /**
  * Pre-allocate a bunch of vertex objects.
+ * @returns {number} number of allocated vertex objects
  * @private
  */
 export default (voPool, maxAllocSize = 0) => {
   const max = voPool.capacity - voPool.usedCount - voPool.allocatedCount;
-  const len = voPool.allocatedCount + (maxAllocSize > 0 && maxAllocSize < max ? maxAllocSize : max);
+  const count = (maxAllocSize > 0 && maxAllocSize < max ? maxAllocSize : max);
+  const len = voPool.allocatedCount + count;
 
   for (let i = voPool.allocatedCount; i < len; i++) {
     const voArray = voPool.voArray.subarray(i);
@@ -15,4 +17,6 @@ export default (voPool, maxAllocSize = 0) => {
 
     voPool.availableVOs.push(vertexObject);
   }
+
+  return count;
 };

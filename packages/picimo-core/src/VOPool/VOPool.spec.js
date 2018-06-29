@@ -157,7 +157,7 @@ describe('VOPool', () => {
     let vOs;
 
     it('allocate 15x', () => {
-      vOs = pool.alloc(15);
+      vOs = pool.multiAlloc(15);
       assert.equal(vOs.length, 15);
     });
 
@@ -169,5 +169,23 @@ describe('VOPool', () => {
       pool.free(vOs.slice(0, 13));
       assert.equal(pool.usedCount, 2);
     });
+  });
+
+  describe('new VOPool() : multiAlloc > maxAllocVOSize', () => {
+    const pool = new VOPool(descriptor, { capacity: 200, maxAllocVOSize: 10 });
+
+    it('availableCount:before', () => assert.equal(pool.availableCount, 200));
+    it('allocatedCount:before', () => assert.equal(pool.allocatedCount, 10));
+
+    let vOs;
+
+    it('allocate 25x', () => {
+      vOs = pool.multiAlloc(25);
+      assert.equal(vOs.length, 25);
+    });
+
+    it('allocatedCount:after', () => assert.equal(pool.allocatedCount, 25));
+    it('availableCoun:after', () => assert.equal(pool.availableCount, 175));
+    it('usedCount:after', () => assert.equal(pool.usedCount, 25));
   });
 });

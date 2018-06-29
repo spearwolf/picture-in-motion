@@ -1,5 +1,5 @@
 /* eslint no-param-reassign: 0 */
-import { readOption } from '@picimo/utils'; // eslint-disable-line
+import { readOption, maxOf } from '@picimo/utils'; // eslint-disable-line
 
 import generateUuid from '../generateUuid';
 
@@ -68,39 +68,48 @@ export default class VOPool {
   }
 
   /**
-   * Return **size** *vertex objects*
-   * @return {VertexObject|VertexObject[]}
+   * Allocate a *vertex object*
+   * @return {VertexObject}
    */
 
-  alloc(size = 1, push2arr) {
-    if (size > 1) {
-      const arr = push2arr || [];
-      for (let i = 0; i < size; ++i) {
-        const vo = this.alloc(1);
-        if (vo !== undefined) {
-          arr.push(vo);
-        } else {
-          break;
-        }
-      }
-      return arr;
-    }
-
-    const vo = this.availableVOs.shift();
+  alloc() {
+    let vo = this.availableVOs.shift();
 
     if (vo === undefined) {
       if ((this.capacity - this.allocatedCount) > 0) {
         createVOs(this, this.maxAllocVOSize);
-        return this.alloc();
+        vo = this.availableVOs.shift();
+      } else {
+        return;
       }
-      return;
     }
 
     this.usedVOs.push(vo);
-
     vo.voArray.copy(this.voNew.voArray);
 
     return vo;
+  }
+
+  /**
+   * Allocate multiple *vertex objects*
+   * @return {VertexObject[]}
+   */
+
+  multiAlloc(size, targetArray = []) {
+    if ((this.allocatedCount - this.usedCount) < size) {
+      createVOs(this, maxOf(this.maxAllocVOSize, size - this.allocatedCount - this.usedCount));
+    }
+    for (let i = 0; i < size; ++i) {
+      const vo = this.availableVOs.shift();
+      if (vo !== undefined) {
+        this.usedVOs.push(vo);
+        vo.voArray.copy(this.voNew.voArray);
+        targetArray.push(vo);
+      } else {
+        break;
+      }
+    }
+    return targetArray;
   }
 
   /**
