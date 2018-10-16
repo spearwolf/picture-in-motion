@@ -3,6 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var glMatrix = require('gl-matrix');
+var utils = require('@picimo/utils');
 
 const isNumber = x => typeof x === 'number';
 
@@ -485,28 +486,12 @@ class Mat4 {
   }
 }
 
-/**
- * @param {number} n
- * @return {boolean}
- */
-const isPowerOf2 = n => n !== 0 && (n & (n - 1)) === 0;
-
-/**
- * @param {number} x
- * @return {number}
- */
-function findNextPowerOf2(x) {
-  let p = 1;
-  while (x > p) p <<= 1;
-  return p;
-}
-
 /* eslint-env browser */
 
 /** @private */
 function convertToPowerOf2(image) {
-  const w = findNextPowerOf2(image.width);
-  const h = findNextPowerOf2(image.height);
+  const w = utils.findNextPowerOf2(image.width);
+  const h = utils.findNextPowerOf2(image.height);
 
   const canvas = document.createElement('canvas');
   canvas.width = w;
@@ -518,7 +503,7 @@ function convertToPowerOf2(image) {
 
 /** @private */
 function setPowerOf2ImgEl(p2img, imgEl) {
-  p2img.imgEl = isPowerOf2(imgEl.width) && isPowerOf2(imgEl.height) ? imgEl : convertToPowerOf2(imgEl);
+  p2img.imgEl = utils.isPowerOf2(imgEl.width) && utils.isPowerOf2(imgEl.height) ? imgEl : convertToPowerOf2(imgEl);
   p2img.origWidth = imgEl.width;
   p2img.origHeight = imgEl.height;
 }
@@ -1405,7 +1390,7 @@ class VODescriptor {
     this.isInstanced = instanceOf != null;
 
     /** @type VODescriptor */
-    this.voBase = instanceOf;
+    this.base = instanceOf;
 
     createAttributes(this, attributes);
     createAliases(this, aliases);
@@ -1462,10 +1447,10 @@ class VODescriptor {
    * Check if *descriptor* has an attribute with a specific size.
    *
    * @param {string} name
-   * @param {number} size - attribute items count
+   * @param {number} [size=1] - attribute items count
    * @returns {boolean}
    */
-  hasAttribute(name, size) {
+  hasAttribute(name, size = 1) {
     const attr = this.attr[name];
     return attr && attr.size === size;
   }
@@ -1969,26 +1954,14 @@ class ShaderVariableBufferGroup extends ShaderVariableGroup {
 }
 
 /**
- * @private
- */
-var readOption = (options, propName, defValue, funcArgs) => {
-  if (options) {
-    const val = options[propName];
-    if (val !== undefined) return val;
-  }
-  if (typeof defValue === 'function') {
-    return defValue.call(null, funcArgs);
-  }
-  return defValue;
-};
-
-/**
  * Pre-allocate a bunch of vertex objects.
+ * @returns {number} number of allocated vertex objects
  * @private
  */
 var createVOs = (voPool, maxAllocSize = 0) => {
   const max = voPool.capacity - voPool.usedCount - voPool.allocatedCount;
-  const len = voPool.allocatedCount + (maxAllocSize > 0 && maxAllocSize < max ? maxAllocSize : max);
+  const count = (maxAllocSize > 0 && maxAllocSize < max ? maxAllocSize : max);
+  const len = voPool.allocatedCount + count;
 
   for (let i = voPool.allocatedCount; i < len; i++) {
     const voArray = voPool.voArray.subarray(i);
@@ -1998,6 +1971,8 @@ var createVOs = (voPool, maxAllocSize = 0) => {
 
     voPool.availableVOs.push(vertexObject);
   }
+
+  return count;
 };
 
 /* eslint no-param-reassign: 0 */
@@ -2019,15 +1994,15 @@ class VOPool {
   constructor(descriptor, options) {
     this.id = uuid();
     this.descriptor = descriptor;
-    this.capacity = readOption(options, 'capacity', this.descriptor.maxIndexedVOPoolSize);
-    this.maxAllocVOSize = readOption(options, 'maxAllocVOSize', 0);
-    this.voZero = readOption(options, 'voZero', () => descriptor.createVO());
-    this.voNew = readOption(options, 'voNew', () => descriptor.createVO());
-    this.usage = readOption(options, 'usage', 'dynamic');
-    this.voArray = readOption(options, 'voArray', () => descriptor.createVOArray(this.capacity, {
+    this.capacity = utils.readOption(options, 'capacity', this.descriptor.maxIndexedVOPoolSize);
+    this.maxAllocVOSize = utils.readOption(options, 'maxAllocVOSize', 0);
+    this.voZero = utils.readOption(options, 'voZero', () => descriptor.createVO());
+    this.voNew = utils.readOption(options, 'voNew', () => descriptor.createVO());
+    this.usage = utils.readOption(options, 'usage', 'dynamic');
+    this.voArray = utils.readOption(options, 'voArray', () => descriptor.createVOArray(this.capacity, {
       usage: this.usage,
-      autotouch: readOption(options, 'autotouch', this.usage === 'dynamic'),
-      doubleBuffer: readOption(options, 'doubleBuffer', this.usage === 'dynamic'),
+      autotouch: utils.readOption(options, 'autotouch', this.usage === 'dynamic'),
+      doubleBuffer: utils.readOption(options, 'doubleBuffer', this.usage === 'dynamic'),
       // TODO tripleBuffer / read and write to different buffers for dynamic...
     }));
 
@@ -2065,39 +2040,48 @@ class VOPool {
   }
 
   /**
-   * Return **size** *vertex objects*
-   * @return {VertexObject|VertexObject[]}
+   * Allocate a *vertex object*
+   * @return {VertexObject}
    */
 
-  alloc(size = 1, push2arr) {
-    if (size > 1) {
-      const arr = push2arr || [];
-      for (let i = 0; i < size; ++i) {
-        const vo = this.alloc(1);
-        if (vo !== undefined) {
-          arr.push(vo);
-        } else {
-          break;
-        }
-      }
-      return arr;
-    }
-
-    const vo = this.availableVOs.shift();
+  alloc() {
+    let vo = this.availableVOs.shift();
 
     if (vo === undefined) {
       if ((this.capacity - this.allocatedCount) > 0) {
         createVOs(this, this.maxAllocVOSize);
-        return this.alloc();
+        vo = this.availableVOs.shift();
+      } else {
+        return;
       }
-      return;
     }
 
     this.usedVOs.push(vo);
-
     vo.voArray.copy(this.voNew.voArray);
 
     return vo;
+  }
+
+  /**
+   * Allocate multiple *vertex objects*
+   * @return {VertexObject[]}
+   */
+
+  multiAlloc(size, targetArray = []) {
+    if ((this.allocatedCount - this.usedCount) < size) {
+      createVOs(this, utils.maxOf(this.maxAllocVOSize, size - this.allocatedCount - this.usedCount));
+    }
+    for (let i = 0; i < size; ++i) {
+      const vo = this.availableVOs.shift();
+      if (vo !== undefined) {
+        this.usedVOs.push(vo);
+        vo.voArray.copy(this.voNew.voArray);
+        targetArray.push(vo);
+      } else {
+        break;
+      }
+    }
+    return targetArray;
   }
 
   /**
@@ -2134,21 +2118,8 @@ class VOPool {
   }
 }
 
-var pick = names => (obj) => {
-  const newObj = {};
-  if (obj) {
-    names.forEach((key) => {
-      const val = obj[key];
-      if (val !== undefined) {
-        newObj[key] = val;
-      }
-    });
-  }
-  return newObj;
-};
-
 /** @private */
-const pickVOPoolOpts = pick([
+const pickVOPoolOpts = utils.pick([
   'autotouch',
   'capacity',
   'doubleBuffer',
@@ -2179,23 +2150,30 @@ const createSpriteSizeHook = (setSize = 'size') => {
  * @param {VODescriptor} descriptor - The `VODescriptor` (*vertex object description*)
  * @param {Object} options - Options
  * @param {number} [options.capacity] - Maximum number of *sprites*
- * @param {ElementIndexedArray|function} primitive - The *primitive factory function* is a function that takes one argument (capacity) and returns an IndexedPrimitive instance
+ * @param {IndexedPrimitive|ElementIndexArray|function} primitive - The *primitive factory function* is a function that takes one argument (capacity) and returns an IndexedPrimitive instance
  * @param {VOArray} [options.voArray] - The internal *vertex object array*
  * @param {Object|function} [options.voZero] - *vertex object* prototype
  * @param {Object|function} [options.voNew] - *vertex object* prototype
  * @param {function|string} [options.setSize='size'] - A function that takes three arguments (sprite, width, height) and sets the size of sprite (called by `.createSprite(w, h)`). Or you can specify the *name* of the size attribute (should be a 2d vector unform).
  * @param {number} [options.maxAllocVOSize] - Never allocate more than `maxAllocVOSize` *sprites* at once
  * @param {string} [options.usage='dynamic'] - Buffer usage hint, choose between `dynamic` or `static`
- * @param {ShaderProgram} [options.shader] - The `ShaderProgram`. As alternative you can use the `vertexShader` option together with `fragmentShader`
+ * @param {ShaderProgram} [options.shaderProgram] - The `ShaderProgram`. As alternative you can use the `vertexShader` option together with `fragmentShader`
  * @param {string|ShaderSource} [options.vertexShader] - The *vertex shader*
  * @param {string|ShaderSource} [options.fragmentShader] - The *fragment shader*
  * @param {Object} [options.textures] - The *shader variable name* to *texture* mapping
- * @param {string} [options.doubleBuffer] - buffer `doubleBuffer` hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`
- * @param {string} [options.autotouch] - auto touch vertex buffers hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
+ * @param {boolean} [options.doubleBuffer] - buffer `doubleBuffer` hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`
+ * @param {boolean} [options.autotouch] - auto touch vertex buffers hint, set to `true` (which is the default if `usage` equals to `dynamic`) or `false`.
+ * @param {SpriteGroup|Object} [options.base] - The *base sprite group instance* or the *base sprite group options*
  */
 class SpriteGroup {
   constructor(descriptor, options = {}) {
     this.descriptor = descriptor;
+
+    if (options.base instanceof SpriteGroup) {
+      this.base = options.base;
+    } else if (typeof options.base === 'object') {
+      this.base = new SpriteGroup(descriptor.base, options.base);
+    }
 
     let {
       voNew,
@@ -2224,7 +2202,7 @@ class SpriteGroup {
     const { primitive } = options;
     if (typeof primitive === 'function') {
       this.primitive = primitive(this.capacity);
-    } else if (primitive instanceof ElementIndexArray) {
+    } else {
       this.primitive = primitive;
     }
 
@@ -2247,16 +2225,35 @@ class SpriteGroup {
   }
 
   /**
+   * Create a sprite.
    * @param {number} [width]
    * @param {number} [height=width]
+   * @returns {Object} sprite
    */
   createSprite(width, height) {
-    const sprite = this.voPool.alloc(1);
+    const sprite = this.voPool.alloc();
     const { setSize } = this.spriteHook;
-    if (setSize && width !== undefined) {
+    if (setSize && (width !== undefined || height !== undefined)) {
       setSize(sprite, width, height !== undefined ? height : width, this.descriptor);
     }
     return sprite;
+  }
+
+  /**
+   * Create multiple sprites at once.
+   * @param {number} count - number of sprites to create
+   * @param {number} [width]
+   * @param {number} [height=width]
+   * @returns {Array<Object>} sprites
+   */
+  createSprites(count, width, height) {
+    const sprites = this.voPool.multiAlloc(count);
+    const { setSize } = this.spriteHook;
+    if (setSize && (width !== undefined || height !== undefined)) {
+      const h = height !== undefined ? height : width;
+      sprites.forEach(sprite => setSize(sprite, width, h, this.descriptor));
+    }
+    return sprites;
   }
 
   /**
@@ -2369,10 +2366,10 @@ class Texture {
       this.parent = null;
 
       this._ref = new DataRef('Texture', this, {
-        flipY: readOption(hints, 'flipY', false),
-        repeatable: readOption(hints, 'repeatable', false),
-        premultiplyAlpha: readOption(hints, 'premultiplyAlpha', true),
-        nearest: readOption(hints, 'nearest', true),
+        flipY: utils.readOption(hints, 'flipY', false),
+        repeatable: utils.readOption(hints, 'repeatable', false),
+        premultiplyAlpha: utils.readOption(hints, 'premultiplyAlpha', true),
+        nearest: utils.readOption(hints, 'nearest', true),
       });
 
       if ('origWidth' in source && 'origHeight' in source) {
@@ -2547,8 +2544,6 @@ class TextureAtlasJsonDef {
   }
 }
 
-var sample = arr => arr[(Math.random() * arr.length) | 0];
-
 /* eslint-env browser */
 
 /**
@@ -2612,14 +2607,14 @@ class TextureAtlas {
    * @returns {Texture}
    */
   randomFrame() {
-    return sample(Array.from(this.frames.values()));
+    return utils.sample(Array.from(this.frames.values()));
   }
 
   /**
    * @returns {string}
    */
   randomFrameName() {
-    return sample(this.frameNames());
+    return utils.sample(this.frameNames());
   }
 
   /**
@@ -2646,10 +2641,10 @@ class TextureAtlas {
    */
   static async load(url, options) {
     const atlasUrl = new URL(url, window.location.href).href;
-    const jsonDef = await TextureAtlasJsonDef.load(atlasUrl, readOption(options, 'fetchOptions'));
-    const image = await new PowerOf2Image(readOption(options, 'image', () => new URL(jsonDef.imageUrl, atlasUrl).href, jsonDef)).onLoaded;
+    const jsonDef = await TextureAtlasJsonDef.load(atlasUrl, utils.readOption(options, 'fetchOptions'));
+    const image = await new PowerOf2Image(utils.readOption(options, 'image', () => new URL(jsonDef.imageUrl, atlasUrl).href, jsonDef)).onLoaded;
 
-    const rootTexture = new Texture(image, undefined, undefined, 0, 0, readOption(options, 'textureHints'));
+    const rootTexture = new Texture(image, undefined, undefined, 0, 0, utils.readOption(options, 'textureHints'));
     const atlas = new TextureAtlas(rootTexture, jsonDef);
 
     const { frameNames } = jsonDef;
@@ -2792,7 +2787,7 @@ class TexturedSpriteGroup extends SpriteGroup {
   constructor(descriptor, options = {}) {
     super(descriptor, options);
 
-    this.textureLibrary = readOption(options, 'textureLibrary', () => new TextureLibrary());
+    this.textureLibrary = utils.readOption(options, 'textureLibrary', () => new TextureLibrary());
 
     const { setTexCoordsByTexture } = options;
     if (setTexCoordsByTexture === null || setTexCoordsByTexture === false) {
@@ -2900,13 +2895,6 @@ class Viewport extends AABB2 {
   }
 }
 
-/**
- * @param {number} a
- * @param {number} b
- * @return {number}
- */
-const maxOf = (a, b) => (a > b ? a : b);
-
 exports.ShaderTool = ShaderTool;
 exports.AABB2 = AABB2;
 exports.DataRef = DataRef;
@@ -2934,10 +2922,4 @@ exports.VOArray = VOArray;
 exports.VODescriptor = VODescriptor;
 exports.VOPool = VOPool;
 exports.Viewport = Viewport;
-exports.findNextPowerOf2 = findNextPowerOf2;
 exports.generateUuid = uuid;
-exports.isPowerOf2 = isPowerOf2;
-exports.maxOf = maxOf;
-exports.pick = pick;
-exports.readOption = readOption;
-exports.sample = sample;
