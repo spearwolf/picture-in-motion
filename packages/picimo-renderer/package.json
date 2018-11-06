@@ -1,17 +1,14 @@
 {
   "name": "@picimo/renderer",
   "version": "0.0.1",
-  "private": true,
   "module": "src/index.js",
   "author": "Wolfger Schramm <wolfger@spearwolf.de> (https:/www.spearwolf.de)",
   "license": "Apache-2.0",
   "scripts": {
     "test": "webpack-dev-server",
-    "docs": "esdoc"
-  },
-  "peerDependencies": {
-    "gl-matrix": "^2.4.0",
-    "loglevel": "^1.6.1"
+    "docs": "esdoc",
+    "build": "cross-env NODE_ENV=production rollup -c rollup.config.js",
+    "clean": "shx rm -rf dist/picimo*.js dist/picimo*.js.map"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -24,6 +21,7 @@
     "babel-core": "^7.0.0-0",
     "babel-loader": "^8.0.4",
     "chai": "^4.2.0",
+    "cross-env": "^5.2.0",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^5.7.0",
@@ -31,12 +29,17 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
-    "gl-matrix": "^2.8.1",
-    "loglevel": "^1.6.1",
     "mocha": "^5.2.0",
+    "shx": "^0.3.2",
     "sinon": "^7.0.0",
-    "webpack": "^4.20.2",
+    "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9"
+  },
+  "dependencies": {
+    "@picimo/core": "^0.0.1",
+    "@picimo/utils": "^0.0.1",
+    "gl-matrix": "^2.8.1",
+    "loglevel": "^1.6.1"
   }
 }

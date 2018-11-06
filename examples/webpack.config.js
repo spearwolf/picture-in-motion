@@ -18,16 +18,19 @@ module.exports = {
     compress: true,
     host: '0.0.0.0',
     port: 8080,
+    open: true,
+    useLocalIp: true,
+    disableHostCheck: true,
   },
-  resolve: {
-    alias: {
-      '@picimo/core': path.resolve(__dirname, '../packages/picimo-core'),
-      '@picimo/ecs': path.resolve(__dirname, '../packages/picimo-ecs'),
-      '@picimo/renderer': path.resolve(__dirname, '../packages/picimo-renderer'),
-      '@picimo/toolkit': path.resolve(__dirname, '../packages/picimo-toolkit'),
-      '@picimo/utils': path.resolve(__dirname, '../packages/picimo-utils'),
-    },
-  },
+  // resolve: {
+  //   alias: {
+  //     '@picimo/core': path.resolve(__dirname, '../packages/picimo-core'),
+  //     '@picimo/ecs': path.resolve(__dirname, '../packages/picimo-ecs'),
+  //     '@picimo/renderer': path.resolve(__dirname, '../packages/picimo-renderer'),
+  //     '@picimo/toolkit': path.resolve(__dirname, '../packages/picimo-toolkit'),
+  //     '@picimo/utils': path.resolve(__dirname, '../packages/picimo-utils'),
+  //   },
+  // },
   module: {
     rules: [
       {
@@ -35,7 +38,8 @@ module.exports = {
         loader: 'file-loader',
         options: {
           name: '[path][name].[hash].[ext]',
-          publicPath: 'http://localhost:8080/',
+          publicPath: '/',
+          // publicPath: 'http://localhost:8080/',
         },
       },
       {

@@ -1,5 +1,5 @@
 {
-  "name": "picimo-next",
+  "name": "picture-in-motion",
   "private": true,
   "author": {
     "name": "Wolfger Schramm",
@@ -7,10 +7,10 @@
     "url": "https://www.spearwolf.de"
   },
   "license": "Apache-2.0",
-  "scripts": {
-    "clean": "shx rm -fr node_modules packages/*/node_modules examples/node_modules packages/*/yarn-error.log examples/yarn-error.log"
-  },
   "devDependencies": {
-    "shx": "^0.3.0"
-  }
+    "lerna": "^3.4.3"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

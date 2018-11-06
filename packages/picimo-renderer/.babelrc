@@ -1,7 +1,6 @@
 {
   "plugins": [
-    "@babel/plugin-syntax-dynamic-import",
-    ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": true }],
+    ["@babel/plugin-proposal-object-rest-spread", { "loose": false, "useBuiltIns": false }],
     ["@babel/plugin-proposal-class-properties", { "loose": true }]
   ]
 }
