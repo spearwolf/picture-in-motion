@@ -5,11 +5,14 @@
   "author": "Wolfger Schramm <wolfger@spearwolf.de> (https:/www.spearwolf.de)",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "webpack-dev-server",
+    "karma": "karma",
+    "start": "webpack-dev-server",
+    "test:single-run": "cross-env NODE_ENV=test karma start --single-run",
+    "test": "run-s parser:build test:single-run",
     "docs": "esdoc",
-    "parser:build": "pegjs -o src/picimoParser.js src/picimoParser.pegjs",
-    "parser:start": "node ./scripts/picimo-parser.js",
-    "parser": "run-s parser:build parser:start",
+    "parser:pegjs": "pegjs -o src/picimoParser.js src/picimoParser.pegjs",
+    "parser:convertToEsm": "node ./scripts/convertGeneratedPegJsToESM.js ./src/picimoParser.js ./src/picimoParser.js",
+    "parser:build": "run-s parser:pegjs parser:convertToEsm",
     "build:js": "cross-env NODE_ENV=production rollup -c rollup.config.js",
     "build": "run-s parser:build build:js",
     "clean": "shx rm -rf dist/picimo*.js dist/picimo*.js.map"

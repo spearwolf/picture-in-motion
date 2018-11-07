@@ -3,11 +3,11 @@ import set from 'lodash/set';
 import { get, pick } from '@picimo/utils'; // eslint-disable-line
 import { getLogger } from 'loglevel';
 
+import { parse } from './picimoParser';
+
 import { VertexObject, Primitive, SpriteGroup } from './factories';
 
 import { DECLARATION } from './constants';
-
-const parser = require('./picimoParser');
 
 const VERTEX_OBJECT = 'vertexobject';
 const PRIMITIVE = 'primitive';
@@ -95,7 +95,7 @@ class Context {
     if (config) {
       this.configure(config);
     }
-    const parsedTree = parser.parse(source, { ctx: this });
+    const parsedTree = parse(source, { ctx: this });
     parsedTree.forEach((item) => {
       if (item.type === DECLARATION) {
         set(this.declaration, item.name, Object.assign(transformDeclaration(item), pickDeclaration(item)));

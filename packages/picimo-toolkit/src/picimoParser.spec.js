@@ -4,6 +4,7 @@
 import { expect } from 'chai';
 
 import Context from './Context';
+
 import { parse } from './picimoParser';
 
 const itParse = (title, picimoDsl, options, expectedResult) => {
