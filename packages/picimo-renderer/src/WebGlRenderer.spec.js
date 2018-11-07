@@ -28,7 +28,7 @@ describe('WebGlRenderer', () => {
       });
     });
 
-    describe('while <canvas> is appended as child to document.body', () => {
+    describe.skip('while <canvas> is appended as child to document.body', () => {
       it('shoud have the same size as document.body', () => {
         const canvas = document.createElement('canvas');
         document.body.appendChild(canvas);

@@ -5,7 +5,9 @@
   "author": "Wolfger Schramm <wolfger@spearwolf.de> (https:/www.spearwolf.de)",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "webpack-dev-server",
+    "karma": "karma",
+    "start": "webpack-dev-server",
+    "test": "cross-env NODE_ENV=test karma start --single-run",
     "docs": "esdoc",
     "build": "cross-env NODE_ENV=production rollup -c rollup.config.js",
     "clean": "shx rm -rf dist/picimo*.js dist/picimo*.js.map"
