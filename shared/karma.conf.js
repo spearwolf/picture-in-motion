@@ -17,7 +17,7 @@ module.exports = basePath => (config) => {
     files: [
       'src/**/*.spec.js',
       {
-        pattern: 'test/assets/**/*', watched: true, included: false, served: true, nocache: false,
+        pattern: 'test/assets/**/*', watched: false, included: false, served: true, nocache: false,
       },
     ],
 
