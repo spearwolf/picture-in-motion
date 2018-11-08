@@ -11,6 +11,7 @@
     "lerna": "^3.4.3"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples"
   ]
 }
