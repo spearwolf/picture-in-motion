@@ -5,14 +5,40 @@ import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 
-export default ({ root, filename, external }) => ({
+export default ({
+  root,
+  filename,
+  external,
+  name, // The variable name, representing your iife/umd bundle, by which other scripts on the same page can access it.
+}) => ({
   external,
   input: 'src/index.js',
   output: {
+    name,
     file: path.join(root, 'dist', `${filename}.js`),
     sourcemap: true,
     sourcemapFile: path.join(root, 'dist', `${filename}.js.map`),
-    format: 'es',
+    format: 'umd',
+    globals: (() => {
+      const GLOBALS = {
+        '@picimo/core': 'PicimoCore',
+        '@picimo/ecs': 'PicimoECS',
+        '@picimo/toolkit': 'PicimoToolkit',
+        '@picimo/utils': 'PicimoUtils',
+        '@spearwolf/eventize': 'eventize',
+        'gl-matrix': 'glMatrix',
+        eventize: 'eventize',
+        loglevel: 'log',
+      };
+      const g = {};
+      Object.keys(GLOBALS).forEach((key) => {
+        const val = GLOBALS[key];
+        if (val !== name) {
+          g[key] = val;
+        }
+      });
+      return g;
+    })(),
   },
   plugins: [
     babel({

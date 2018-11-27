@@ -1,7 +1,8 @@
 {
   "name": "@picimo/utils",
   "version": "0.0.1",
-  "module": "dist/picimo-utils.js",
+  "main": "dist/picimo-utils.js",
+  "module": "src/index.js",
   "author": {
     "name": "Wolfger Schramm",
     "email": "wolfger@spearwolf.de",

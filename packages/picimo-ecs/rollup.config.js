@@ -1,6 +1,7 @@
 import config from '../../shared/rollup.config';
 
 export default config({
+  name: 'PicimoECS',
   root: __dirname,
   filename: 'picimo-ecs',
   external: [

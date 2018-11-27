@@ -1,6 +1,7 @@
 {
   "name": "@picimo/ecs",
   "version": "0.0.1",
+  "main": "dist/picimo-ecs.js",
   "module": "src/index.js",
   "author": "Wolfger Schramm <wolfger@spearwolf.de> (https:/www.spearwolf.de)",
   "license": "Apache-2.0",

@@ -15,9 +15,15 @@
     "hamburgers": "^1.1.3",
     "lodash": "^4.17.11",
     "loglevel": "^1.6.1",
+    "@picimo/core": "^0.0.1",
+    "@picimo/ecs": "^0.0.1",
+    "@picimo/renderer": "^0.0.1",
+    "@picimo/toolkit": "^0.0.1",
+    "@picimo/utils": "^0.0.1",
     "prop-types": "^15.6.2",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
+    "@spearwolf/eventize": "^0.6",
     "styled-components": "^4.0.3"
   },
   "devDependencies": {
