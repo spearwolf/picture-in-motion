@@ -2,15 +2,16 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
+  devtool: 'source-maps',
   entry: {
-    main: './src/main.js',
-    'basics/HelloWorld/bundle': './src/basics/HelloWorld/index.js',
-    'basics/InstancedQuads/bundle': './src/basics/InstancedQuads/main.js',
-    'advanced/HelloWorld/bundle': './src/advanced/HelloWorld/index.js',
-    'advanced/SpriteGroup/bundle': './src/advanced/SpriteGroup/index.js',
-    'advanced/HelloInstancedWorld/bundle': './src/advanced/HelloInstancedWorld/index.js',
-    'advanced/TexturedSpriteGroup/bundle': './src/advanced/TexturedSpriteGroup/index.js',
-    'demo/Starscape/bundle': './src/demo/Starscape/index.js',
+    main: ['@babel/polyfill', './src/main.js'],
+    'basics/HelloWorld/bundle': ['@babel/polyfill', './src/basics/HelloWorld/index.js'],
+    'basics/InstancedQuads/bundle': ['@babel/polyfill', './src/basics/InstancedQuads/main.js'],
+    'advanced/HelloWorld/bundle': ['@babel/polyfill', './src/advanced/HelloWorld/index.js'],
+    'advanced/SpriteGroup/bundle': ['@babel/polyfill', './src/advanced/SpriteGroup/index.js'],
+    'advanced/HelloInstancedWorld/bundle': ['@babel/polyfill', './src/advanced/HelloInstancedWorld/index.js'],
+    'advanced/TexturedSpriteGroup/bundle': ['@babel/polyfill', './src/advanced/TexturedSpriteGroup/index.js'],
+    'demo/Starscape/bundle': ['@babel/polyfill', './src/demo/Starscape/index.js'],
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),
@@ -22,15 +23,6 @@ module.exports = {
     useLocalIp: true,
     disableHostCheck: true,
   },
-  // resolve: {
-  //   alias: {
-  //     '@picimo/core': path.resolve(__dirname, '../packages/picimo-core'),
-  //     '@picimo/ecs': path.resolve(__dirname, '../packages/picimo-ecs'),
-  //     '@picimo/renderer': path.resolve(__dirname, '../packages/picimo-renderer'),
-  //     '@picimo/toolkit': path.resolve(__dirname, '../packages/picimo-toolkit'),
-  //     '@picimo/utils': path.resolve(__dirname, '../packages/picimo-utils'),
-  //   },
-  // },
   module: {
     rules: [
       {
@@ -39,7 +31,6 @@ module.exports = {
         options: {
           name: '[path][name].[hash].[ext]',
           publicPath: '/',
-          // publicPath: 'http://localhost:8080/',
         },
       },
       {
@@ -65,14 +56,14 @@ module.exports = {
           options: {
             presets: [
               ['@babel/preset-env', {
-                debug: true,
+                debug: false,
                 useBuiltIns: 'entry',
                 targets: {
                   browsers: [
-                    'and_chr 64',
-                    'chrome 64',
-                    'ios_saf 11',
-                    'firefox 57',
+                    'and_chr 69',
+                    'chrome 69',
+                    'ios_saf 12',
+                    'firefox 62',
                     'samsung 6.2',
                     'edge 16',
                   ],

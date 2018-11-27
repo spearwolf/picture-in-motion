@@ -1,6 +1,5 @@
 /* eslint-env browser */
 /* eslint no-console: 0 */
-import '@babel/polyfill';
 
 import {
   ShaderSource,
@@ -10,10 +9,9 @@ import {
   VODescriptor,
   VOPool,
   ElementIndexArray,
-} from '@picimo/core'; // eslint-disable-line
+} from '@picimo/core';
 
-import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
-
+import { WebGlRenderer } from '@picimo/renderer';
 
 // ---------------------------------------------------------------------------
 //

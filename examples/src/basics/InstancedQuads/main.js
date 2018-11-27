@@ -1,25 +1,16 @@
 /* eslint-env browser */
 /* eslint no-console: 0 */
-import '@babel/polyfill';
 
-import { compile } from '@picimo/toolkit'; // eslint-disable-line
-
+import { compile } from '@picimo/toolkit';
+import { hexCol2rgba, makeCircleCoords, sample } from '@picimo/utils';
+import { WebGlRenderer } from '@picimo/renderer';
 import {
   IndexedPrimitive,
   ShaderProgram,
   ShaderSource,
   ShaderTool,
   SpriteGroup,
-} from '@picimo/core'; // eslint-disable-line
-
-import {
-  hexCol2rgba,
-  makeCircleCoords,
-  sample,
-} from '@picimo/utils'; // eslint-disable-line
-
-import { WebGlRenderer, BlendMode } from '@picimo/renderer'; // eslint-disable-line
-
+} from '@picimo/core';
 
 // ---------------------------------------------------------------------------
 //

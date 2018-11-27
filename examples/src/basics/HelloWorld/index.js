@@ -1,20 +1,10 @@
 /* eslint-env browser */
 /* eslint no-console: 0 */
-import '@babel/polyfill';
 
-import { compile } from '@picimo/toolkit'; // eslint-disable-line
-import { WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
-
-import {
-  ShaderSource,
-  ShaderTool,
-} from '@picimo/core'; // eslint-disable-line
-
-import {
-  hexCol2rgba,
-  toFloatColors,
-} from '@picimo/utils'; // eslint-disable-line
-
+import { compile } from '@picimo/toolkit';
+import { WebGlRenderer } from '@picimo/renderer';
+import { ShaderSource, ShaderTool } from '@picimo/core';
+import { hexCol2rgba, toFloatColors } from '@picimo/utils';
 
 // ---------------------------------------------------------------------------
 //

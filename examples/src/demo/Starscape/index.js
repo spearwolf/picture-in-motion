@@ -1,6 +1,5 @@
 /* eslint-env browser */
 /* eslint no-console: 0 */
-import '@babel/polyfill';
 
 import {
   IndexedPrimitive,
@@ -9,9 +8,9 @@ import {
   ShaderUniformGroup,
   TexturedSpriteGroup,
   VODescriptor,
-} from '@picimo/core'; // eslint-disable-line
+} from '@picimo/core';
 
-import { BlendMode, WebGlRenderer } from '@picimo/renderer'; // eslint-disable-line
+import { BlendMode, WebGlRenderer } from '@picimo/renderer';
 
 // ---------------------------------------------------------------------------
 //
