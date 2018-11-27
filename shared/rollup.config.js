@@ -4,6 +4,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
+import { sizeSnapshot } from 'rollup-plugin-size-snapshot';
 
 export default ({
   root,
@@ -66,6 +67,7 @@ export default ({
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
+    sizeSnapshot(),
     terser(),
   ],
 });
