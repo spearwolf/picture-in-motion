@@ -10,7 +10,7 @@
     "build": "cross-env NODE_ENV=production rollup -c rollup.config.js",
     "build:gzip": "gzip --verbose --keep --force --best dist/picimo*js dist/picimo*js.map",
     "start": "http-server --gzip --cors",
-    "serve": "run-s clean build build:gzip start",
+    "serve": "run-s build build:gzip start",
     "clean": "shx rm -f dist/picimo*"
   },
   "devDependencies": {
