@@ -1,7 +1,7 @@
-import { getLogger } from 'loglevel';
+import loglevel from 'loglevel';
 import { ShaderSource } from '@picimo/core';  // eslint-disable-line
 
-const log = getLogger('picimo.renderer.WebGlShader');
+const log = loglevel.getLogger('picimo.renderer.WebGlShader');
 
 /** @private */
 const compileShader = (shader) => {

@@ -1,6 +1,6 @@
-export default ({ name, version }) => ({
+export default ({ name, description, version }) => ({
   banner: `/*!
-@file ${name} - part of the hottest webgl library on earth ::( picture-in-motion ):: make sprites & shaders fun again ;-)
+@file ${name} - ${description}
 @author Wolfger Schramm <wolfger@spearwolf.de>
 @version ${version}
 

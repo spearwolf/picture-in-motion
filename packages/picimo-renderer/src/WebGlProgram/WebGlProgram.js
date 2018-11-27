@@ -1,10 +1,10 @@
 /* eslint no-param-reassign: 0 */
-import { getLogger } from 'loglevel';
+import loglevel from 'loglevel';
 
 import WebGlUniform from './WebGlUniform';
 import WebGlAttribute from './WebGlAttribute';
 
-const log = getLogger('picimo.renderer.WebGlProgram');
+const log = loglevel.getLogger('picimo.renderer.WebGlProgram');
 
 /** @private */
 function createAttributes(program) {

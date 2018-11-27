@@ -1,9 +1,10 @@
 {
   "name": "@picimo/toolkit",
+  "description": "part of the hottest webgl library on earth ::( picture-in-motion ):: make sprites & shaders fun again ;-)",
   "version": "0.0.1",
   "main": "dist/picimo-toolkit.js",
   "module": "src/index.js",
-  "author": "Wolfger Schramm <wolfger@spearwolf.de> (https:/www.spearwolf.de)",
+  "author": "Wolfger Schramm <wolfger@spearwolf.de>",
   "license": "Apache-2.0",
   "scripts": {
     "karma": "karma",

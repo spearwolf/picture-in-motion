@@ -1,7 +1,7 @@
 import has from 'lodash/has';
 import set from 'lodash/set';
+import loglevel from 'loglevel';
 import { get, pick } from '@picimo/utils'; // eslint-disable-line
-import { getLogger } from 'loglevel';
 
 import { parse } from './picimoParser';
 
@@ -21,7 +21,7 @@ const FACTORIES = {
 };
 
 /** @private */
-const log = getLogger('picimo.toolkit.Context');
+const log = loglevel.getLogger('picimo.toolkit.Context');
 
 /** @private */
 const getFactory = (type) => {

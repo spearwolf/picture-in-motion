@@ -1,4 +1,4 @@
-import { getLogger } from 'loglevel';
+import loglevel from 'loglevel';
 import { DataRef } from '@picimo/core';  // eslint-disable-line
 import { readOption } from '@picimo/utils';  // eslint-disable-line
 
@@ -24,7 +24,7 @@ const loadResource = (cache, resource, callback) => {
 };
 
 /** @private */
-const log = getLogger('picimo.renderer.WebGlResourceLibrary');
+const log = loglevel.getLogger('picimo.renderer.WebGlResourceLibrary');
 
 export default class WebGlResourceLibrary {
   constructor(glx) {

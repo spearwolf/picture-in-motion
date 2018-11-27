@@ -1,5 +1,6 @@
 {
   "name": "@picimo/utils",
+  "description": "part of the hottest webgl library on earth ::( picture-in-motion ):: make sprites & shaders fun again ;-)",
   "version": "0.0.1",
   "main": "dist/picimo-utils.js",
   "module": "src/index.js",

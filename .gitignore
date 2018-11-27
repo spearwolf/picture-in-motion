@@ -9,4 +9,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .tern-port
-.size-snapshot.json
+.size-snapshot*.json
