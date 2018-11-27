@@ -6,6 +6,8 @@ import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import { sizeSnapshot } from 'rollup-plugin-size-snapshot';
 
+import bannerPlugin from './bannerPlugin';
+
 export default ({
   root,
   filename,
@@ -42,6 +44,7 @@ export default ({
     })(),
   },
   plugins: [
+    bannerPlugin(require(path.join(root, 'package.json'))), // eslint-disable-line
     babel({
       exclude: [
         /node_modules/,
@@ -68,6 +71,8 @@ export default ({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     sizeSnapshot(),
-    terser(),
+    terser({
+      output: { comments: /^!/ },
+    }),
   ],
 });
