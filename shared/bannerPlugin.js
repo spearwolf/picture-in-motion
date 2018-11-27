@@ -1,6 +1,6 @@
 export default ({ name, version }) => ({
   banner: `/*!
-@file ${name} - part of the hottest webgl framework on earth ::( picture-in-motion ):: make sprites fun again ;-)
+@file ${name} - part of the hottest webgl library on earth ::( picture-in-motion ):: make sprites & shaders fun again ;-)
 @author Wolfger Schramm <wolfger@spearwolf.de>
 @version ${version}
 

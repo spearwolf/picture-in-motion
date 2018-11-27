@@ -1,5 +1,5 @@
 /*!
-@file @picimo/renderer - part of the hottest webgl framework on earth ::( picture-in-motion ):: make webgl fun again ;-)
+@file @picimo/renderer - part of the hottest webgl library on earth ::( picture-in-motion ):: make sprites & shaders fun again ;-)
 @author Wolfger Schramm <wolfger@spearwolf.de>
 @version 0.0.1
 
